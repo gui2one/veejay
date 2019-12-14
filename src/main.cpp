@@ -1,0 +1,1458 @@
+
+
+#include "pch.h"
+
+#include "core.h"
+
+#include "actions.h"
+#include "param.h"
+
+#include "ipc/client.h"
+
+#include "jsonfilewriter.h"
+
+// for explorerDialog
+#include <dirent.h>
+#include <linux/limits.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
+
+#include "wave_file_reader.h"
+#include <sndfile.h>
+
+#include "fft.h"
+/*******************************************************************/
+
+struct ReleaseData{	
+	virtual ~ReleaseData(){};
+	virtual void funcA() = 0;
+};
+struct ReleaseDataFloat : public ReleaseData{
+	inline void funcA() override{}
+	float old_val;
+	float new_val;
+	std::function<void()> callback;
+};
+struct ReleaseDataInt : public ReleaseData{
+	inline void funcA() override{}
+	int old_val;
+	int new_val;
+	std::function<void()> callback;
+};
+struct ReleaseDataColor3 : public ReleaseData{
+	inline void funcA() override{}
+	glm::vec3 old_val;
+	glm::vec3 new_val;
+	std::function<void()> callback;
+};
+
+
+enum FILE_EXPLORER_MODE
+{
+	FILE_EXPLORER_MODE_LOAD_FILE,
+	FILE_EXPLORER_MODE_SAVE_FILE,
+	FILE_EXPLORER_MODE_DIRECTORY
+};
+
+GLFWwindow * ui_window;
+GLFWwindow * live_window;
+
+GLuint viewport_FBO = 0;
+GLuint viewport_FBO_VBO = 0;
+GLuint viewport_FBO_texture = 0;
+
+unsigned int w_width = 1280;
+unsigned int w_height = 720;
+
+unsigned int live_w_width = 640;
+unsigned int live_w_height = 360;
+
+
+unsigned int bufid; 
+Shader fbo_shader;
+
+
+
+Timer timer;
+
+int counter = 0;
+
+ParamLayout player_layout("Player Functions");
+std::vector<std::shared_ptr<BaseParam> > params; 
+std::shared_ptr<BaseParam> active_param = nullptr;
+bool is_param_clicked = false;
+std::shared_ptr<ReleaseData> current_param_data;
+
+std::vector<std::shared_ptr<Module>> modules;
+
+std::vector< std::shared_ptr<Action> > actions;
+
+
+//~ std::string current_explorer_path = "/home/pi/";
+static bool b_explorer_opened = false;
+std::function<void()> current_explorer_callback = [](){};
+//~ std::string current_explorer_file_path = "";
+std::string current_scene_file_name = "default.vjs";
+
+std::string current_scene_file_path = "";
+
+
+std::string explorer_V2_dir_path = "/home/pi/Documents/";
+std::string explorer_V2_file_name = "";
+std::string current_explorer_file_path_V2 = "";
+int current_module_id = -1;
+
+Renderer renderer;
+
+float sound_buffer[512 * 2];
+fftw_complex * fft_out;
+
+WaveFileReader wave_reader(sound_buffer);
+SOUND_PLAYER_CMD sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
+SOUND_PLAYER_MODE sound_player_mode = SOUND_PLAYER_MODE_SINE_WAVE;
+char * WAV_PATH;
+
+float sine_wave_frequency = 440.0f;
+
+// sound player params
+std::shared_ptr<ParamFilePath> sound_player_wave_file_path_param = std::make_shared<ParamFilePath>();
+
+
+static std::vector<std::string> split(const std::string& str, std::string delimiter = " ")
+{
+	
+	std::vector<std::string> tokens;
+	std::string tmp = str;
+	std::string::size_type start = 0;
+	while(true)
+	{
+		std::string::size_type found = tmp.find_first_of(delimiter);
+		if( found == std::string::npos )
+		{
+			//std::cout << " reached end ------------------------------- " << std::endl;	
+			tokens.push_back(tmp);
+			break;
+		}else{
+			std::string cut = tmp.substr(0, found);
+			tokens.push_back(cut);
+			tmp = tmp.substr(found+1, tmp.size() - (found-1));
+			//std::cout << tmp << std::endl;
+			start = found;
+		}
+	}
+	
+	//std::cout << " ------------------------------- " << std::endl;	
+	
+	return tokens;
+}
+
+int explorerDialog_V2(const char * path = "", const char * file_name = "")
+{
+	
+	using namespace std;
+	DIR* dir;
+	struct dirent *sd;
+	
+	
+	
+	struct stat st_buf;
+	int status;
+	
+	//~ if(path != "" )
+		//~ current_explorer_path = std::string(path);
+
+	if((dir = opendir(explorer_V2_dir_path.c_str())) == NULL){ /*Opens directory*/
+		printf("explorer error \n \t%s \n", explorer_V2_dir_path.c_str());
+		return errno;
+	}
+
+	std::vector<std::string> dir_names;
+	std::vector<std::string> file_names;
+	
+	// collect files and dirs names
+	while ((sd= readdir(dir)) != NULL){ /*starts directory stream*/
+		if(strcmp(sd -> d_name,".") == 0 || strcmp(sd -> d_name,"..") == 0)
+		{
+			continue;
+		}else{			
+			std::string check_path = explorer_V2_dir_path;
+			check_path += sd->d_name;	
+				
+			status = stat (check_path.c_str(), &st_buf);
+				
+			if (!S_ISREG(st_buf.st_mode)) 
+			{		
+				if(sd->d_name[0] != '.')	
+					dir_names.push_back(sd->d_name);
+			}else{
+				if(sd->d_name[0] != '.')	
+					file_names.push_back(sd->d_name);
+			}
+		}
+	}  
+	closedir(dir); /* important !!!! */
+	
+	
+	
+	// sort names vectors
+	sort(dir_names.begin(), dir_names.end(), 
+	[](std::string& str1, std::string& str2)
+	{ 
+		std::string lower1 = str1;
+		std::string lower2 = str2;
+		std::transform(lower1.begin(), lower1.end(), lower1.begin(), ::tolower);
+		std::transform(lower2.begin(), lower2.end(), lower2.begin(), ::tolower);
+		return lower1 < lower2;
+	});
+	sort(file_names.begin(), file_names.end(), 
+	[](std::string& str1, std::string& str2)
+	{ 
+		std::string lower1 = str1;
+		std::string lower2 = str2;
+		std::transform(lower1.begin(), lower1.end(), lower1.begin(), ::tolower);
+		std::transform(lower2.begin(), lower2.end(), lower2.begin(), ::tolower);
+		return lower1 < lower2;
+	});	
+	
+	
+	
+	if(ImGui::Begin("File explorer 2", &b_explorer_opened))
+	{
+		
+		static char file_n[256] = "hello\0";
+		//~ strcpy(file_n,current_scene_file_name.c_str());
+		if(ImGui::InputText(":file name", file_n, IM_ARRAYSIZE(file_n))){
+			//~ current_scene_file_name = file_n;
+		}
+		ImGui::SameLine();
+		if(ImGui::Button("Save")){
+			b_explorer_opened = false;
+			
+			std::string f_name_str(file_n);
+			
+			current_explorer_file_path_V2 = explorer_V2_dir_path + f_name_str;
+			current_explorer_callback();			
+			//~ printf("current path : %s\n", current_explorer_file_path.c_str());
+		}
+		
+		// make directories a different color
+		ImVec4 color = ImColor(1.0f, 1.0f, 0.2f, 1.0f);
+		ImGui::PushStyleColor(ImGuiCol_Text, color);
+		
+		if(ImGui::Selectable("..", false))
+		{
+			
+			if( explorer_V2_dir_path != "/")
+			{
+				std::string new_path;
+				new_path = "";
+				
+				std::vector<std::string> splitted = split(explorer_V2_dir_path, "/");
+				
+				for (int i = 0; i < splitted.size()-2; i++)
+				{
+					new_path += splitted[i];
+					new_path += "/";
+				}
+				
+				//~ std::cout << "\n";
+					
+				explorer_V2_dir_path = new_path;		
+			}
+		}
+		for (int i = 0; i < dir_names.size(); i++)
+		{
+			if(ImGui::Selectable(dir_names[i].c_str(), false)){
+				
+				explorer_V2_dir_path += dir_names[i];	
+				explorer_V2_dir_path += "/";		
+			}	
+		}
+		// revert back to default color
+		ImGui::PopStyleColor();
+		
+		for (int i = 0; i < file_names.size(); i++)
+		{
+			if(ImGui::Selectable(file_names[i].c_str(), false)){
+				
+				//~ printf("Selected File is : ????????\n");
+				//~ std::string selected_file_path = explorer_V2_dir_path + file_names[i];
+				explorer_V2_file_name = file_names[i];
+				//~ strcpy(file_n,file_names[i].c_str());				
+				
+				
+				//~ explorer_V2_dir_path = selected_file_path;
+				printf("Selected File is : %s / %s\n", explorer_V2_dir_path.c_str(), explorer_V2_file_name.c_str());
+
+			}	
+		}	
+		
+		
+		
+		
+		
+	}
+	ImGui::End();
+	
+	dir_names.clear();
+	file_names.clear();
+	
+	return 0;
+}
+
+static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) // In C++11 you are better off using lambdas for this sort of forwarding callbacks
+{
+	printf("STUB !!! \n\n");
+	return 42;
+}
+
+void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callback = [](){})
+{
+	
+	Param<float> * p_float  = nullptr;
+	Param<int> *   p_int    = nullptr;
+	Param<bool> *  p_bool   = nullptr;
+	Param<std::string> *  p_text   = nullptr;
+	ParamMenu *    p_menu   = nullptr;
+	ParamButton *  p_button = nullptr;
+	ParamColor3 *  p_color3 = nullptr;
+	ParamSeparator *  p_separator = nullptr;
+	ParamFilePath *  p_file_path = nullptr;
+	
+	char _name[255];
+	      if(p_float  = dynamic_cast<Param<float> *>(param_ptr.get()) ){
+		
+		float _val = p_float->getValue();
+		float old = _val;
+		
+		sprintf((char *)_name, "##%s", p_float->getName());
+
+		ImGui::Columns(2);
+		ImGui::Text(p_float->getName() );
+		ImGui::NextColumn();
+		ImGui::PushItemWidth(-1);
+		if( ImGui::DragFloat((const char *) _name, &_val, 0.05f)){
+			//~ p_float->setValue(_val);
+			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
+			if (state == GLFW_PRESS)
+			{
+				if( !is_param_clicked){
+					
+					active_param = param_ptr;
+					is_param_clicked = true;
+					
+					std::shared_ptr<ReleaseDataFloat> data = std::make_shared<ReleaseDataFloat>();
+					current_param_data = data;
+					data->old_val = old; 
+					data->callback = [](){
+						printf("Float Param Release\n");
+					};					
+				}
+				
+				
+				ReleaseDataFloat * data_float = nullptr;
+				if( data_float = dynamic_cast<ReleaseDataFloat *>( current_param_data.get())){
+					
+					data_float->new_val = _val; 
+					
+				}
+				p_float->setValue(_val);
+			}else{
+				
+					std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, old, _val, [](){
+						printf("Flaot action callback !!!!!!\n");
+					});
+					actions.insert(actions.begin(), action );
+					p_float->setValue(_val);
+					
+			}
+		
+		}
+		
+		ImGui::Columns(1);
+		
+		
+	}else if(p_int    = dynamic_cast<Param<int> *>  (param_ptr.get()) ){
+		int _val = p_int->getValue();
+		int old = _val;
+
+		sprintf((char *)_name, "##%s", p_int->getName());		
+		ImGui::Columns(2);
+		ImGui::Text(p_int->getName() );
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		if( ImGui::SliderInt((const char *) _name, &_val, 0, 20)){
+			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
+			if (state == GLFW_PRESS)
+			{
+				if( !is_param_clicked){
+					
+					active_param = param_ptr;
+					is_param_clicked = true;
+					
+					std::shared_ptr<ReleaseDataInt> data = std::make_shared<ReleaseDataInt>();
+					current_param_data = data;
+					data->old_val = old; 
+					data->callback = [](){
+						printf("Int Param Release\n");
+					};					
+				}
+				
+				
+				
+				ReleaseDataInt * data_int = nullptr;
+				if( data_int = dynamic_cast<ReleaseDataInt *>( current_param_data.get())){
+					
+					data_int->new_val = _val; 
+					
+				}
+				p_int->setValue(_val);
+
+			}
+		}
+		
+		ImGui::Columns(1);
+	}else if(p_bool   = dynamic_cast<Param<bool> *> (param_ptr.get()) ){
+		bool _val = p_bool->getValue();
+		bool old = _val;
+
+		sprintf(_name, "##%s", p_bool->getName());		
+		ImGui::Columns(2);
+		ImGui::Text(p_bool->getName() );
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		if( ImGui::Checkbox( _name, &_val)){
+			std::shared_ptr<ActionParamChange<bool> > action = std::make_shared<ActionParamChange<bool> >(p_bool, old, _val, [](){
+					printf("bool action callback !!!!!!\n");
+			});
+			actions.insert(actions.begin(), action );
+		}
+		ImGui::Columns(1);
+		
+	}else if(p_text   = dynamic_cast<Param<std::string> *> (param_ptr.get()) ){
+		//~ ImGui::Text(p_text->getValue());
+		std::string _val = p_text->getValue();
+		std::string old = _val;
+
+		sprintf(_name, "##%s", p_text->getName());		
+		ImGui::Columns(2);
+		ImGui::Text(p_text->getName() );
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		
+		
+
+		static char temp_char[256];
+		strcpy(temp_char,_val.c_str());		
+		if( ImGui::InputText( _name, temp_char, 256, 
+			ImGuiInputTextFlags_EnterReturnsTrue|ImGuiInputTextFlags_CallbackCompletion|ImGuiInputTextFlags_CallbackHistory, &TextEditCallbackStub))
+		{
+			std::shared_ptr<ActionParamChange<std::string> > action = std::make_shared<ActionParamChange<std::string> >(p_text, old, _val, [](){
+					printf("Text action callback !!!!!!\n");
+					
+			});
+			actions.insert(actions.begin(), action );
+			p_text->setValue(temp_char);
+		}
+		ImGui::Columns(1);
+		
+	}else if(p_menu   = dynamic_cast<ParamMenu *>   (param_ptr.get()) ){
+		
+		
+		sprintf(_name, "##%s", p_menu->getName());	
+				
+		int choice = p_menu->getValue();
+		
+		ImGui::Columns(2);
+		ImGui::Text(p_menu->getName() );
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);
+		
+
+							
+		if(ImGui::BeginCombo(_name, p_menu->entries[choice].first,0))
+		{
+			int inc = 0;
+			for(auto entry : p_menu->entries)
+			{
+				if(ImGui::Selectable(entry.first, choice == inc))
+				{
+					
+					int _val = p_menu->getValue();
+					int old = _val;					
+					
+					std::shared_ptr<ActionParamMenuChange> action = std::make_shared<ActionParamMenuChange >(p_menu, old, inc, [old, inc](){
+							printf("Menu action callback old : %d, new %d\n", old, inc);
+					});
+					actions.insert(actions.begin(), action );
+					choice = inc;
+				}
+				inc++;
+			}
+			ImGui::EndCombo();
+		}
+		
+		ImGui::Columns(1);
+		
+	}else if(p_button = dynamic_cast<ParamButton *> (param_ptr.get()) ){
+		
+		
+		sprintf(_name, "##%s", p_button->getName());	
+			
+		//~ printf("##%s", p_button->getName());	
+
+		
+		ImGui::Columns(2);
+		ImGui::Text("");
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		
+		if(ImGui::Button(p_button->getName())){
+			p_button->getCallback()();
+		}	
+		
+		ImGui::Columns(1);
+	}else if(p_color3 = dynamic_cast<ParamColor3 *> (param_ptr.get()) ){
+		
+		glm::vec3 _val = glm::vec3(p_color3->getValue());
+		glm::vec3 old = _val;		
+		
+		sprintf(_name, "##%s", p_color3->getName());	
+			
+		//~ printf("##%s", p_color3->getName());	
+
+		
+		ImGui::Columns(2);
+		ImGui::Text(p_color3->getName());
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		
+		
+		glm::vec3 temp_color  = glm::vec3(p_color3->color.x, p_color3->color.y, p_color3->color.z);
+		if(ImGui::ColorEdit3("u_color", (float*)glm::value_ptr(temp_color)))
+		{
+			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
+			if (state == GLFW_PRESS)
+			{
+				if( !is_param_clicked){
+					
+					active_param = param_ptr;
+					is_param_clicked = true;
+					
+					std::shared_ptr<ReleaseDataColor3> data = std::make_shared<ReleaseDataColor3>();
+					current_param_data = data;
+					data->old_val = old; 
+					data->callback = [](){
+						printf("Color Param Release\n");
+						//~ p_color3->color = 
+					};					
+					
+					printf("Clicked, old value = %.3f %.3f %.3f \n", old.x, old.y, old.z);
+				}
+				
+				
+				ReleaseDataColor3 * data_color3 = nullptr;
+				if( data_color3 = dynamic_cast<ReleaseDataColor3 *>( current_param_data.get())){
+					
+					data_color3->new_val = temp_color; 
+					
+				}
+				//~ p_color3->color = _val;
+				
+			}else{
+				
+					std::shared_ptr<ActionParamColor3Change> action = std::make_shared<ActionParamColor3Change>(p_color3, old, temp_color, [](){
+						printf("Color3 action callback !!!!!!\n");
+					});
+					actions.insert(actions.begin(), action );
+					p_color3->color = temp_color;
+			}
+			
+					
+		}
+
+		
+		ImGui::Columns(1);
+	}else if(p_separator = dynamic_cast<ParamSeparator *>(param_ptr.get())){
+		ImGui::Separator();
+	}else if(p_file_path = dynamic_cast<ParamFilePath *>(param_ptr.get())){
+		std::string _val = p_file_path->getValue();
+		std::string old = _val;
+
+		sprintf(_name, "##%s", p_file_path->getName());		
+		ImGui::Columns(3);
+		ImGui::PushItemWidth(-1);	
+		ImGui::Text(p_file_path->getName() );
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		
+		
+
+	
+		ImGui::Text((char *)p_file_path->getValue().c_str());
+		
+		
+		
+		ImGui::NextColumn();	
+		if(ImGui::Button("file") == true)
+		{
+				b_explorer_opened = true;
+				_val = explorer_V2_dir_path + explorer_V2_file_name;
+				current_explorer_callback = [p_file_path, old, _val](){
+					printf("ParamFilePath -->  current path : %s\n" ,explorer_V2_dir_path.c_str());
+					
+					p_file_path->setValue(explorer_V2_dir_path + explorer_V2_file_name);
+					std::shared_ptr<ActionParamFilePathChange > action = std::make_shared<ActionParamFilePathChange >(p_file_path, old, p_file_path->getValue(), p_file_path->getCallback());	
+					
+					
+					current_explorer_callback = [](){};
+					actions.insert(actions.begin(), action );
+				};			
+		}
+		ImGui::Columns(1);		
+		
+		
+	}
+}
+
+void actions_dialog()
+{
+	using namespace ImGui;
+	if(Begin("Actions"), true)
+	{
+		Columns(2);
+		Text("Undos");
+		PushItemWidth(-1);
+		if (ListBoxHeader("##Undos", 10))
+		{
+			for(auto action : actions)
+			{
+				Selectable(action->getName(), false);
+			}
+			
+			ListBoxFooter();
+		}
+
+		NextColumn();
+		Text("Redos"); 
+		PushItemWidth(-1);
+		if (ListBoxHeader("##Redos", 10))
+		{
+			//~ for(auto action : actions)
+			//~ {
+				//~ Selectable("Selected", false);
+			//~ }
+			Selectable("None", false);
+			ListBoxFooter();
+		}        
+
+		End();
+	}
+}
+
+void saveToFile()
+{
+	printf("\nsave function\n\n");
+	
+		
+	JsonFileWriter writer;
+	writer.encodeModules(renderer.m_modules);
+	
+	current_scene_file_path = current_explorer_file_path_V2;
+	
+	std::ofstream output_file;
+	output_file.open(current_explorer_file_path_V2);
+	
+	
+	
+	output_file << writer.json_data; ;
+	output_file.close();
+	
+	b_explorer_opened = false;
+	
+	if( current_scene_file_path != "" )
+	{
+		glfwSetWindowTitle(ui_window, current_scene_file_path.c_str()); 
+	}
+}
+
+void move_module( int from , int to)
+{
+
+	
+	std::shared_ptr<Module > save = renderer.m_modules[from];
+	renderer.m_modules.erase( renderer.m_modules.begin() + from);	
+	renderer.m_modules.insert( renderer.m_modules.begin() + to, save);
+}
+
+void add_module(MODULE_TYPE type, unsigned int layer_num = 0)
+{
+	if( (MODULE_TYPE)type == MODULE_TYPE_ORBITER)
+	{
+		
+		std::shared_ptr<Orbiter> mod = std::make_shared<Orbiter>();
+		mod->setName("Orbiter 2");
+		mod->p_color->color = glm::vec3(1.0, 1.0, 1.0);
+		mod->init();
+		//~ renderer.m_modules.push_back(mod);
+		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+	}
+	else if( (MODULE_TYPE)type == MODULE_TYPE_CIRCLES)
+	{
+		std::shared_ptr<Circles> mod = std::make_shared<Circles>();
+		mod->setName("Circles 2");
+		mod->p_color->color = glm::vec3(1.0, 0.0, 1.0);
+		mod->init();
+		//~ renderer.m_modules.push_back(mod);
+		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+	}	
+	else if( (MODULE_TYPE)type == MODULE_TYPE_IMAGE)
+	{
+		std::shared_ptr<Image> mod = std::make_shared<Image>();
+		mod->setName("Image");
+		mod->p_color->color = glm::vec3(1.0, 1.0, 1.0);
+		mod->init();
+		//~ renderer.m_modules.push_back(mod);
+		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+	}
+}
+
+void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
+{
+	renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, ptr);
+}
+
+void remove_module(unsigned int id)
+{
+	renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
+	
+}
+
+void module_list_dialog()
+{
+	using namespace ImGui;
+	if( ImGui::Begin("Module List"), true)
+	{
+		const char * choices[] = {"Orbiter", "Circles", "Image"};
+		static int choice = 1;
+		SetNextItemWidth(100);
+		if(BeginCombo("##label", choices[choice - 1])){
+			
+			//~ if(Selectable("choose")){
+				
+			//~ }
+			if(Selectable("Orbiter", false)){
+				choice = (int)MODULE_TYPE_ORBITER;
+			}
+			if(Selectable("Circles", false)){
+				choice = (int)MODULE_TYPE_CIRCLES;
+			}
+			if(Selectable("Image", false)){
+				choice = (int)MODULE_TYPE_IMAGE;
+			}			
+			
+			EndCombo();
+		}
+		
+		SameLine();
+		if(Button("Add Module"))
+		{
+			std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>((MODULE_TYPE)choice, add_module, remove_module);
+			
+			actions.insert(actions.begin(), action);
+			add_module((MODULE_TYPE)choice);
+		}
+		SameLine();
+		if(Button("Remove"))
+		{
+			if( current_module_id != -1)
+			{
+				std::shared_ptr<ActionRemoveModule> action = std::make_shared<ActionRemoveModule>(
+																						(MODULE_TYPE)choice, 
+																						renderer.m_modules[current_module_id], 
+																						current_module_id, 
+																						add_module_ptr, 
+																						remove_module
+																						);
+				
+				actions.insert(actions.begin(), action);
+				remove_module(current_module_id);
+			}
+				
+		}		
+		
+		
+		int inc = 0;
+		
+		for(auto module : renderer.m_modules)
+		{
+		
+			
+			
+			ImGui::PushID(inc);
+			//~ ImGui::PushItemWidth(100);
+			if( Selectable("##title", inc == current_module_id, 0, ImVec2( 100, GetFontSize() * 3 )))
+			{
+
+				current_module_id = inc;
+			}
+			
+			
+			ImGuiDragDropFlags src_flags = 0;
+			
+			if(BeginDragDropSource(src_flags))
+			{
+				if( !(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip)){
+								
+				}				
+				SetDragDropPayload("DRAGDROP", &inc, sizeof(int));
+				EndDragDropSource();
+			}
+			
+			if(BeginDragDropTarget())
+			{
+				ImGuiDragDropFlags target_flags = 0;
+				//~ target_flags |= ImGuiDragDropFlags_AcceptBeforeDelivery;
+				
+				if( const ImGuiPayload * payload = AcceptDragDropPayload("DRAGDROP", target_flags) )
+				{
+					//~ printf("move from %d \n", *(const int*)payload->Data);
+					//~ printf("move to %d \n", inc);
+					
+					std::shared_ptr<ActionMoveModule> action = std::make_shared<ActionMoveModule>(
+						*(const int*)payload->Data , 
+						inc , 
+						[](){
+						
+					});
+					action->m_move_function = move_module;
+					actions.insert(actions.begin(), action );					
+					move_module(*(const int*)payload->Data, inc);
+				}
+				
+				EndDragDropTarget();
+			}	
+			
+			
+			
+			
+           
+            
+            //~ ImGui::SameLine();
+            SetCursorPosY(GetCursorPosY() - GetFontSize() * 3);
+            ImGui::SetNextItemWidth(200);
+            Text(module->p_name->getValue().c_str());
+            SameLine();
+            BeginChild("module options" , ImVec2(0, GetFontSize() * 3), true);
+            
+			UI_widget(module->p_opacity);
+			
+			ImGui::EndChild();
+			ImGui::PopID();			
+			
+			//~ ImGui::SetCursorPosY( 0);
+
+			
+			inc++;
+		}
+	}
+	ImGui::End();
+}
+
+void draw_param_layout(ParamLayout& layout)
+{
+	ImGui::Text(layout.getName());
+	ImGui::Separator();
+	for(auto param : layout.params){
+		UI_widget(param);
+	}
+}
+
+//// GLFW callbacks
+void live_window_size_callback(GLFWwindow* window, int width, int height)
+{
+	printf("width : %d -- height %d \n", width, height);
+	live_w_width = width;
+	live_w_height = height;
+	
+	//~ init_viewport_FBO();
+	renderer.initFBO(live_w_width, live_w_height);
+}
+
+void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<ReleaseData> data)
+{
+	//~ printf("param name : %s\n", param->getName());
+	Param<float> * p_float = nullptr;
+	ReleaseDataFloat * data_float = nullptr;
+	
+	Param<int> * p_int = nullptr;
+	ReleaseDataInt * data_int = nullptr;	
+	
+	ParamColor3 * p_color3 = nullptr;
+	ReleaseDataColor3 * data_color3 = nullptr;		
+	
+	if((p_float = dynamic_cast<Param<float> *>(param.get())) && (data_float = dynamic_cast<ReleaseDataFloat * >(data.get())))
+	{
+		
+		std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, data_float->old_val, data_float->new_val, data_float->callback);
+		actions.insert(actions.begin(), action );
+				
+	}else if((p_int = dynamic_cast<Param<int> *>(param.get())) && (data_int = dynamic_cast<ReleaseDataInt * >(data.get())))
+	{
+		
+		std::shared_ptr<ActionParamChange<int> > action = std::make_shared<ActionParamChange<int> >(p_int, data_int->old_val, data_int->new_val, data_int->callback);
+		actions.insert(actions.begin(), action );	
+			
+	}else if((p_color3 = dynamic_cast<ParamColor3 *>(param.get())) && (data_color3 = dynamic_cast<ReleaseDataColor3 * >(data.get())))
+	{
+		//~ printf("old val  AGAIN -> %.3f %.3f %.3f\n", data_color3->old_val.x, data_color3->old_val.y, data_color3->old_val.z);
+		std::shared_ptr<ActionParamColor3Change > action = std::make_shared<ActionParamColor3Change >(p_color3, data_color3->old_val, data_color3->new_val, data_color3->callback);
+		actions.insert(actions.begin(), action );		
+	}	
+
+} 
+
+void UI_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+ 
+	//~ printf("button_action\n");
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+		//~ printf("\tleft button press\n");
+	}
+	
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
+		if( is_param_clicked){
+			
+			execute_widget_release(active_param, current_param_data);
+
+			is_param_clicked = false;
+		}
+	}
+}
+
+
+void UI_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+		//~ printf("scancode : %d, mods : %d\n", scancode, mods );
+    if (scancode == 25 /* z key */ && action == GLFW_PRESS && mods == 2 /* ctrl */){
+		
+		//~ printf("UNDO ?\n");
+		if(actions.size() > 0)
+		{
+			actions[0]->undo();
+			actions.erase(actions.begin());
+		}		
+		
+	}
+        
+}
+/////////
+
+void make_sound(const char * wav_path)
+{
+	
+	
+	wave_reader.read(wav_path);
+	
+	while(true)
+	{
+		wave_reader.play( &sound_player_cmd, &sound_player_mode, &sine_wave_frequency, true);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	////////////////////////////////////////
+    //~ Sine sine;
+
+    //~ printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
+    
+    //~ ScopedPaHandler paInit;
+    //~ if( paInit.result() != paNoError ) goto error;
+
+    //~ if (sine.open(Pa_GetDefaultOutputDevice()))
+    //~ {
+        //~ if (sine.start())
+        //~ {
+            //~ printf("Play for %d seconds.\n", NUM_SECONDS );
+            //~ Pa_Sleep( NUM_SECONDS * 1000 );
+
+            //~ sine.stop();
+        //~ }
+
+        //~ sine.close();
+    //~ }
+
+    //~ printf("Test finished.\n");
+    
+	//~ error:
+		//~ fprintf( stderr, "An error occured while using the portaudio stream\n" );
+		//~ fprintf( stderr, "Error number: %d\n", paInit.result() );
+		//~ fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( paInit.result() ) );    
+		
+		////////////////////////////////////
+}
+
+void sound_dialog()
+{
+	if(ImGui::Begin("Sound"), true)
+	{
+		const char * modes[2] = {"Wave file Player", "Sine Wave Generator"};
+		static int choice = 0;
+		
+		ImGui::Text("Mode");
+		ImGui::SameLine();
+		
+		ImGui::PushItemWidth(-1);
+		if( ImGui::BeginCombo("##Mode", modes[choice]))
+		{
+			for(size_t i = 0; i < 2; i++)
+			{
+				if(ImGui::Selectable(modes[i], choice == i))
+				{
+					choice = i;
+				}
+				
+			}
+
+			ImGui::EndCombo();
+		}
+			
+		//~ ImGui::SameLine();
+		if(ImGui::Button("Change")){
+			sound_player_mode = (SOUND_PLAYER_MODE)choice;
+		}
+		
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+		
+		if( sound_player_mode == SOUND_PLAYER_MODE_FILE)
+		{
+			UI_widget(sound_player_wave_file_path_param);
+		}
+		else if(sound_player_mode == SOUND_PLAYER_MODE_SINE_WAVE)
+		{
+			static float freq = 440.0;
+			ImGui::Text("Frequency :");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(-1);
+			if(ImGui::InputFloat("##freq", &freq ))
+			{
+				sine_wave_frequency = freq;
+				printf("%.3f\n",freq);
+			}
+		}
+
+		
+		
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+		
+				
+		if(ImGui::Button("Play")){
+			if( sound_player_cmd == SOUND_PLAYER_CMD_STOP)
+			{
+				wave_reader.read(sound_player_wave_file_path_param->getValue().c_str());
+				sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
+				
+				
+			}else{
+				sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
+			}
+			
+		}
+		ImGui::SameLine();
+		if(ImGui::Button("Pause")){
+			sound_player_cmd = SOUND_PLAYER_CMD_PAUSE;
+		}
+		ImGui::SameLine();
+		if(ImGui::Button("Stop")){
+			sound_player_cmd = SOUND_PLAYER_CMD_STOP;
+		}
+		ImGui::Text("Wave form :");
+		ImGui::BeginChild("child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+		
+		for(size_t i=0; i < 512; i++){
+			ImGui::GetWindowDrawList()->AddRectFilled(
+						ImVec2(ImGui::GetCursorScreenPos().x + i, ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0)),
+						ImVec2(
+								ImGui::GetCursorScreenPos().x + i + 1, 
+								ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0) + sound_buffer[i*2]  * 100.0f
+						), 
+						IM_COL32(255,255,255,150)
+			);
+		}
+		
+		
+		ImGui::EndChild();
+		
+		
+		ImGui::Text("FFT :");
+		ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+		
+		double max = abs(fft_out[0][0]);
+		int num_bands = 16;
+		int fft_num_samples = 256;
+		int num_per_band = fft_num_samples / num_bands;
+		for(size_t i=0; i < num_bands; i++){
+			
+			double accum = 0.0;
+			for (int j = 0; j < num_per_band; j++)
+			{
+				double fft_val = (abs(fft_out[(i*num_per_band)+j][0])*2.0)/fft_num_samples;
+				accum += fft_val;
+			}
+			
+			accum /= (double)num_per_band;
+			accum = sqrt(accum);
+			
+			ImGui::GetWindowDrawList()->AddRectFilled(
+						ImVec2(ImGui::GetCursorScreenPos().x + i*2*num_per_band, ImGui::GetCursorScreenPos().y),
+						ImVec2(
+								ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
+								ImGui::GetCursorScreenPos().y + accum * 200.0f
+						), 						
+						IM_COL32(255,255,255,150)
+			);
+		}
+		
+		
+		ImGui::EndChild();
+		
+				
+		ImGui::End();
+	}
+}
+
+
+
+int main(int argc, char** argv)
+{
+
+	
+	FFT fft;
+	
+	
+	for(size_t i=0; i< 512; i++){
+		sound_buffer[i] = 0.5;
+	}
+	
+	//~ if( argc < 2)
+	//~ {
+		//~ printf("I need a wav file path\n\n");
+		//~ return 0;
+	//~ } 
+	//~ WAV_PATH = argv[1];
+	//~ char temp_char[512] = "/home/pi/Downloads/2009-03-30-clairdelune.ogg\0";
+	//~ strcpy(WAV_PATH, (const char *)temp_char);
+	//~ WAV_PATH = "/home/pi/Downloads/2009-03-30-clairdelune.ogg";
+	std::string str_wav_path = "/home/pi/Downloads/2009-03-30-clairdelune.ogg";
+	WAV_PATH = (char *)(str_wav_path.c_str());
+	std::thread t(make_sound, WAV_PATH);
+	
+	Client client;
+	int res;
+	client.send_message("hello server ...", res);
+	client.send_message("whos the boss now ...",res);
+
+	
+	sound_player_wave_file_path_param->setName("Sound File");
+	sound_player_wave_file_path_param->setValue(std::string(WAV_PATH));
+	sound_player_wave_file_path_param->setCallback( [](){
+		printf("changed file path \n");
+		//~ WAV_PATH = sound_player_wave_file_path_param->getValue().c_str();
+		strcpy(WAV_PATH, sound_player_wave_file_path_param->getValue().c_str());
+		printf("%s\n", WAV_PATH);
+	});
+
+	
+	std::shared_ptr<ParamButton > play_button = std::make_shared<ParamButton >();
+	play_button->setName("send PLAY");
+	play_button->setCallback( [&client, &res](){
+		client.send_message("PLAY", res);
+	});
+	player_layout.addParam(play_button);		
+	
+	std::shared_ptr<ParamButton > stop_button = std::make_shared<ParamButton >();
+	stop_button->setName("send STOP");
+	stop_button->setCallback( [&client, &res](){
+		client.send_message("STOP", res);
+	});
+	player_layout.addParam(stop_button);			
+	
+
+	
+	if( !glfwInit()){
+		printf("glfw init error\n");
+		return -1;
+	}
+	
+	
+	
+	ui_window = glfwCreateWindow(w_width, w_height,"UI Window", NULL, NULL);
+	live_window = glfwCreateWindow(live_w_width, live_w_height,"other window", NULL, ui_window);
+	
+	if( !live_window){
+		printf("glfw live_window error ??\n");
+		glfwTerminate();
+	}
+	if( !ui_window){
+		printf("glfw window error\n");
+		glfwTerminate();
+	}
+	printf("hello \n");
+	
+	glfwSetWindowSizeCallback(live_window, live_window_size_callback);
+	
+	glfwSetMouseButtonCallback(ui_window, UI_mouse_button_callback);
+	glfwSetKeyCallback(ui_window, UI_key_callback);
+	glfwMakeContextCurrent(ui_window);
+	
+	
+	glewInit();
+	
+	
+
+	
+	printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
+	printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	
+	
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);		
+	
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+    //~ io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //~ io.ConfigViewportsNoAutoMerge = true;
+    //~ io.ConfigViewportsNoTaskBarIcon = true;
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    
+    
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(ui_window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);    
+	
+	
+
+	
+
+	static bool show_another_window = true;	
+	glEnable(GL_TEXTURE_2D);
+
+
+	
+	std::shared_ptr<Orbiter> orbiter = std::make_shared<Orbiter>();
+	orbiter->setName("Orbiter");
+	orbiter->init();
+	renderer.m_modules.push_back(orbiter);	
+	
+	std::shared_ptr<Orbiter> orbiter_2 = std::make_shared<Orbiter>();
+	orbiter_2->setName("Orbiter 2");
+	orbiter_2->p_color->color = glm::vec3(0.0, 0.0, 1.0);
+	orbiter_2->init();
+	renderer.m_modules.push_back(orbiter_2);		
+		
+	std::shared_ptr<Circles> circles = std::make_shared<Circles>();
+	circles->setName("Circles Module");
+	circles->init();
+	renderer.m_modules.push_back(circles);
+
+	
+	renderer.initTexture();
+	renderer.initFBO(live_w_width, live_w_height);
+	//~ init_viewport_FBO();
+
+	timer.start();
+	int cur_time = 0;
+	int old_time = 0;
+	while (!glfwWindowShouldClose(live_window)){
+		
+		double fft_temp[512];
+		for (size_t i = 0; i < 512; i++)
+		{
+			fft_temp[i] = (double)sound_buffer[i*2];
+		}
+		
+		fft_out = fft.execute_plan(fft_temp);
+
+		
+		timer.update();
+		
+		cur_time = timer.getMillis();
+		//~ printf("cur_time : %d\n", cur_time);
+		old_time = cur_time;
+		
+		glfwMakeContextCurrent(ui_window);
+		
+		
+		glClearColor(0.0,0.0,0.0,1.0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		renderer.updateModules();
+		renderer.render();
+		//~ render_viewport_FBO();
+		
+		       // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        
+			static ImGuiID dockspaceID = 0;
+			bool active = true;
+			
+			if( b_explorer_opened )
+			{
+				explorerDialog_V2("/home/pi/Downloads");
+			}
+			
+			if (active)
+			{
+				// Declare Central dockspace
+
+				ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_None|ImGuiDockNodeFlags_PassthruCentralNode/*|ImGuiDockNodeFlags_NoResize*/);
+			}
+
+			
+			module_list_dialog();
+			actions_dialog();
+			sound_dialog();
+			
+			if (ImGui::Begin("Main Menu",  &active))
+			{
+				
+				if(ImGui::BeginMenu("File"))
+				{
+					if(ImGui::MenuItem("save"))
+					{
+						printf("save ????\n");
+						b_explorer_opened = true;
+						current_explorer_callback = [](){
+							saveToFile();
+						};
+					}
+					
+					if(ImGui::MenuItem("exit"))
+					{
+										
+					}
+					
+					ImGui::EndMenu();
+				}
+					
+				if(ImGui::BeginMenu("Edit"))
+				{
+					if(ImGui::MenuItem("Undo"))
+					{
+						if(actions.size() > 0)
+						{
+							actions[0]->undo();
+							actions.erase(actions.begin());
+						}
+					}
+					
+					ImGui::EndMenu();
+				}	
+			}
+			ImGui::End(); 
+			 
+			if (ImGui::Begin("Viewport"), &active)
+			{
+				int avail_width = ImGui::GetContentRegionAvail().x;				
+				
+				float _ratio = (float)live_w_width / (float)live_w_height;
+				ImGui::Image((void*)(uintptr_t)renderer.m_texture, ImVec2(avail_width,(int)((float)avail_width / _ratio)),ImVec2(0,1), ImVec2(1,0));
+				
+			}
+			ImGui::End(); 
+			
+			if (ImGui::Begin("Player"), &active)
+			{
+				draw_param_layout(player_layout);
+
+			}
+			ImGui::End(); 
+			
+			if (ImGui::Begin("Module Params"), &active)
+			{
+				
+				if( current_module_id != -1)
+					draw_param_layout(renderer.m_modules[current_module_id]->param_layout);
+
+			}
+			ImGui::End(); 			
+        
+        ImGui::Render();	
+		
+		//~ glClearColor(0.0,0.0,0.0,1.0);
+		//~ glClear(GL_COLOR_BUFFER_BIT);
+		
+
+		
+		
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // Update and Render additional Platform Windows
+        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+        //~ ImGui::CreateContext();
+        
+        //~ ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }		
+		
+		
+		glfwPollEvents();
+		glfwSwapBuffers(ui_window);
+		counter++;
+		
+		
+		glfwMakeContextCurrent(live_window);
+		
+		//~ float aspect = (float)live_w_width / (float)live_w_height;
+		glViewport(0, 0, live_w_width, live_w_height);
+		
+	
+		
+		//~ glClearColor(0.0,0.0,1.0,0.1);		
+		//~ glClear(GL_COLOR_BUFFER_BIT);
+		
+		renderer.displayScreen();	
+		
+		glfwPollEvents();
+		glfwSwapBuffers(live_window);
+		//~ update_otherWindow();
+	}
+	
+		
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+	
+	
+	//~ glfwDestroyWindow(ui_window);
+	//~ if(live_window != nullptr)
+	//~ {
+		//~ t.detach();
+		//~ glfwDestroyWindow(live_window);
+	//~ }
+	
+	glfwTerminate();
+	exit(0);
+	return 0;
+}
