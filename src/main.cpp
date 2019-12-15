@@ -98,7 +98,7 @@ std::string current_scene_file_name = "default.vjs";
 std::string current_scene_file_path = "";
 
 
-std::string explorer_V2_dir_path = "/home/pi/Documents/";
+std::string explorer_V2_dir_path = "/home/pi/Downloads/";
 std::string explorer_V2_file_name = "";
 std::string current_explorer_file_path_V2 = "";
 int current_module_id = -1;
@@ -107,6 +107,10 @@ Renderer renderer;
 
 float sound_buffer[512 * 2];
 fftw_complex * fft_out;
+
+const unsigned int NUM_BANDS = 32;
+float fft_maximums[NUM_BANDS];
+
 
 WaveFileReader wave_reader(sound_buffer);
 SOUND_PLAYER_CMD sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
@@ -372,6 +376,15 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		
 		ImGui::Columns(1);
 		
+		if (ImGui::BeginPopupContextItem("item context menu"))
+		{
+
+			ImGui::Selectable("item1", false);
+			ImGui::Selectable("item2", false);
+			
+			ImGui::EndPopup();
+			
+		}		
 		
 	}else if(p_int    = dynamic_cast<Param<int> *>  (param_ptr.get()) ){
 		int _val = p_int->getValue();
@@ -992,6 +1005,88 @@ void make_sound(const char * wav_path)
 		////////////////////////////////////
 }
 
+void display_fft_values()
+{
+		ImGui::Text("FFT :");
+		ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+		
+		static float threshold  = 0.1;
+		static float exponent  = 1.5;
+		if( ImGui::SliderFloat("##Threshold", &threshold, 0.0, 1.0, "Threshold = %.3f"))
+		{
+			
+		}
+		
+		if( ImGui::SliderFloat("##Exponent", &exponent, 0.0, 10.0, "Exponent = %.3f"))
+		{
+			
+		}		
+		
+		double max = abs(fft_out[0][0]);
+		int num_bands = NUM_BANDS;
+		int fft_num_samples = 256;
+		int num_per_band = fft_num_samples / num_bands;
+		for(size_t i=0; i < num_bands/2; i++){
+			
+			double accum = 0.0;
+			for (int j = 0; j < num_per_band; j++)
+			{
+				double fft_val = (abs(fft_out[(i*num_per_band)+j][0])*2.0)/fft_num_samples;
+				accum += fft_val;
+			}
+			
+			accum /= (double)num_per_band;
+			//~ accum = sqrt(accum);
+			accum *= (double)(i+1)*(i != 0 ? exponent : 1.0);
+			double height;
+			if(accum < (double)threshold){
+				accum = 0.0;
+			}
+			
+			if( accum > fft_maximums[i])
+			{
+				fft_maximums[i] = (float)(accum);
+			}else{
+				fft_maximums[i] *= 1.0f - 0.005 * (float)timer.getDeltaMillis();
+			}
+			
+				
+				
+			height = accum * 200.0f;
+			
+			
+			ImGui::GetWindowDrawList()->AddRectFilled(
+						ImVec2(ImGui::GetCursorScreenPos().x + i*2*num_per_band, ImGui::GetCursorScreenPos().y),
+						ImVec2(
+								ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
+								ImGui::GetCursorScreenPos().y  + height
+						), 						
+						IM_COL32(255,255,255,30)
+			);
+		}
+		
+		
+		
+		for (int i = 0; i < NUM_BANDS/2; i++)
+		{
+			double height = (double)fft_maximums[i] * 200.0;
+			ImGui::GetWindowDrawList()->AddRectFilled(
+						ImVec2(
+							ImGui::GetCursorScreenPos().x + i*2*num_per_band, 
+							ImGui::GetCursorScreenPos().y + height - 2
+						),
+						ImVec2(
+							ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
+							ImGui::GetCursorScreenPos().y  + height
+						), 						
+						IM_COL32(255,255,255,150)
+			);			
+		}
+		
+		
+		ImGui::EndChild();	
+}
+
 void sound_dialog()
 {
 	if(ImGui::Begin("Sound"), true)
@@ -1090,37 +1185,7 @@ void sound_dialog()
 		ImGui::EndChild();
 		
 		
-		ImGui::Text("FFT :");
-		ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
-		
-		double max = abs(fft_out[0][0]);
-		int num_bands = 16;
-		int fft_num_samples = 256;
-		int num_per_band = fft_num_samples / num_bands;
-		for(size_t i=0; i < num_bands; i++){
-			
-			double accum = 0.0;
-			for (int j = 0; j < num_per_band; j++)
-			{
-				double fft_val = (abs(fft_out[(i*num_per_band)+j][0])*2.0)/fft_num_samples;
-				accum += fft_val;
-			}
-			
-			accum /= (double)num_per_band;
-			accum = sqrt(accum);
-			
-			ImGui::GetWindowDrawList()->AddRectFilled(
-						ImVec2(ImGui::GetCursorScreenPos().x + i*2*num_per_band, ImGui::GetCursorScreenPos().y),
-						ImVec2(
-								ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
-								ImGui::GetCursorScreenPos().y + accum * 200.0f
-						), 						
-						IM_COL32(255,255,255,150)
-			);
-		}
-		
-		
-		ImGui::EndChild();
+		display_fft_values();
 		
 				
 		ImGui::End();
@@ -1132,7 +1197,7 @@ void sound_dialog()
 int main(int argc, char** argv)
 {
 
-	
+	memset(fft_maximums, 0.0, sizeof(float) * NUM_BANDS);
 	FFT fft;
 	
 	

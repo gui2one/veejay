@@ -13,15 +13,22 @@ void Timer::start()
 
 }
 
-int Timer::getMillis(){
+int Timer::getMillis()
+{
 	return m_millis;
 }
+
 void Timer::update()
 {
 	m_current_time = std::chrono::steady_clock::now();
 	auto duration = std::chrono::duration(m_current_time - m_start_time);
 	auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+	m_old_millis = m_millis;
 	m_millis = (int)millis.count();
 	//~ std::cout << "milliseconds : " << (millis.count()) << std::endl;
 }
 
+int Timer::getDeltaMillis()
+{
+	return m_millis - m_old_millis;
+}

@@ -12,11 +12,13 @@ class Timer
 		void start();
 		void update();
 		int getMillis();
+		int getDeltaMillis();
 
 		
 	private:
 	
 		int m_millis;
+		int m_old_millis;
 		std::chrono::steady_clock::time_point m_start_time, m_current_time;
 
 		

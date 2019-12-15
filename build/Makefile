@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pi/projects/glfw_multi_window/build
+CMAKE_SOURCE_DIR = /home/pi/projects/veejay/build
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pi/projects/glfw_multi_window/build
+CMAKE_BINARY_DIR = /home/pi/projects/veejay/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/projects/glfw_multi_window/build/CMakeFiles /home/pi/projects/glfw_multi_window/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/projects/veejay/build/CMakeFiles /home/pi/projects/veejay/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/projects/glfw_multi_window/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/projects/veejay/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -162,653 +162,653 @@ CoreLib/fast:
 	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/build
 .PHONY : CoreLib/fast
 
-home/pi/projects/glfw_multi_window/src/actions.o: home/pi/projects/glfw_multi_window/src/actions.cpp.o
+home/pi/projects/veejay/src/actions.o: home/pi/projects/veejay/src/actions.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/actions.o
-
-# target to build an object file
-home/pi/projects/glfw_multi_window/src/actions.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/actions.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/actions.cpp.o
-
-home/pi/projects/glfw_multi_window/src/actions.i: home/pi/projects/glfw_multi_window/src/actions.cpp.i
-
-.PHONY : home/pi/projects/glfw_multi_window/src/actions.i
-
-# target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/actions.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/actions.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/actions.cpp.i
-
-home/pi/projects/glfw_multi_window/src/actions.s: home/pi/projects/glfw_multi_window/src/actions.cpp.s
-
-.PHONY : home/pi/projects/glfw_multi_window/src/actions.s
-
-# target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/actions.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/actions.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/actions.cpp.s
-
-home/pi/projects/glfw_multi_window/src/core.o: home/pi/projects/glfw_multi_window/src/core.cpp.o
-
-.PHONY : home/pi/projects/glfw_multi_window/src/core.o
+.PHONY : home/pi/projects/veejay/src/actions.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core.cpp.o
+home/pi/projects/veejay/src/actions.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/actions.cpp.o
+.PHONY : home/pi/projects/veejay/src/actions.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core.i: home/pi/projects/glfw_multi_window/src/core.cpp.i
+home/pi/projects/veejay/src/actions.i: home/pi/projects/veejay/src/actions.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core.i
+.PHONY : home/pi/projects/veejay/src/actions.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core.cpp.i
+home/pi/projects/veejay/src/actions.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/actions.cpp.i
+.PHONY : home/pi/projects/veejay/src/actions.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core.s: home/pi/projects/glfw_multi_window/src/core.cpp.s
+home/pi/projects/veejay/src/actions.s: home/pi/projects/veejay/src/actions.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core.s
+.PHONY : home/pi/projects/veejay/src/actions.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core.cpp.s
+home/pi/projects/veejay/src/actions.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/actions.cpp.s
+.PHONY : home/pi/projects/veejay/src/actions.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/modules/circles.o: home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.o
+home/pi/projects/veejay/src/core.o: home/pi/projects/veejay/src/core.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/circles.o
+.PHONY : home/pi/projects/veejay/src/core.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.o
+home/pi/projects/veejay/src/core.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core.cpp.o
+.PHONY : home/pi/projects/veejay/src/core.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/modules/circles.i: home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.i
+home/pi/projects/veejay/src/core.i: home/pi/projects/veejay/src/core.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/circles.i
+.PHONY : home/pi/projects/veejay/src/core.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.i
+home/pi/projects/veejay/src/core.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core.cpp.i
+.PHONY : home/pi/projects/veejay/src/core.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/modules/circles.s: home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.s
+home/pi/projects/veejay/src/core.s: home/pi/projects/veejay/src/core.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/circles.s
+.PHONY : home/pi/projects/veejay/src/core.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/circles.cpp.s
+home/pi/projects/veejay/src/core.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core.cpp.s
+.PHONY : home/pi/projects/veejay/src/core.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/modules/image.o: home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.o
+home/pi/projects/veejay/src/core/modules/circles.o: home/pi/projects/veejay/src/core/modules/circles.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/image.o
+.PHONY : home/pi/projects/veejay/src/core/modules/circles.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.o
+home/pi/projects/veejay/src/core/modules/circles.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/circles.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/modules/circles.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/modules/image.i: home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.i
+home/pi/projects/veejay/src/core/modules/circles.i: home/pi/projects/veejay/src/core/modules/circles.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/image.i
+.PHONY : home/pi/projects/veejay/src/core/modules/circles.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.i
+home/pi/projects/veejay/src/core/modules/circles.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/circles.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/modules/circles.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/modules/image.s: home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.s
+home/pi/projects/veejay/src/core/modules/circles.s: home/pi/projects/veejay/src/core/modules/circles.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/image.s
+.PHONY : home/pi/projects/veejay/src/core/modules/circles.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/image.cpp.s
+home/pi/projects/veejay/src/core/modules/circles.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/circles.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/modules/circles.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/modules/module.o: home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.o
+home/pi/projects/veejay/src/core/modules/image.o: home/pi/projects/veejay/src/core/modules/image.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/module.o
+.PHONY : home/pi/projects/veejay/src/core/modules/image.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.o
+home/pi/projects/veejay/src/core/modules/image.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/image.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/modules/image.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/modules/module.i: home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.i
+home/pi/projects/veejay/src/core/modules/image.i: home/pi/projects/veejay/src/core/modules/image.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/module.i
+.PHONY : home/pi/projects/veejay/src/core/modules/image.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.i
+home/pi/projects/veejay/src/core/modules/image.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/image.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/modules/image.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/modules/module.s: home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.s
+home/pi/projects/veejay/src/core/modules/image.s: home/pi/projects/veejay/src/core/modules/image.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/module.s
+.PHONY : home/pi/projects/veejay/src/core/modules/image.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/module.cpp.s
+home/pi/projects/veejay/src/core/modules/image.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/image.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/modules/image.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/modules/orbiter.o: home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.o
+home/pi/projects/veejay/src/core/modules/module.o: home/pi/projects/veejay/src/core/modules/module.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/orbiter.o
+.PHONY : home/pi/projects/veejay/src/core/modules/module.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.o
+home/pi/projects/veejay/src/core/modules/module.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/module.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/modules/module.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/modules/orbiter.i: home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.i
+home/pi/projects/veejay/src/core/modules/module.i: home/pi/projects/veejay/src/core/modules/module.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/orbiter.i
+.PHONY : home/pi/projects/veejay/src/core/modules/module.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.i
+home/pi/projects/veejay/src/core/modules/module.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/module.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/modules/module.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/modules/orbiter.s: home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.s
+home/pi/projects/veejay/src/core/modules/module.s: home/pi/projects/veejay/src/core/modules/module.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/orbiter.s
+.PHONY : home/pi/projects/veejay/src/core/modules/module.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/modules/orbiter.cpp.s
+home/pi/projects/veejay/src/core/modules/module.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/module.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/modules/module.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/renderer.o: home/pi/projects/glfw_multi_window/src/core/renderer.cpp.o
+home/pi/projects/veejay/src/core/modules/orbiter.o: home/pi/projects/veejay/src/core/modules/orbiter.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/renderer.o
+.PHONY : home/pi/projects/veejay/src/core/modules/orbiter.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/renderer.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/renderer.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/renderer.cpp.o
+home/pi/projects/veejay/src/core/modules/orbiter.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/orbiter.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/modules/orbiter.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/renderer.i: home/pi/projects/glfw_multi_window/src/core/renderer.cpp.i
+home/pi/projects/veejay/src/core/modules/orbiter.i: home/pi/projects/veejay/src/core/modules/orbiter.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/renderer.i
+.PHONY : home/pi/projects/veejay/src/core/modules/orbiter.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/renderer.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/renderer.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/renderer.cpp.i
+home/pi/projects/veejay/src/core/modules/orbiter.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/orbiter.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/modules/orbiter.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/renderer.s: home/pi/projects/glfw_multi_window/src/core/renderer.cpp.s
+home/pi/projects/veejay/src/core/modules/orbiter.s: home/pi/projects/veejay/src/core/modules/orbiter.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/renderer.s
+.PHONY : home/pi/projects/veejay/src/core/modules/orbiter.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/renderer.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/renderer.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/renderer.cpp.s
+home/pi/projects/veejay/src/core/modules/orbiter.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/orbiter.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/modules/orbiter.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/shader.o: home/pi/projects/glfw_multi_window/src/core/shader.cpp.o
+home/pi/projects/veejay/src/core/renderer.o: home/pi/projects/veejay/src/core/renderer.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/shader.o
+.PHONY : home/pi/projects/veejay/src/core/renderer.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/shader.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/shader.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/shader.cpp.o
+home/pi/projects/veejay/src/core/renderer.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/renderer.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/renderer.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/shader.i: home/pi/projects/glfw_multi_window/src/core/shader.cpp.i
+home/pi/projects/veejay/src/core/renderer.i: home/pi/projects/veejay/src/core/renderer.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/shader.i
+.PHONY : home/pi/projects/veejay/src/core/renderer.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/shader.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/shader.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/shader.cpp.i
+home/pi/projects/veejay/src/core/renderer.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/renderer.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/renderer.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/shader.s: home/pi/projects/glfw_multi_window/src/core/shader.cpp.s
+home/pi/projects/veejay/src/core/renderer.s: home/pi/projects/veejay/src/core/renderer.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/shader.s
+.PHONY : home/pi/projects/veejay/src/core/renderer.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/shader.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/shader.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/shader.cpp.s
+home/pi/projects/veejay/src/core/renderer.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/renderer.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/renderer.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/texture.o: home/pi/projects/glfw_multi_window/src/core/texture.cpp.o
+home/pi/projects/veejay/src/core/shader.o: home/pi/projects/veejay/src/core/shader.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/texture.o
+.PHONY : home/pi/projects/veejay/src/core/shader.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/texture.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/texture.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/texture.cpp.o
+home/pi/projects/veejay/src/core/shader.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/shader.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/shader.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/texture.i: home/pi/projects/glfw_multi_window/src/core/texture.cpp.i
+home/pi/projects/veejay/src/core/shader.i: home/pi/projects/veejay/src/core/shader.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/texture.i
+.PHONY : home/pi/projects/veejay/src/core/shader.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/texture.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/texture.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/texture.cpp.i
+home/pi/projects/veejay/src/core/shader.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/shader.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/shader.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/texture.s: home/pi/projects/glfw_multi_window/src/core/texture.cpp.s
+home/pi/projects/veejay/src/core/shader.s: home/pi/projects/veejay/src/core/shader.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/texture.s
+.PHONY : home/pi/projects/veejay/src/core/shader.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/texture.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/texture.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/texture.cpp.s
+home/pi/projects/veejay/src/core/shader.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/shader.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/shader.cpp.s
 
-home/pi/projects/glfw_multi_window/src/core/timer.o: home/pi/projects/glfw_multi_window/src/core/timer.cpp.o
+home/pi/projects/veejay/src/core/texture.o: home/pi/projects/veejay/src/core/texture.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/timer.o
+.PHONY : home/pi/projects/veejay/src/core/texture.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/core/timer.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/timer.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/core/timer.cpp.o
+home/pi/projects/veejay/src/core/texture.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/texture.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/texture.cpp.o
 
-home/pi/projects/glfw_multi_window/src/core/timer.i: home/pi/projects/glfw_multi_window/src/core/timer.cpp.i
+home/pi/projects/veejay/src/core/texture.i: home/pi/projects/veejay/src/core/texture.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/timer.i
+.PHONY : home/pi/projects/veejay/src/core/texture.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/core/timer.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/timer.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/core/timer.cpp.i
+home/pi/projects/veejay/src/core/texture.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/texture.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/texture.cpp.i
 
-home/pi/projects/glfw_multi_window/src/core/timer.s: home/pi/projects/glfw_multi_window/src/core/timer.cpp.s
+home/pi/projects/veejay/src/core/texture.s: home/pi/projects/veejay/src/core/texture.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/core/timer.s
+.PHONY : home/pi/projects/veejay/src/core/texture.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/core/timer.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/glfw_multi_window/src/core/timer.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/core/timer.cpp.s
+home/pi/projects/veejay/src/core/texture.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/texture.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/texture.cpp.s
 
-home/pi/projects/glfw_multi_window/src/fft.o: home/pi/projects/glfw_multi_window/src/fft.cpp.o
+home/pi/projects/veejay/src/core/timer.o: home/pi/projects/veejay/src/core/timer.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/fft.o
+.PHONY : home/pi/projects/veejay/src/core/timer.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/fft.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/fft.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/fft.cpp.o
+home/pi/projects/veejay/src/core/timer.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/timer.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/timer.cpp.o
 
-home/pi/projects/glfw_multi_window/src/fft.i: home/pi/projects/glfw_multi_window/src/fft.cpp.i
+home/pi/projects/veejay/src/core/timer.i: home/pi/projects/veejay/src/core/timer.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/fft.i
+.PHONY : home/pi/projects/veejay/src/core/timer.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/fft.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/fft.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/fft.cpp.i
+home/pi/projects/veejay/src/core/timer.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/timer.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/timer.cpp.i
 
-home/pi/projects/glfw_multi_window/src/fft.s: home/pi/projects/glfw_multi_window/src/fft.cpp.s
+home/pi/projects/veejay/src/core/timer.s: home/pi/projects/veejay/src/core/timer.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/fft.s
+.PHONY : home/pi/projects/veejay/src/core/timer.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/fft.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/fft.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/fft.cpp.s
+home/pi/projects/veejay/src/core/timer.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/timer.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/timer.cpp.s
 
-home/pi/projects/glfw_multi_window/src/ipc/client.o: home/pi/projects/glfw_multi_window/src/ipc/client.cpp.o
+home/pi/projects/veejay/src/fft.o: home/pi/projects/veejay/src/fft.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/client.o
+.PHONY : home/pi/projects/veejay/src/fft.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/ipc/client.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/ipc/client.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/client.cpp.o
+home/pi/projects/veejay/src/fft.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/fft.cpp.o
+.PHONY : home/pi/projects/veejay/src/fft.cpp.o
 
-home/pi/projects/glfw_multi_window/src/ipc/client.i: home/pi/projects/glfw_multi_window/src/ipc/client.cpp.i
+home/pi/projects/veejay/src/fft.i: home/pi/projects/veejay/src/fft.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/client.i
+.PHONY : home/pi/projects/veejay/src/fft.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/ipc/client.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/ipc/client.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/client.cpp.i
+home/pi/projects/veejay/src/fft.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/fft.cpp.i
+.PHONY : home/pi/projects/veejay/src/fft.cpp.i
 
-home/pi/projects/glfw_multi_window/src/ipc/client.s: home/pi/projects/glfw_multi_window/src/ipc/client.cpp.s
+home/pi/projects/veejay/src/fft.s: home/pi/projects/veejay/src/fft.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/client.s
+.PHONY : home/pi/projects/veejay/src/fft.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/ipc/client.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/ipc/client.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/client.cpp.s
+home/pi/projects/veejay/src/fft.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/fft.cpp.s
+.PHONY : home/pi/projects/veejay/src/fft.cpp.s
 
-home/pi/projects/glfw_multi_window/src/ipc/server.o: home/pi/projects/glfw_multi_window/src/ipc/server.cpp.o
+home/pi/projects/veejay/src/ipc/client.o: home/pi/projects/veejay/src/ipc/client.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/server.o
+.PHONY : home/pi/projects/veejay/src/ipc/client.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/ipc/server.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/glfw_multi_window/src/ipc/server.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/server.cpp.o
+home/pi/projects/veejay/src/ipc/client.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/ipc/client.cpp.o
+.PHONY : home/pi/projects/veejay/src/ipc/client.cpp.o
 
-home/pi/projects/glfw_multi_window/src/ipc/server.i: home/pi/projects/glfw_multi_window/src/ipc/server.cpp.i
+home/pi/projects/veejay/src/ipc/client.i: home/pi/projects/veejay/src/ipc/client.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/server.i
+.PHONY : home/pi/projects/veejay/src/ipc/client.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/ipc/server.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/glfw_multi_window/src/ipc/server.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/server.cpp.i
+home/pi/projects/veejay/src/ipc/client.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/ipc/client.cpp.i
+.PHONY : home/pi/projects/veejay/src/ipc/client.cpp.i
 
-home/pi/projects/glfw_multi_window/src/ipc/server.s: home/pi/projects/glfw_multi_window/src/ipc/server.cpp.s
+home/pi/projects/veejay/src/ipc/client.s: home/pi/projects/veejay/src/ipc/client.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/server.s
+.PHONY : home/pi/projects/veejay/src/ipc/client.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/ipc/server.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/glfw_multi_window/src/ipc/server.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/ipc/server.cpp.s
+home/pi/projects/veejay/src/ipc/client.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/ipc/client.cpp.s
+.PHONY : home/pi/projects/veejay/src/ipc/client.cpp.s
 
-home/pi/projects/glfw_multi_window/src/jsonfilewriter.o: home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.o
+home/pi/projects/veejay/src/ipc/server.o: home/pi/projects/veejay/src/ipc/server.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/jsonfilewriter.o
+.PHONY : home/pi/projects/veejay/src/ipc/server.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.o
+home/pi/projects/veejay/src/ipc/server.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/ipc/server.cpp.o
+.PHONY : home/pi/projects/veejay/src/ipc/server.cpp.o
 
-home/pi/projects/glfw_multi_window/src/jsonfilewriter.i: home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.i
+home/pi/projects/veejay/src/ipc/server.i: home/pi/projects/veejay/src/ipc/server.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/jsonfilewriter.i
+.PHONY : home/pi/projects/veejay/src/ipc/server.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.i
+home/pi/projects/veejay/src/ipc/server.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/ipc/server.cpp.i
+.PHONY : home/pi/projects/veejay/src/ipc/server.cpp.i
 
-home/pi/projects/glfw_multi_window/src/jsonfilewriter.s: home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.s
+home/pi/projects/veejay/src/ipc/server.s: home/pi/projects/veejay/src/ipc/server.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/jsonfilewriter.s
+.PHONY : home/pi/projects/veejay/src/ipc/server.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/jsonfilewriter.cpp.s
+home/pi/projects/veejay/src/ipc/server.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/ipc/server.cpp.s
+.PHONY : home/pi/projects/veejay/src/ipc/server.cpp.s
 
-home/pi/projects/glfw_multi_window/src/main.o: home/pi/projects/glfw_multi_window/src/main.cpp.o
+home/pi/projects/veejay/src/jsonfilewriter.o: home/pi/projects/veejay/src/jsonfilewriter.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/main.o
+.PHONY : home/pi/projects/veejay/src/jsonfilewriter.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/main.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/main.cpp.o
+home/pi/projects/veejay/src/jsonfilewriter.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/jsonfilewriter.cpp.o
+.PHONY : home/pi/projects/veejay/src/jsonfilewriter.cpp.o
 
-home/pi/projects/glfw_multi_window/src/main.i: home/pi/projects/glfw_multi_window/src/main.cpp.i
+home/pi/projects/veejay/src/jsonfilewriter.i: home/pi/projects/veejay/src/jsonfilewriter.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/main.i
+.PHONY : home/pi/projects/veejay/src/jsonfilewriter.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/main.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/main.cpp.i
+home/pi/projects/veejay/src/jsonfilewriter.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/jsonfilewriter.cpp.i
+.PHONY : home/pi/projects/veejay/src/jsonfilewriter.cpp.i
 
-home/pi/projects/glfw_multi_window/src/main.s: home/pi/projects/glfw_multi_window/src/main.cpp.s
+home/pi/projects/veejay/src/jsonfilewriter.s: home/pi/projects/veejay/src/jsonfilewriter.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/main.s
+.PHONY : home/pi/projects/veejay/src/jsonfilewriter.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/main.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/main.cpp.s
+home/pi/projects/veejay/src/jsonfilewriter.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/jsonfilewriter.cpp.s
+.PHONY : home/pi/projects/veejay/src/jsonfilewriter.cpp.s
 
-home/pi/projects/glfw_multi_window/src/pch.o: home/pi/projects/glfw_multi_window/src/pch.cpp.o
+home/pi/projects/veejay/src/main.o: home/pi/projects/veejay/src/main.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/pch.o
+.PHONY : home/pi/projects/veejay/src/main.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/pch.cpp.o:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/pch.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/pch.cpp.o
+home/pi/projects/veejay/src/main.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/main.cpp.o
+.PHONY : home/pi/projects/veejay/src/main.cpp.o
 
-home/pi/projects/glfw_multi_window/src/pch.i: home/pi/projects/glfw_multi_window/src/pch.cpp.i
+home/pi/projects/veejay/src/main.i: home/pi/projects/veejay/src/main.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/pch.i
+.PHONY : home/pi/projects/veejay/src/main.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/pch.cpp.i:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/pch.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/pch.cpp.i
+home/pi/projects/veejay/src/main.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/main.cpp.i
+.PHONY : home/pi/projects/veejay/src/main.cpp.i
 
-home/pi/projects/glfw_multi_window/src/pch.s: home/pi/projects/glfw_multi_window/src/pch.cpp.s
+home/pi/projects/veejay/src/main.s: home/pi/projects/veejay/src/main.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/pch.s
+.PHONY : home/pi/projects/veejay/src/main.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/pch.cpp.s:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/pch.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/pch.cpp.s
+home/pi/projects/veejay/src/main.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/main.cpp.s
+.PHONY : home/pi/projects/veejay/src/main.cpp.s
 
-home/pi/projects/glfw_multi_window/src/player.o: home/pi/projects/glfw_multi_window/src/player.cpp.o
+home/pi/projects/veejay/src/pch.o: home/pi/projects/veejay/src/pch.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/player.o
+.PHONY : home/pi/projects/veejay/src/pch.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/player.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/glfw_multi_window/src/player.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/player.cpp.o
+home/pi/projects/veejay/src/pch.cpp.o:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/pch.cpp.o
+.PHONY : home/pi/projects/veejay/src/pch.cpp.o
 
-home/pi/projects/glfw_multi_window/src/player.i: home/pi/projects/glfw_multi_window/src/player.cpp.i
+home/pi/projects/veejay/src/pch.i: home/pi/projects/veejay/src/pch.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/player.i
+.PHONY : home/pi/projects/veejay/src/pch.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/player.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/glfw_multi_window/src/player.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/player.cpp.i
+home/pi/projects/veejay/src/pch.cpp.i:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/pch.cpp.i
+.PHONY : home/pi/projects/veejay/src/pch.cpp.i
 
-home/pi/projects/glfw_multi_window/src/player.s: home/pi/projects/glfw_multi_window/src/player.cpp.s
+home/pi/projects/veejay/src/pch.s: home/pi/projects/veejay/src/pch.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/player.s
+.PHONY : home/pi/projects/veejay/src/pch.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/player.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/glfw_multi_window/src/player.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/player.cpp.s
+home/pi/projects/veejay/src/pch.cpp.s:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/pch.cpp.s
+.PHONY : home/pi/projects/veejay/src/pch.cpp.s
 
-home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.o: home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.o
+home/pi/projects/veejay/src/player.o: home/pi/projects/veejay/src/player.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.o
+.PHONY : home/pi/projects/veejay/src/player.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.o
+home/pi/projects/veejay/src/player.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/player.cpp.o
+.PHONY : home/pi/projects/veejay/src/player.cpp.o
 
-home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.i: home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.i
+home/pi/projects/veejay/src/player.i: home/pi/projects/veejay/src/player.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.i
+.PHONY : home/pi/projects/veejay/src/player.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.i
+home/pi/projects/veejay/src/player.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/player.cpp.i
+.PHONY : home/pi/projects/veejay/src/player.cpp.i
 
-home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.s: home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.s
+home/pi/projects/veejay/src/player.s: home/pi/projects/veejay/src/player.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.s
+.PHONY : home/pi/projects/veejay/src/player.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.cpp.s
+home/pi/projects/veejay/src/player.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/player.cpp.s
+.PHONY : home/pi/projects/veejay/src/player.cpp.s
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.o: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.o
+home/pi/projects/veejay/src/vendor/SimpleJSON/json.o: home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.o
+.PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.o:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.o
+home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.o
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.i: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.i
+home/pi/projects/veejay/src/vendor/SimpleJSON/json.i: home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.i
+.PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.i:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.i
+home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.i
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.s: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.s
+home/pi/projects/veejay/src/vendor/SimpleJSON/json.s: home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.s
+.PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.s:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.cpp.s
+home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.s
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.o: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui.o: home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.o:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.o:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.o
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.i: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui.i: home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.i:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.i:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.i
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.s: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui.s: home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.s:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.s:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui.cpp.s
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.o: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_draw.o: home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_draw.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.o:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.o:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.o
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.i: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_draw.i: home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_draw.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.i:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.i:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.i
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.s: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_draw.s: home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_draw.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.s:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.s:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_draw.cpp.s
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.o: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.o: home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.o:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.o:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.o
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.i: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.i: home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.i:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.i:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.i
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.s: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.s: home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.s:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.s:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.cpp.s
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.o: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.o: home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.o:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.o:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.o
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.i: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.i: home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.i:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.i:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.i
 
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.s: home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.s: home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.s:
-	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.s:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.cpp.s
 
-home/pi/projects/glfw_multi_window/src/wave_file_reader.o: home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.o: home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.o
 
-.PHONY : home/pi/projects/glfw_multi_window/src/wave_file_reader.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.o
 
 # target to build an object file
-home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.o
-.PHONY : home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.o
+home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.o:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.o
 
-home/pi/projects/glfw_multi_window/src/wave_file_reader.i: home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.i: home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.i
 
-.PHONY : home/pi/projects/glfw_multi_window/src/wave_file_reader.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.i
 
 # target to preprocess a source file
-home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.i
-.PHONY : home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.i
+home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.i:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.i
 
-home/pi/projects/glfw_multi_window/src/wave_file_reader.s: home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.s: home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.s
 
-.PHONY : home/pi/projects/glfw_multi_window/src/wave_file_reader.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.s
 
 # target to generate assembly for a file
-home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.s
-.PHONY : home/pi/projects/glfw_multi_window/src/wave_file_reader.cpp.s
+home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.s:
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.cpp.s
+
+home/pi/projects/veejay/src/wave_file_reader.o: home/pi/projects/veejay/src/wave_file_reader.cpp.o
+
+.PHONY : home/pi/projects/veejay/src/wave_file_reader.o
+
+# target to build an object file
+home/pi/projects/veejay/src/wave_file_reader.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/wave_file_reader.cpp.o
+.PHONY : home/pi/projects/veejay/src/wave_file_reader.cpp.o
+
+home/pi/projects/veejay/src/wave_file_reader.i: home/pi/projects/veejay/src/wave_file_reader.cpp.i
+
+.PHONY : home/pi/projects/veejay/src/wave_file_reader.i
+
+# target to preprocess a source file
+home/pi/projects/veejay/src/wave_file_reader.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/wave_file_reader.cpp.i
+.PHONY : home/pi/projects/veejay/src/wave_file_reader.cpp.i
+
+home/pi/projects/veejay/src/wave_file_reader.s: home/pi/projects/veejay/src/wave_file_reader.cpp.s
+
+.PHONY : home/pi/projects/veejay/src/wave_file_reader.s
+
+# target to generate assembly for a file
+home/pi/projects/veejay/src/wave_file_reader.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/wave_file_reader.cpp.s
+.PHONY : home/pi/projects/veejay/src/wave_file_reader.cpp.s
 
 # Help Target
 help:
@@ -822,78 +822,78 @@ help:
 	@echo "... vj_player"
 	@echo "... PCHLib"
 	@echo "... CoreLib"
-	@echo "... home/pi/projects/glfw_multi_window/src/actions.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/actions.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/actions.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/circles.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/circles.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/circles.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/image.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/image.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/image.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/module.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/module.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/module.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/orbiter.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/orbiter.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/modules/orbiter.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/renderer.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/renderer.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/renderer.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/shader.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/shader.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/shader.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/texture.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/texture.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/texture.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/timer.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/timer.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/core/timer.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/fft.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/fft.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/fft.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/ipc/client.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/ipc/client.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/ipc/client.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/ipc/server.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/ipc/server.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/ipc/server.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/jsonfilewriter.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/jsonfilewriter.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/jsonfilewriter.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/main.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/main.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/main.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/pch.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/pch.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/pch.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/player.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/player.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/player.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/SimpleJSON/json.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_draw.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_glfw.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_impl_opengl3.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/vendor/imgui/imgui_widgets.s"
-	@echo "... home/pi/projects/glfw_multi_window/src/wave_file_reader.o"
-	@echo "... home/pi/projects/glfw_multi_window/src/wave_file_reader.i"
-	@echo "... home/pi/projects/glfw_multi_window/src/wave_file_reader.s"
+	@echo "... home/pi/projects/veejay/src/actions.o"
+	@echo "... home/pi/projects/veejay/src/actions.i"
+	@echo "... home/pi/projects/veejay/src/actions.s"
+	@echo "... home/pi/projects/veejay/src/core.o"
+	@echo "... home/pi/projects/veejay/src/core.i"
+	@echo "... home/pi/projects/veejay/src/core.s"
+	@echo "... home/pi/projects/veejay/src/core/modules/circles.o"
+	@echo "... home/pi/projects/veejay/src/core/modules/circles.i"
+	@echo "... home/pi/projects/veejay/src/core/modules/circles.s"
+	@echo "... home/pi/projects/veejay/src/core/modules/image.o"
+	@echo "... home/pi/projects/veejay/src/core/modules/image.i"
+	@echo "... home/pi/projects/veejay/src/core/modules/image.s"
+	@echo "... home/pi/projects/veejay/src/core/modules/module.o"
+	@echo "... home/pi/projects/veejay/src/core/modules/module.i"
+	@echo "... home/pi/projects/veejay/src/core/modules/module.s"
+	@echo "... home/pi/projects/veejay/src/core/modules/orbiter.o"
+	@echo "... home/pi/projects/veejay/src/core/modules/orbiter.i"
+	@echo "... home/pi/projects/veejay/src/core/modules/orbiter.s"
+	@echo "... home/pi/projects/veejay/src/core/renderer.o"
+	@echo "... home/pi/projects/veejay/src/core/renderer.i"
+	@echo "... home/pi/projects/veejay/src/core/renderer.s"
+	@echo "... home/pi/projects/veejay/src/core/shader.o"
+	@echo "... home/pi/projects/veejay/src/core/shader.i"
+	@echo "... home/pi/projects/veejay/src/core/shader.s"
+	@echo "... home/pi/projects/veejay/src/core/texture.o"
+	@echo "... home/pi/projects/veejay/src/core/texture.i"
+	@echo "... home/pi/projects/veejay/src/core/texture.s"
+	@echo "... home/pi/projects/veejay/src/core/timer.o"
+	@echo "... home/pi/projects/veejay/src/core/timer.i"
+	@echo "... home/pi/projects/veejay/src/core/timer.s"
+	@echo "... home/pi/projects/veejay/src/fft.o"
+	@echo "... home/pi/projects/veejay/src/fft.i"
+	@echo "... home/pi/projects/veejay/src/fft.s"
+	@echo "... home/pi/projects/veejay/src/ipc/client.o"
+	@echo "... home/pi/projects/veejay/src/ipc/client.i"
+	@echo "... home/pi/projects/veejay/src/ipc/client.s"
+	@echo "... home/pi/projects/veejay/src/ipc/server.o"
+	@echo "... home/pi/projects/veejay/src/ipc/server.i"
+	@echo "... home/pi/projects/veejay/src/ipc/server.s"
+	@echo "... home/pi/projects/veejay/src/jsonfilewriter.o"
+	@echo "... home/pi/projects/veejay/src/jsonfilewriter.i"
+	@echo "... home/pi/projects/veejay/src/jsonfilewriter.s"
+	@echo "... home/pi/projects/veejay/src/main.o"
+	@echo "... home/pi/projects/veejay/src/main.i"
+	@echo "... home/pi/projects/veejay/src/main.s"
+	@echo "... home/pi/projects/veejay/src/pch.o"
+	@echo "... home/pi/projects/veejay/src/pch.i"
+	@echo "... home/pi/projects/veejay/src/pch.s"
+	@echo "... home/pi/projects/veejay/src/player.o"
+	@echo "... home/pi/projects/veejay/src/player.i"
+	@echo "... home/pi/projects/veejay/src/player.s"
+	@echo "... home/pi/projects/veejay/src/vendor/SimpleJSON/json.o"
+	@echo "... home/pi/projects/veejay/src/vendor/SimpleJSON/json.i"
+	@echo "... home/pi/projects/veejay/src/vendor/SimpleJSON/json.s"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui.o"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui.i"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui.s"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_draw.o"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_draw.i"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_draw.s"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.o"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.i"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_impl_glfw.s"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.o"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.i"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_impl_opengl3.s"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.o"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.i"
+	@echo "... home/pi/projects/veejay/src/vendor/imgui/imgui_widgets.s"
+	@echo "... home/pi/projects/veejay/src/wave_file_reader.o"
+	@echo "... home/pi/projects/veejay/src/wave_file_reader.i"
+	@echo "... home/pi/projects/veejay/src/wave_file_reader.s"
 .PHONY : help
 
 
