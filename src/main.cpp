@@ -114,7 +114,7 @@ float fft_maximums[NUM_BANDS];
 
 WaveFileReader wave_reader(sound_buffer);
 SOUND_PLAYER_CMD sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
-SOUND_PLAYER_MODE sound_player_mode = SOUND_PLAYER_MODE_SINE_WAVE;
+SOUND_PLAYER_MODE sound_player_mode = SOUND_PLAYER_MODE_FILE;
 char * WAV_PATH;
 
 float sine_wave_frequency = 440.0f;
@@ -122,6 +122,8 @@ float sine_wave_frequency = 440.0f;
 // sound player params
 std::shared_ptr<ParamFilePath> sound_player_wave_file_path_param = std::make_shared<ParamFilePath>();
 
+// forward declarations ...
+void display_fft_values();
 
 static std::vector<std::string> split(const std::string& str, std::string delimiter = " ")
 {
@@ -311,6 +313,48 @@ static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) // In C++11 yo
 	return 42;
 }
 
+
+void display_signal_dialog(std::shared_ptr<BaseParam> param_ptr)
+{
+
+	Param<float> * p_float  = nullptr;
+	Param<int> *   p_int    = nullptr;
+	Param<bool> *  p_bool   = nullptr;
+	Param<std::string> *  p_text   = nullptr;
+	ParamMenu *    p_menu   = nullptr;
+	ParamButton *  p_button = nullptr;
+	ParamColor3 *  p_color3 = nullptr;
+	ParamSeparator *  p_separator = nullptr;
+	ParamFilePath *  p_file_path = nullptr;
+	
+	char _name[255];
+	
+	if(p_float  = dynamic_cast<Param<float> *>(param_ptr.get()) ){	
+	
+		ImGui::SetNextItemWidth(256.0);
+		
+		sprintf((char *)_name, "##%s", p_float->getName());
+		ImGui::PushID(param_ptr.get());
+		if (ImGui::BeginPopupContextWindow(_name))
+		{
+			
+			ImGui::SetNextItemWidth(256.0);
+			ImGui::Text(p_float->getName());
+			//~ ImGui::Selectable("item1", false);
+			//~ ImGui::Selectable("item2", false);
+			ImGui::SetNextItemWidth(256.0);
+			//~ display_fft_values();
+			
+			//~ ImGui::PopItemWidth();
+			ImGui::EndPopup();
+			
+		}
+		ImGui::PopID();	
+	}
+	
+	
+}
+
 void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callback = [](){})
 {
 	
@@ -365,7 +409,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 			}else{
 				
 					std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, old, _val, [](){
-						printf("Flaot action callback !!!!!!\n");
+						printf("Float action callback !!!!!!\n");
 					});
 					actions.insert(actions.begin(), action );
 					p_float->setValue(_val);
@@ -376,15 +420,9 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		
 		ImGui::Columns(1);
 		
-		if (ImGui::BeginPopupContextItem("item context menu"))
-		{
+		
 
-			ImGui::Selectable("item1", false);
-			ImGui::Selectable("item2", false);
-			
-			ImGui::EndPopup();
-			
-		}		
+				
 		
 	}else if(p_int    = dynamic_cast<Param<int> *>  (param_ptr.get()) ){
 		int _val = p_int->getValue();
@@ -543,7 +581,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		
 		
 		glm::vec3 temp_color  = glm::vec3(p_color3->color.x, p_color3->color.y, p_color3->color.z);
-		if(ImGui::ColorEdit3("u_color", (float*)glm::value_ptr(temp_color)))
+		if(ImGui::ColorEdit3("##u_color", (float*)glm::value_ptr(temp_color)))
 		{
 			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
 			if (state == GLFW_PRESS)
@@ -627,6 +665,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		
 		
 	}
+
+	display_signal_dialog(param_ptr);
 }
 
 void actions_dialog()
@@ -1167,25 +1207,31 @@ void sound_dialog()
 		if(ImGui::Button("Stop")){
 			sound_player_cmd = SOUND_PLAYER_CMD_STOP;
 		}
-		ImGui::Text("Wave form :");
-		ImGui::BeginChild("child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
 		
-		for(size_t i=0; i < 512; i++){
-			ImGui::GetWindowDrawList()->AddRectFilled(
-						ImVec2(ImGui::GetCursorScreenPos().x + i, ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0)),
-						ImVec2(
-								ImGui::GetCursorScreenPos().x + i + 1, 
-								ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0) + sound_buffer[i*2]  * 100.0f
-						), 
-						IM_COL32(255,255,255,150)
-			);
+		if(ImGui::CollapsingHeader("Wave form :", 0))
+		{
+			ImGui::BeginChild("child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+			
+			for(size_t i=0; i < 512; i++){
+				ImGui::GetWindowDrawList()->AddRectFilled(
+							ImVec2(ImGui::GetCursorScreenPos().x + i, ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0)),
+							ImVec2(
+									ImGui::GetCursorScreenPos().x + i + 1, 
+									ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0) + sound_buffer[i*2]  * 100.0f
+							), 
+							IM_COL32(255,255,255,150)
+				);
+			}
+			
+			
+			ImGui::EndChild();
 		}
 		
+		if(ImGui::CollapsingHeader("Frequencies :", ImGuiTreeNodeFlags_DefaultOpen))
+		{		
+			display_fft_values();
+		}
 		
-		ImGui::EndChild();
-		
-		
-		display_fft_values();
 		
 				
 		ImGui::End();
@@ -1214,7 +1260,7 @@ int main(int argc, char** argv)
 	//~ char temp_char[512] = "/home/pi/Downloads/2009-03-30-clairdelune.ogg\0";
 	//~ strcpy(WAV_PATH, (const char *)temp_char);
 	//~ WAV_PATH = "/home/pi/Downloads/2009-03-30-clairdelune.ogg";
-	std::string str_wav_path = "/home/pi/Downloads/2009-03-30-clairdelune.ogg";
+	std::string str_wav_path = "/home/pi/Downloads/guitar_riff.wav";
 	WAV_PATH = (char *)(str_wav_path.c_str());
 	std::thread t(make_sound, WAV_PATH);
 	
