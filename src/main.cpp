@@ -503,18 +503,26 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		SignalRange new_val = parent_param->getSignalRange();
 		SignalRange old_val = new_val;
 		int new_val_min = parent_param->getSignalRange().min;
+		int new_val_max = parent_param->getSignalRange().max;
 		int old_val_min = new_val_min;
+		int old_val_max = new_val_max;
 
 		
-		sprintf((char *)_name, "##%s --> min", parent_param->getName());
-
-		ImGui::Columns(2);
+		
+		
 		ImGui::Text(parent_param->getName() );
+		ImGui::Separator();
+		ImGui::Columns(2);
+		ImGui::Text("Min Band :" );
+		
 		ImGui::NextColumn();
 		ImGui::PushItemWidth(-1);
 		
 		ImGui::PushID(p_signal_range);
-		if( ImGui::DragInt((const char *) _name, &new_val_min))
+		
+		sprintf((char *)_name, "##%s --> min", parent_param->getName());
+
+		if( ImGui::SliderInt((const char *) _name, &new_val_min, 0, 31))
 		{
 			//~ p_float->setValue(_val);
 			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
@@ -529,7 +537,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					current_param_data = data;
 					data->old_val = old_val; 
 					data->callback = [](){
-						printf("Signal Range Param Release\n");
+						printf("Signal Range Minimum Param Release\n");
 					};					
 				}
 				
@@ -575,6 +583,76 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		ImGui::PopItemWidth();
 		ImGui::Columns(1);
 	
+		ImGui::Columns(2);
+		ImGui::Text("Max Band :" );
+		
+		ImGui::NextColumn();
+		ImGui::PushItemWidth(-1);
+		
+		ImGui::PushID(p_signal_range);
+		
+		sprintf((char *)_name, "##%s --> max", parent_param->getName());
+
+		if( ImGui::SliderInt((const char *) _name, &new_val_max, 0, 31))
+		{
+			//~ p_float->setValue(_val);
+			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
+			if (state == GLFW_PRESS)
+			{
+				if( !is_param_clicked){
+					
+					active_param = param_ptr;
+					is_param_clicked = true;
+					
+					std::shared_ptr<ReleaseDataSignalRange> data = std::make_shared<ReleaseDataSignalRange>();
+					current_param_data = data;
+					data->old_val = old_val; 
+					data->callback = [](){
+						printf("Signal Range Maximum Param Release\n");
+					};					
+				}
+				
+				
+				ReleaseDataSignalRange * data_signal_range = nullptr;
+				if( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get())){
+					SignalRange result;
+					result.min = parent_param->getSignalRange().min;
+					result.max = new_val_max;
+					//~ p_signal_range->setValue(result);					
+					data_signal_range->new_val = result; 
+					data_signal_range->parent_param = parent_param;
+						
+					parent_param->setSignalRange(result);
+				}
+				
+				
+				
+
+			}else{
+				
+				SignalRange result;
+				result.min = parent_param->getSignalRange().min;
+				result.max = new_val_max;
+
+				printf("result min -> %d\n", result.min);
+				printf("result max -> %d\n", result.max);				
+
+					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
+						printf("Signal Range Maximum action Input callback !!!!!!\n");
+					});
+					actions.insert(actions.begin(), action );
+					
+				//~ parent_param->setSignalRange(p_signal_range->getValue());	
+				
+				printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
+				printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
+			}
+		
+			
+		}
+		ImGui::PopID();
+		ImGui::PopItemWidth();
+		ImGui::Columns(1);	
 		
 		
 	}else if((p_menu   = dynamic_cast<ParamMenu *>   (param_ptr.get()) )){
