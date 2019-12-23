@@ -6,17 +6,7 @@
 #include "param.h"
 #include "core/modules/module.h"
 
-/*
-template <typename T>
-struct ParamSnapshot{
 
-	std::pair< Param<T>, T > old_value, new_value;
-	
-	void printValues(){
-		printf("what do I do now ?\n");
-	}
-};
-*/
 
 class Action{
 public:
@@ -44,34 +34,96 @@ class ActionParamChange : public Action
 {
 public:
 
-	ActionParamChange(Param<T> * param, T old, T val, std::function<void()> callback) : Action(){
+	ActionParamChange(Param<T> * param, T _old_value, T _new_value, std::function<void()> callback) : Action(){
 		setName("Param Change");
 		m_param = param;
 		m_callback = callback;
-		old_value = old;
-		new_value = val;
+		m_old_value = _old_value;
+
+		m_new_value = _new_value;
+
 		//~ printf("old value stored : %s\n", param->getName().c_str());
 		
 		
-		param->setValue(val);
+		param->setValue(_new_value);
 		
 		callback();
 	};
 	void redo()override{};
 	
 	void undo()override{
-		m_param->setValue(old_value);
+		m_param->setValue(m_old_value);
 		m_callback();
 	} ;
 	
 	Param<T> * m_param;
-	T old_value, new_value;
+	T m_old_value, m_new_value;
+
 	std::function<void()> m_callback;
 		
 private:
 };
 
 
+class ActionParamUseSignalChange : public Action
+{
+public :
+	ActionParamUseSignalChange(BaseParam * param, bool old_value, bool new_value, std::function<void()> callback = [](){}) : Action()
+	{
+		setName("Use Signal Change");
+		m_param = param;
+		m_callback = callback;
+		m_old_value = old_value;
+		m_new_value = new_value;
+		callback();
+	}
+	
+	void redo()override{};
+	
+	void undo()override{
+		m_param->setUseSignalRange(m_old_value);
+		m_callback();
+	} ;	
+private:
+	BaseParam * m_param;
+	bool m_old_value, m_new_value;
+	std::function<void()> m_callback;	
+};
+
+
+class ActionParamSignalRangeChange : public Action
+{
+public:
+
+	ActionParamSignalRangeChange(BaseParam * param, SignalRange _old_value, SignalRange _new_value, std::function<void()> callback) : Action(){
+		setName("Signal Range Change");
+		m_param = param;
+		m_callback = callback;
+		m_old_value = _old_value;
+
+		m_new_value = _new_value;
+
+		//~ printf("old value stored : %s\n", param->getName().c_str());
+		
+		
+		param->setSignalRange(_new_value);
+		
+		callback();
+	};
+	void redo()override{};
+	
+	void undo()override{
+		m_param->setSignalRange(m_old_value);
+		m_callback();
+	} ;
+	
+	BaseParam * m_param;
+	SignalRange m_old_value, m_new_value;
+
+	std::function<void()> m_callback;
+		
+private:
+};
 
 class ActionParamMenuChange : public Action
 {

@@ -1,5 +1,3 @@
-
-
 #include "pch.h"
 
 #include "core.h"
@@ -27,6 +25,8 @@
 struct ReleaseData{	
 	virtual ~ReleaseData(){};
 	virtual void funcA() = 0;
+	
+	std::shared_ptr<BaseParam> parent_param = nullptr;
 };
 struct ReleaseDataFloat : public ReleaseData{
 	inline void funcA() override{}
@@ -44,6 +44,12 @@ struct ReleaseDataColor3 : public ReleaseData{
 	inline void funcA() override{}
 	glm::vec3 old_val;
 	glm::vec3 new_val;
+	std::function<void()> callback;
+};
+struct ReleaseDataSignalRange : public ReleaseData{
+	inline void funcA() override{}
+	SignalRange old_val;
+	SignalRange new_val;
 	std::function<void()> callback;
 };
 
@@ -73,6 +79,7 @@ unsigned int bufid;
 Shader fbo_shader;
 
 
+bool signal_range_dialog_opened = true;
 
 Timer timer;
 
@@ -119,6 +126,8 @@ char * WAV_PATH;
 
 float sine_wave_frequency = 440.0f;
 
+
+std::vector<std::shared_ptr<BaseParam> > pinned_params;
 // sound player params
 std::shared_ptr<ParamFilePath> sound_player_wave_file_path_param = std::make_shared<ParamFilePath>();
 
@@ -297,9 +306,9 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 		
 		
 		
-		
+		ImGui::End();
 	}
-	ImGui::End();
+	
 	
 	dir_names.clear();
 	file_names.clear();
@@ -314,73 +323,39 @@ static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) // In C++11 yo
 }
 
 
-void display_signal_dialog(std::shared_ptr<BaseParam> param_ptr)
-{
 
-	Param<float> * p_float  = nullptr;
-	Param<int> *   p_int    = nullptr;
-	Param<bool> *  p_bool   = nullptr;
-	Param<std::string> *  p_text   = nullptr;
-	ParamMenu *    p_menu   = nullptr;
-	ParamButton *  p_button = nullptr;
-	ParamColor3 *  p_color3 = nullptr;
-	ParamSeparator *  p_separator = nullptr;
-	ParamFilePath *  p_file_path = nullptr;
-	
-	char _name[255];
-	
-	if(p_float  = dynamic_cast<Param<float> *>(param_ptr.get()) ){	
-	
-		ImGui::SetNextItemWidth(256.0);
-		
-		sprintf((char *)_name, "##%s", p_float->getName());
-		ImGui::PushID(param_ptr.get());
-		if (ImGui::BeginPopupContextWindow(_name))
-		{
-			
-			ImGui::SetNextItemWidth(256.0);
-			ImGui::Text(p_float->getName());
-			//~ ImGui::Selectable("item1", false);
-			//~ ImGui::Selectable("item2", false);
-			ImGui::SetNextItemWidth(256.0);
-			//~ display_fft_values();
-			
-			//~ ImGui::PopItemWidth();
-			ImGui::EndPopup();
-			
-		}
-		ImGui::PopID();	
-	}
-	
-	
-}
 
-void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callback = [](){})
+void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> parent_param = nullptr, std::function<void()> callback = [](){})
 {
 	
 	Param<float> * p_float  = nullptr;
 	Param<int> *   p_int    = nullptr;
 	Param<bool> *  p_bool   = nullptr;
 	Param<std::string> *  p_text   = nullptr;
+	Param<SignalRange> *  p_signal_range   = nullptr;
 	ParamMenu *    p_menu   = nullptr;
 	ParamButton *  p_button = nullptr;
 	ParamColor3 *  p_color3 = nullptr;
 	ParamSeparator *  p_separator = nullptr;
 	ParamFilePath *  p_file_path = nullptr;
+
 	
+	ImGui::PushID(param_ptr->getName());
 	char _name[255];
-	      if(p_float  = dynamic_cast<Param<float> *>(param_ptr.get()) ){
+	      if((p_float  = dynamic_cast<Param<float> *>(param_ptr.get())) ){
 		
-		float _val = p_float->getValue();
-		float old = _val;
+		float new_val = p_float->getValue();
+		float old_val = new_val;
+
 		
 		sprintf((char *)_name, "##%s", p_float->getName());
 
-		ImGui::Columns(2);
+		ImGui::Columns(3);
 		ImGui::Text(p_float->getName() );
 		ImGui::NextColumn();
 		ImGui::PushItemWidth(-1);
-		if( ImGui::DragFloat((const char *) _name, &_val, 0.05f)){
+		if( ImGui::DragFloat((const char *) _name, &new_val, 0.05f))
+		{
 			//~ p_float->setValue(_val);
 			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
 			if (state == GLFW_PRESS)
@@ -392,7 +367,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 					
 					std::shared_ptr<ReleaseDataFloat> data = std::make_shared<ReleaseDataFloat>();
 					current_param_data = data;
-					data->old_val = old; 
+					data->old_val = old_val; 
 					data->callback = [](){
 						printf("Float Param Release\n");
 					};					
@@ -402,29 +377,44 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 				ReleaseDataFloat * data_float = nullptr;
 				if( data_float = dynamic_cast<ReleaseDataFloat *>( current_param_data.get())){
 					
-					data_float->new_val = _val; 
+					data_float->new_val = new_val; 
 					
 				}
-				p_float->setValue(_val);
+				p_float->setValue(new_val);
 			}else{
 				
-					std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, old, _val, [](){
+					std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, old_val, new_val, [](){
 						printf("Float action callback !!!!!!\n");
 					});
 					actions.insert(actions.begin(), action );
-					p_float->setValue(_val);
+					//~ p_float->setValue(new_val);
 					
 			}
 		
+			
 		}
+		ImGui::PopItemWidth();
+		ImGui::NextColumn();
 		
+		bool checked = param_ptr->getUseSignalRange();
+		if(ImGui::Checkbox(" : Use Signal", &checked)){
+			
+			bool old_val = p_float->getUseSignalRange();
+			bool new_val = checked;
+			std::shared_ptr<ActionParamUseSignalChange > action = std::make_shared<ActionParamUseSignalChange >(p_float, old_val, new_val, [](){
+				printf("Use Signal Action Log\n");
+			});
+			actions.insert(actions.begin(), action );			
+			
+			param_ptr->setUseSignalRange( checked);
+		}
 		ImGui::Columns(1);
 		
 		
 
 				
 		
-	}else if(p_int    = dynamic_cast<Param<int> *>  (param_ptr.get()) ){
+	}else if((p_int    = dynamic_cast<Param<int> *>  (param_ptr.get())) ){
 		int _val = p_int->getValue();
 		int old = _val;
 
@@ -464,7 +454,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		}
 		
 		ImGui::Columns(1);
-	}else if(p_bool   = dynamic_cast<Param<bool> *> (param_ptr.get()) ){
+	}else if((p_bool   = dynamic_cast<Param<bool> *> (param_ptr.get())) ){
 		bool _val = p_bool->getValue();
 		bool old = _val;
 
@@ -481,7 +471,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		}
 		ImGui::Columns(1);
 		
-	}else if(p_text   = dynamic_cast<Param<std::string> *> (param_ptr.get()) ){
+	}else if((p_text   = dynamic_cast<Param<std::string> *> (param_ptr.get())) ){
 		//~ ImGui::Text(p_text->getValue());
 		std::string _val = p_text->getValue();
 		std::string old = _val;
@@ -508,7 +498,86 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		}
 		ImGui::Columns(1);
 		
-	}else if(p_menu   = dynamic_cast<ParamMenu *>   (param_ptr.get()) ){
+	}else if((p_signal_range = dynamic_cast<Param<SignalRange > *>(param_ptr.get()))){
+	
+		SignalRange new_val = parent_param->getSignalRange();
+		SignalRange old_val = new_val;
+		int new_val_min = parent_param->getSignalRange().min;
+		int old_val_min = new_val_min;
+
+		
+		sprintf((char *)_name, "##%s --> min", parent_param->getName());
+
+		ImGui::Columns(2);
+		ImGui::Text(parent_param->getName() );
+		ImGui::NextColumn();
+		ImGui::PushItemWidth(-1);
+		
+		ImGui::PushID(p_signal_range);
+		if( ImGui::DragInt((const char *) _name, &new_val_min))
+		{
+			//~ p_float->setValue(_val);
+			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
+			if (state == GLFW_PRESS)
+			{
+				if( !is_param_clicked){
+					
+					active_param = param_ptr;
+					is_param_clicked = true;
+					
+					std::shared_ptr<ReleaseDataSignalRange> data = std::make_shared<ReleaseDataSignalRange>();
+					current_param_data = data;
+					data->old_val = old_val; 
+					data->callback = [](){
+						printf("Signal Range Param Release\n");
+					};					
+				}
+				
+				
+				ReleaseDataSignalRange * data_signal_range = nullptr;
+				if( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get())){
+					SignalRange result;
+					result.min = new_val_min;
+					result.max = parent_param->getSignalRange().max;
+					//~ p_signal_range->setValue(result);					
+					data_signal_range->new_val = result; 
+					data_signal_range->parent_param = parent_param;
+						
+					parent_param->setSignalRange(result);
+				}
+				
+				
+				
+
+			}else{
+				
+				SignalRange result;
+				result.min = new_val_min;
+				result.max = parent_param->getSignalRange().max;
+
+				printf("result min -> %d\n", result.min);
+				printf("result max -> %d\n", result.max);				
+
+					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
+						printf("Signal Range action Input callback !!!!!!\n");
+					});
+					actions.insert(actions.begin(), action );
+					
+				//~ parent_param->setSignalRange(p_signal_range->getValue());	
+				
+				printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
+				printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
+			}
+		
+			
+		}
+		ImGui::PopID();
+		ImGui::PopItemWidth();
+		ImGui::Columns(1);
+	
+		
+		
+	}else if((p_menu   = dynamic_cast<ParamMenu *>   (param_ptr.get()) )){
 		
 		
 		sprintf(_name, "##%s", p_menu->getName());	
@@ -546,7 +615,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		
 		ImGui::Columns(1);
 		
-	}else if(p_button = dynamic_cast<ParamButton *> (param_ptr.get()) ){
+	}else if((p_button = dynamic_cast<ParamButton *> (param_ptr.get()) )){
 		
 		
 		sprintf(_name, "##%s", p_button->getName());	
@@ -564,7 +633,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		}	
 		
 		ImGui::Columns(1);
-	}else if(p_color3 = dynamic_cast<ParamColor3 *> (param_ptr.get()) ){
+	}else if((p_color3 = dynamic_cast<ParamColor3 *> (param_ptr.get()) )){
 		
 		glm::vec3 _val = glm::vec3(p_color3->getValue());
 		glm::vec3 old = _val;		
@@ -625,9 +694,9 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 
 		
 		ImGui::Columns(1);
-	}else if(p_separator = dynamic_cast<ParamSeparator *>(param_ptr.get())){
+	}else if((p_separator = dynamic_cast<ParamSeparator *>(param_ptr.get()))){
 		ImGui::Separator();
-	}else if(p_file_path = dynamic_cast<ParamFilePath *>(param_ptr.get())){
+	}else if((p_file_path = dynamic_cast<ParamFilePath *>(param_ptr.get()))){
 		std::string _val = p_file_path->getValue();
 		std::string old = _val;
 
@@ -666,7 +735,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::function<void()> callb
 		
 	}
 
-	display_signal_dialog(param_ptr);
+	ImGui::PopID();
+	
 }
 
 void actions_dialog()
@@ -904,13 +974,17 @@ void module_list_dialog()
 			ImGui::EndChild();
 			ImGui::PopID();			
 			
+			
+						
 			//~ ImGui::SetCursorPosY( 0);
 
 			
 			inc++;
 		}
+		
+		ImGui::End();
 	}
-	ImGui::End();
+	
 }
 
 void draw_param_layout(ParamLayout& layout)
@@ -919,6 +993,7 @@ void draw_param_layout(ParamLayout& layout)
 	ImGui::Separator();
 	for(auto param : layout.params){
 		UI_widget(param);
+		
 	}
 }
 
@@ -933,7 +1008,7 @@ void live_window_size_callback(GLFWwindow* window, int width, int height)
 	renderer.initFBO(live_w_width, live_w_height);
 }
 
-void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<ReleaseData> data)
+void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<ReleaseData> data, std::shared_ptr<BaseParam> parent_param = nullptr)
 {
 	//~ printf("param name : %s\n", param->getName());
 	Param<float> * p_float = nullptr;
@@ -944,6 +1019,9 @@ void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<Re
 	
 	ParamColor3 * p_color3 = nullptr;
 	ReleaseDataColor3 * data_color3 = nullptr;		
+	
+	Param<SignalRange> * p_signal_range = nullptr;
+	ReleaseDataSignalRange * data_signal_range = nullptr;	
 	
 	if((p_float = dynamic_cast<Param<float> *>(param.get())) && (data_float = dynamic_cast<ReleaseDataFloat * >(data.get())))
 	{
@@ -962,6 +1040,13 @@ void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<Re
 		//~ printf("old val  AGAIN -> %.3f %.3f %.3f\n", data_color3->old_val.x, data_color3->old_val.y, data_color3->old_val.z);
 		std::shared_ptr<ActionParamColor3Change > action = std::make_shared<ActionParamColor3Change >(p_color3, data_color3->old_val, data_color3->new_val, data_color3->callback);
 		actions.insert(actions.begin(), action );		
+	}else if((p_signal_range = dynamic_cast<Param<SignalRange> *>(param.get())) && (data_signal_range = dynamic_cast<ReleaseDataSignalRange * >(data.get())))
+	{
+		if(parent_param != nullptr)
+		{			
+			std::shared_ptr<ActionParamSignalRangeChange> action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), data_signal_range->old_val, data_signal_range->new_val, data_signal_range->callback);
+			actions.insert(actions.begin(), action );		
+		}
 	}	
 
 } 
@@ -978,13 +1063,12 @@ void UI_mouse_button_callback(GLFWwindow* window, int button, int action, int mo
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
 		if( is_param_clicked){
 			
-			execute_widget_release(active_param, current_param_data);
+			execute_widget_release(active_param, current_param_data, current_param_data->parent_param);
 
 			is_param_clicked = false;
 		}
 	}
 }
-
 
 void UI_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -1238,6 +1322,47 @@ void sound_dialog()
 	}
 }
 
+void parameter_signal_dialog()
+{
+	
+	ImGuiWindowFlags flags = ImGuiWindowFlags_NoDocking;
+	if(ImGui::Begin("Signal", &signal_range_dialog_opened, flags)) //, &signal_range_dialog_opened, flags))
+	{
+		for( auto module : renderer.m_modules)
+		{			
+			bool has_signal = false;
+			for(auto param : module->param_layout.params)
+			{			
+				if(param->getUseSignalRange())
+				{
+					has_signal = true;
+					break;
+				}
+			
+			}
+			
+			if( has_signal)
+			{
+				if(ImGui::CollapsingHeader(module->getName().c_str()))
+				{
+					for(auto param : module->param_layout.params)
+					{
+						if( param->getUseSignalRange())
+						{
+							//~ ImGui::Text(param->getName());
+							UI_widget(module->p_signal_range, param);
+						}
+					}	
+					
+				}
+				
+			}
+		}
+		
+	}
+	
+	ImGui::End();
+}
 
 
 int main(int argc, char** argv)
@@ -1402,7 +1527,7 @@ int main(int argc, char** argv)
 		timer.update();
 		
 		cur_time = timer.getMillis();
-		//~ printf("cur_time : %d\n", cur_time);
+		
 		old_time = cur_time;
 		
 		glfwMakeContextCurrent(ui_window);
@@ -1421,6 +1546,8 @@ int main(int argc, char** argv)
         ImGui::NewFrame();
         
 			static ImGuiID dockspaceID = 0;
+			
+			
 			bool active = true;
 			
 			if( b_explorer_opened )
@@ -1436,6 +1563,8 @@ int main(int argc, char** argv)
 			}
 
 			
+			
+			parameter_signal_dialog();
 			module_list_dialog();
 			actions_dialog();
 			sound_dialog();
@@ -1475,8 +1604,9 @@ int main(int argc, char** argv)
 					
 					ImGui::EndMenu();
 				}	
+				ImGui::End(); 
 			}
-			ImGui::End(); 
+			
 			 
 			if (ImGui::Begin("Viewport"), &active)
 			{
@@ -1484,25 +1614,27 @@ int main(int argc, char** argv)
 				
 				float _ratio = (float)live_w_width / (float)live_w_height;
 				ImGui::Image((void*)(uintptr_t)renderer.m_texture, ImVec2(avail_width,(int)((float)avail_width / _ratio)),ImVec2(0,1), ImVec2(1,0));
-				
+				ImGui::End(); 
 			}
-			ImGui::End(); 
+			
 			
 			if (ImGui::Begin("Player"), &active)
 			{
 				draw_param_layout(player_layout);
-
+				ImGui::End(); 
 			}
-			ImGui::End(); 
+			
 			
 			if (ImGui::Begin("Module Params"), &active)
 			{
 				
 				if( current_module_id != -1)
 					draw_param_layout(renderer.m_modules[current_module_id]->param_layout);
+					
+				ImGui::End(); 
 
 			}
-			ImGui::End(); 			
+						
         
         ImGui::Render();	
 		

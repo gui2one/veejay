@@ -46,6 +46,7 @@ class Module
 		std::shared_ptr<ParamColor3 > p_color;
 		std::shared_ptr<Param<float> > p_opacity;		
 		std::shared_ptr<ParamMenu > p_blending;		
+		std::shared_ptr<Param<SignalRange> > p_signal_range;		
 	private:
 		MODULE_BLENDING blending_mode = MODULE_BLENDING_NORMAL;
 		MODULE_TYPE type = MODULE_TYPE_NULL;

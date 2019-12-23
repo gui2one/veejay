@@ -26,6 +26,10 @@ Module::Module(){
 	param_layout.addParam(p_blending);
 	
 	param_layout.addParam( std::make_shared<ParamSeparator>());	
+	
+	
+	p_signal_range = std::make_shared<Param<SignalRange > >();
+	p_signal_range->setName("Signal Range");
 
 	
 }

@@ -4,6 +4,22 @@
 #include <functional>
 #include <string>
 
+
+
+struct SignalRange
+{
+	SignalRange(int _min = 0, int _max = 31)
+	{
+		min = _min;
+		max = _max;
+		
+	}
+	int min = 0;
+	int max = 31;
+	
+};
+
+
 class BaseParam
 {
 	public : 
@@ -13,9 +29,25 @@ class BaseParam
 		
 		inline void setName(const char * _name ){ name = _name;}		
 		inline const char * getName(){ return name; }
+
+		inline void setSignalRange(SignalRange _signal ){ signal_range = _signal;}		
+		inline SignalRange getSignalRange(){ return signal_range; }
+		
+		inline void setUseSignalRange(bool _value)
+		{
+			use_signal_range = _value;
+		}
+		
+		inline bool getUseSignalRange()
+		{
+			return use_signal_range;
+		}
 		
 	private:
 		const char * name = "default_param_name";
+		SignalRange signal_range;
+		
+		bool use_signal_range = false;
 };
 
 class ParamLayout{
