@@ -328,6 +328,8 @@ static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) // In C++11 yo
 void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> parent_param = nullptr, std::function<void()> callback = [](){})
 {
 	
+	float LABEL_WIDTH = 120.0f;
+	
 	Param<float> * p_float  = nullptr;
 	Param<int> *   p_int    = nullptr;
 	Param<bool> *  p_bool   = nullptr;
@@ -351,6 +353,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		sprintf((char *)_name, "##%s", p_float->getName());
 
 		ImGui::Columns(3);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_float->getName() );
 		ImGui::NextColumn();
 		ImGui::PushItemWidth(-1);
@@ -420,6 +423,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		sprintf((char *)_name, "##%s", p_int->getName());		
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_int->getName() );
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);	
@@ -460,6 +464,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		sprintf(_name, "##%s", p_bool->getName());		
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_bool->getName() );
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);	
@@ -478,6 +483,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		sprintf(_name, "##%s", p_text->getName());		
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_text->getName() );
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);	
@@ -513,6 +519,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		ImGui::Text(parent_param->getName() );
 		ImGui::Separator();
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text("Min Band :" );
 		
 		ImGui::NextColumn();
@@ -584,6 +591,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		ImGui::Columns(1);
 	
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text("Max Band :" );
 		
 		ImGui::NextColumn();
@@ -663,6 +671,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		int choice = p_menu->getValue();
 		
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_menu->getName() );
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);
@@ -702,6 +711,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text("");
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);	
@@ -722,6 +732,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		
 		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_color3->getName());
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);	
@@ -992,13 +1003,18 @@ void module_list_dialog()
 			
 			
 			ImGui::PushID(inc);
-			//~ ImGui::PushItemWidth(100);
-			if( Selectable("##title", inc == current_module_id, 0, ImVec2( 100, GetFontSize() * 3 )))
+
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(10,20,10,255))	;				
+			if( Selectable("##title", inc == current_module_id, 0, ImVec2( ImGui::GetContentRegionAvailWidth(), GetFontSize() * 1.0 )))
 			{
 
 				current_module_id = inc;
 			}
 			
+			
+			
+	
 			
 			ImGuiDragDropFlags src_flags = 0;
 			
@@ -1040,21 +1056,23 @@ void module_list_dialog()
 			
            
             
-            //~ ImGui::SameLine();
-            SetCursorPosY(GetCursorPosY() - GetFontSize() * 3);
-            ImGui::SetNextItemWidth(200);
-            Text(module->p_name->getValue().c_str());
-            SameLine();
-            BeginChild("module options" , ImVec2(0, GetFontSize() * 3), true);
+            
+            ImGui::SetCursorPosY(GetCursorPosY() - GetFontSize() * 1.0 - 5.0);
+            
+            
+            ImGui::Text(module->p_name->getValue().c_str());
+            
+            ImGui::SetCursorPosY(GetCursorPosY() + 5.0);
+            
             
 			UI_widget(module->p_opacity);
 			
-			ImGui::EndChild();
+			
 			ImGui::PopID();			
 			
 			
 						
-			//~ ImGui::SetCursorPosY( 0);
+			
 
 			
 			inc++;
