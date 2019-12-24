@@ -45,9 +45,13 @@ void Orbiter::init(){
 	//~ printf("orbiter init() \n");
 }
 
-void Orbiter::update(){
+void Orbiter::update(float * fft_maximums){
 	//~ printf("orbiter update \n");
 	m_counter++;
+	m_radius = p_radius->getFilteredValue(fft_maximums);
+	m_opacity = p_opacity->getFilteredValue(fft_maximums);
+	m_speed = p_speed->getFilteredValue(fft_maximums);
+	
 }
 
 void Orbiter::render(){
@@ -60,7 +64,7 @@ void Orbiter::render(){
 	
 	GLint loc_opacity;
 	loc_opacity = glGetUniformLocation(m_shader.m_id, "u_opacity");
-	GLCall(glUniform1f(loc_opacity, p_opacity->getValue()));	
+	GLCall(glUniform1f(loc_opacity, m_opacity));	
 	
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 	GLCall(glEnableVertexAttribArray(0));
@@ -69,8 +73,10 @@ void Orbiter::render(){
 	GLCall(glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ));
 
 		glPushMatrix();
-		glScalef(p_radius->getValue(), p_radius->getValue(),p_radius->getValue());
-		glRotatef((float)m_counter * p_speed->getValue() * -0.25, 0.0, 0.0, 1.0);
+		
+		
+		glScalef(m_radius, m_radius, m_radius);
+		glRotatef((float)m_counter * m_speed * -0.25, 0.0, 0.0, 1.0);
 
 		GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 		

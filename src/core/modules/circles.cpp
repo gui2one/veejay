@@ -17,9 +17,9 @@ void Circles::init()
 	
 }
 
-void Circles::update()
+void Circles::update(float * fft_maximums)
 {
-	
+	m_opacity = p_opacity->getFilteredValue(fft_maximums);
 }
 
 void Circles::render()
@@ -33,7 +33,7 @@ void Circles::render()
 
 	loc = glGetUniformLocation(m_shader.m_id, "u_opacity");
 	
-	GLCall(glUniform1f(loc, p_opacity->getValue()));	
+	GLCall(glUniform1f(loc, m_opacity));	
 	
 	glBegin(GL_TRIANGLES);
 	glVertex3f( 0.0, 0.0, 0.0);

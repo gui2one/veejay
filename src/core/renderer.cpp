@@ -79,35 +79,35 @@ void Renderer::updateModules()
 {
 	for(auto module : m_modules)
 	{
-		module->update();
-		for( auto param : module->param_layout.params)
-		{
-			if( param->getUseSignalRange())
-			{
+		module->update(fft_maximums);
+		//~ for( auto param : module->param_layout.params)
+		//~ {
+			//~ if( param->getUseSignalRange())
+			//~ {
 				
-				size_t min = param->getSignalRange().min;
-				size_t max = param->getSignalRange().max;
+				//~ size_t min = param->getSignalRange().min;
+				//~ size_t max = param->getSignalRange().max;
 				
-				float accum = 0.0f;
+				//~ float accum = 0.0f;
 			
-				for(size_t i = min; i <= max; i++)
-				{
-					accum += fft_maximums[i];
-				}
+				//~ for(size_t i = min; i <= max; i++)
+				//~ {
+					//~ accum += fft_maximums[i];
+				//~ }
 				
-				accum /= (float)(max - min);
+				//~ accum /= (float)(max - min);
 				
-				//~ std::cout << "accumulator : " << accum << std::endl;
-				Param<float> * p_float = nullptr;
 				
-				if((p_float = dynamic_cast<Param<float> *>(param.get())))
-				{
-					float cur = p_float->getValue();
-					p_float->setValue( accum * 10.0);
-				}
+				//~ Param<float> * p_float = nullptr;
 				
-			}
-		}
+				//~ if((p_float = dynamic_cast<Param<float> *>(param.get())))
+				//~ {
+					//~ float cur = p_float->getValue();
+					//~ p_float->setValue( accum * 10.0);
+				//~ }
+				
+			//~ }
+		//~ }
 	}	
 }
 

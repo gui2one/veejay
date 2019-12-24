@@ -4,6 +4,8 @@
 #include <functional>
 #include <string>
 
+class BaseParam;
+struct SignalRange;
 
 
 struct SignalRange
@@ -19,7 +21,13 @@ struct SignalRange
 	
 };
 
-class BaseParam;
+union ReturnValue{
+	
+	float Float;
+	int Int;
+	std::string String;
+	SignalRange Signal;
+};
 
 class ParamLayout{
 public:
@@ -88,6 +96,45 @@ class Param : public BaseParam
 	private:
 	
 		T value;
+		
+};
+
+template<>
+class Param<float> : public BaseParam
+{
+	public:
+		Param(): BaseParam(){}
+		
+		Param(const Param& other){}
+		~Param(){};
+		
+		inline float getValue() 			 { return value;  }
+		inline void  setValue( float input ) { value = input; }
+		
+		inline float getFilteredValue(float * fft_maximums)
+		{
+			if( getUseSignalRange() )
+			{
+				size_t min = getSignalRange().min;
+				size_t max = getSignalRange().max;
+				
+				float accum = 0.0f;
+			
+				for(size_t i = min; i <= max; i++)
+				{
+					accum += fft_maximums[i];
+				}
+				
+				accum /= (float)(max - min);
+				accum *= 10.0f;	
+				return getValue() * accum;
+			}else{
+				return getValue();
+			}	
+		}
+	private:
+	
+		float value;
 		
 };
 

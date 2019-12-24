@@ -10,12 +10,13 @@ class Circles: public Module
 	public:
 		Circles();
 		void init();
-		void update();
+		void update(float * fft_maximums);
 		void render();		
 			
 	private:
 	
 		Shader m_shader;
+		float m_opacity;
 		/* add your private declarations */
 };
 

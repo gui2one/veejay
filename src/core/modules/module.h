@@ -26,7 +26,7 @@ class Module
 		Module();
 		virtual ~Module();
 		virtual void init(){};
-		virtual void update(){};
+		virtual void update(float * fft_maximums){};
 		virtual void render(){};
 		
 		inline void 		setName(std::string _name)

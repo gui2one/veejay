@@ -33,10 +33,10 @@ void Image::init()
 	
 	GLCall(glGenBuffers(1, &m_vbo));
 	float vertices[4 * 3 * 2] = {
-			-0.5, -0.5, 0.0,	0.0, 0.0,
-			 0.5, -0.5, 0.0,	1.0, 0.0,
-			 0.5,  0.5, 0.0,	1.0, 1.0,
-			-0.5,  0.5, 0.0,	0.0, 1.0		
+			-1.0, -1.0, 0.0,	0.0, 0.0,
+			 1.0, -1.0, 0.0,	1.0, 0.0,
+			 1.0,  1.0, 0.0,	1.0, 1.0,
+			-1.0,  1.0, 0.0,	0.0, 1.0		
 	};
 	
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
@@ -45,9 +45,9 @@ void Image::init()
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));	
 }
 
-void Image::update()
+void Image::update(float * fft_maximums)
 {
-	
+	m_opacity = p_opacity->getFilteredValue(fft_maximums);
 }
 
 void Image::render()
@@ -63,7 +63,7 @@ void Image::render()
 
 	loc = glGetUniformLocation(screen_shader.m_id, "u_opacity");
 	
-	GLCall(glUniform1f(loc, p_opacity->getValue()));	
+	GLCall(glUniform1f(loc, m_opacity));	
 		
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_texture.getID()));

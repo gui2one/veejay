@@ -12,7 +12,7 @@ class Image: public Module
 		//~ ~Image();
 		void loadFile(const char * path);
 		void init();
-		void update();
+		void update( float * fft_maximums);
 		void render();				
 		
 	private:
@@ -24,6 +24,8 @@ class Image: public Module
 		Texture m_texture;
 		GLuint m_vbo;
 		Shader screen_shader;
+		
+		float m_opacity;
 		
 };
 
