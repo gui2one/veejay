@@ -193,8 +193,9 @@ public :
 		m_param = param;
 		old_value = old;
 		new_value = val;
+		m_callback = callback;
 		m_param->setValue(val);
-		callback();
+		m_callback();
 	}
 	
 	void redo()override{}
@@ -202,12 +203,15 @@ public :
 	void undo()override
 	{
 		m_param->setValue(old_value);
+		m_callback();
 	}
 	
 private:
 	ParamFilePath * m_param;
 	std::string old_value;
 	std::string new_value;
+	
+	std::function<void()> m_callback;
 };
 
 class ActionAddModule : public Action

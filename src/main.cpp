@@ -110,14 +110,14 @@ std::string explorer_V2_file_name = "";
 std::string current_explorer_file_path_V2 = "";
 int current_module_id = -1;
 
-Renderer renderer;
+
 
 float sound_buffer[512 * 2];
 fftw_complex * fft_out;
 
 const unsigned int NUM_BANDS = 32;
 float fft_maximums[NUM_BANDS];
-
+Renderer renderer( fft_maximums );
 
 WaveFileReader wave_reader(sound_buffer);
 SOUND_PLAYER_CMD sound_player_cmd = SOUND_PLAYER_CMD_PLAY;

@@ -8,7 +8,7 @@
 class Renderer
 {
 	public:
-		Renderer();
+		Renderer(float * _fft_maximums = nullptr);
 		
 		void initTexture();
 		void initFBO(int w, int h);
@@ -23,6 +23,8 @@ class Renderer
 		std::vector<std::shared_ptr<Module>> m_modules;
 		
 		int texture_width, texture_height;
+		
+		float * fft_maximums;
 		
 	private:
 

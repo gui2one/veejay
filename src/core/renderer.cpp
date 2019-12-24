@@ -1,9 +1,12 @@
 #include "renderer.h"
 
 
-Renderer::Renderer()
+Renderer::Renderer(float * _fft_maximums)
 {
-
+	if( _fft_maximums != nullptr)
+	{
+		fft_maximums = _fft_maximums;
+	}	
 }
 
 void Renderer::initTexture()
@@ -77,6 +80,34 @@ void Renderer::updateModules()
 	for(auto module : m_modules)
 	{
 		module->update();
+		for( auto param : module->param_layout.params)
+		{
+			if( param->getUseSignalRange())
+			{
+				
+				size_t min = param->getSignalRange().min;
+				size_t max = param->getSignalRange().max;
+				
+				float accum = 0.0f;
+			
+				for(size_t i = min; i <= max; i++)
+				{
+					accum += fft_maximums[i];
+				}
+				
+				accum /= (float)(max - min);
+				
+				//~ std::cout << "accumulator : " << accum << std::endl;
+				Param<float> * p_float = nullptr;
+				
+				if((p_float = dynamic_cast<Param<float> *>(param.get())))
+				{
+					float cur = p_float->getValue();
+					p_float->setValue( accum * 10.0);
+				}
+				
+			}
+		}
 	}	
 }
 

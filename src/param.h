@@ -19,6 +19,28 @@ struct SignalRange
 	
 };
 
+class BaseParam;
+
+class ParamLayout{
+public:
+	ParamLayout(){ name = "default layout";}
+	ParamLayout(const char * _name): name(_name){
+		
+	}
+	
+	inline void addParam(std::shared_ptr<BaseParam> ptr){
+		params.push_back(ptr);
+	}
+	
+	
+	inline void setName(const char * _name ){ name = _name;}		
+	inline const char * getName(){ return name; }	
+	std::vector<std::shared_ptr<BaseParam> > params; 
+	
+	
+private:
+	const char * name;
+};
 
 class BaseParam
 {
@@ -50,26 +72,7 @@ class BaseParam
 		bool use_signal_range = false;
 };
 
-class ParamLayout{
-public:
-	ParamLayout(){ name = "default layout";}
-	ParamLayout(const char * _name): name(_name){
-		
-	}
-	
-	inline void addParam(std::shared_ptr<BaseParam> ptr){
-		params.push_back(ptr);
-	}
-	
-	
-	inline void setName(const char * _name ){ name = _name;}		
-	inline const char * getName(){ return name; }	
-	std::vector<std::shared_ptr<BaseParam> > params; 
-	
-	
-private:
-	const char * name;
-};
+
 
 template<typename T>
 class Param : public BaseParam
