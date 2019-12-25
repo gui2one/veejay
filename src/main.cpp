@@ -181,7 +181,7 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 		//~ current_explorer_path = std::string(path);
 
 	if((dir = opendir(explorer_V2_dir_path.c_str())) == NULL){ /*Opens directory*/
-		printf("explorer error \n \t%s \n", explorer_V2_dir_path.c_str());
+		//~ printf("explorer error \n \t%s \n", explorer_V2_dir_path.c_str());
 		return errno;
 	}
 
@@ -293,15 +293,9 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 		for (int i = 0; i < file_names.size(); i++)
 		{
 			if(ImGui::Selectable(file_names[i].c_str(), false)){
-				
-				//~ printf("Selected File is : ????????\n");
-				//~ std::string selected_file_path = explorer_V2_dir_path + file_names[i];
+
 				explorer_V2_file_name = file_names[i];
-				//~ strcpy(file_n,file_names[i].c_str());				
-				
-				
-				//~ explorer_V2_dir_path = selected_file_path;
-				printf("Selected File is : %s / %s\n", explorer_V2_dir_path.c_str(), explorer_V2_file_name.c_str());
+				//~ printf("Selected File is : %s / %s\n", explorer_V2_dir_path.c_str(), explorer_V2_file_name.c_str());
 
 			}	
 		}	
@@ -375,7 +369,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					current_param_data = data;
 					data->old_val = old_val; 
 					data->callback = [](){
-						printf("Float Param Release\n");
+						//~ printf("Float Param Release\n");
 					};					
 				}
 				
@@ -390,7 +384,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			}else{
 				
 					std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, old_val, new_val, [](){
-						printf("Float action callback !!!!!!\n");
+						//~ printf("Float action callback !!!!!!\n");
 					});
 					actions.insert(actions.begin(), action );
 					//~ p_float->setValue(new_val);
@@ -408,7 +402,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			bool old_val = p_float->getUseSignalRange();
 			bool new_val = checked;
 			std::shared_ptr<ActionParamUseSignalChange > action = std::make_shared<ActionParamUseSignalChange >(p_float, old_val, new_val, [](){
-				printf("Use Signal Action Log\n");
+				//~ printf("Use Signal Action Log\n");
 			});
 			actions.insert(actions.begin(), action );			
 			
@@ -443,7 +437,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					current_param_data = data;
 					data->old_val = old; 
 					data->callback = [](){
-						printf("Int Param Release\n");
+						
 					};					
 				}
 				
@@ -473,7 +467,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		ImGui::PushItemWidth(-1);	
 		if( ImGui::Checkbox( _name, &_val)){
 			std::shared_ptr<ActionParamChange<bool> > action = std::make_shared<ActionParamChange<bool> >(p_bool, old, _val, [](){
-					printf("bool action callback !!!!!!\n");
+					
 			});
 			actions.insert(actions.begin(), action );
 		}
@@ -499,7 +493,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			ImGuiInputTextFlags_EnterReturnsTrue|ImGuiInputTextFlags_CallbackCompletion|ImGuiInputTextFlags_CallbackHistory, &TextEditCallbackStub))
 		{
 			std::shared_ptr<ActionParamChange<std::string> > action = std::make_shared<ActionParamChange<std::string> >(p_text, old, _val, [](){
-					printf("Text action callback !!!!!!\n");
+					
 					
 			});
 			actions.insert(actions.begin(), action );
@@ -555,7 +549,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					current_param_data = data;
 					data->old_val = old_val; 
 					data->callback = [](){
-						printf("Signal Range Minimum Param Release\n");
+						
 					};					
 				}
 				
@@ -581,18 +575,13 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				result.min = new_val_min;
 				result.max = new_val_max;
 
-				printf("result min -> %d\n", result.min);
-				printf("result max -> %d\n", result.max);				
+				
 
 					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
-						//~ printf("Signal Range action Input callback !!!!!!\n");
+			
 					});
 					actions.insert(actions.begin(), action );
-					
-				//~ parent_param->setSignalRange(p_signal_range->getValue());	
-				
-				//~ printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
-				//~ printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
+
 			}
 		
 			
@@ -708,7 +697,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					int old = _val;					
 					
 					std::shared_ptr<ActionParamMenuChange> action = std::make_shared<ActionParamMenuChange >(p_menu, old, inc, [old, inc](){
-							printf("Menu action callback old : %d, new %d\n", old, inc);
+							//~ printf("Menu action callback old : %d, new %d\n", old, inc);
 					});
 					actions.insert(actions.begin(), action );
 					choice = inc;
@@ -771,11 +760,11 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					current_param_data = data;
 					data->old_val = old; 
 					data->callback = [](){
-						printf("Color Param Release\n");
+						//~ printf("Color Param Release\n");
 						//~ p_color3->color = 
 					};					
 					
-					printf("Clicked, old value = %.3f %.3f %.3f \n", old.x, old.y, old.z);
+					//~ printf("Clicked, old value = %.3f %.3f %.3f \n", old.x, old.y, old.z);
 				}
 				
 				
@@ -790,7 +779,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			}else{
 				
 					std::shared_ptr<ActionParamColor3Change> action = std::make_shared<ActionParamColor3Change>(p_color3, old, temp_color, [](){
-						printf("Color3 action callback !!!!!!\n");
+						//~ printf("Color3 action callback !!!!!!\n");
 					});
 					actions.insert(actions.begin(), action );
 					p_color3->color = temp_color;
@@ -827,7 +816,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				b_explorer_opened = true;
 				_val = explorer_V2_dir_path + explorer_V2_file_name;
 				current_explorer_callback = [p_file_path, old, _val](){
-					printf("ParamFilePath -->  current path : %s\n" ,explorer_V2_dir_path.c_str());
+					//~ printf("ParamFilePath -->  current path : %s\n" ,explorer_V2_dir_path.c_str());
 					
 					p_file_path->setValue(explorer_V2_dir_path + explorer_V2_file_name);
 					std::shared_ptr<ActionParamFilePathChange > action = std::make_shared<ActionParamFilePathChange >(p_file_path, old, p_file_path->getValue(), p_file_path->getCallback());	
@@ -887,7 +876,7 @@ void actions_dialog()
 
 void saveToFile()
 {
-	printf("\nsave function\n\n");
+	//~ printf("\nsave function\n\n");
 	
 		
 	JsonFileWriter writer;
@@ -1072,15 +1061,8 @@ void module_list_dialog()
 				
 				EndDragDropTarget();
 			}	
-			
-			
-			
-			
-           
-            
-            
-            ImGui::SetCursorPosY(GetCursorPosY() - GetFontSize() * 1.0 - 5.0);
-            
+
+            ImGui::SetCursorPosY(GetCursorPosY() - GetFontSize() * 1.0 - 5.0);            
             
             ImGui::Text(module->p_name->getValue().c_str());
             
@@ -1091,10 +1073,6 @@ void module_list_dialog()
 			
 			
 			ImGui::PopID();			
-			
-			
-						
-			
 
 			
 			inc++;
@@ -1142,20 +1120,17 @@ void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<Re
 	ReleaseDataSignalRange * data_signal_range = nullptr;	
 	
 	if((p_float = dynamic_cast<Param<float> *>(param.get())) && (data_float = dynamic_cast<ReleaseDataFloat * >(data.get())))
-	{
-		
+	{		
 		std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, data_float->old_val, data_float->new_val, data_float->callback);
 		actions.insert(actions.begin(), action );
 				
 	}else if((p_int = dynamic_cast<Param<int> *>(param.get())) && (data_int = dynamic_cast<ReleaseDataInt * >(data.get())))
-	{
-		
+	{		
 		std::shared_ptr<ActionParamChange<int> > action = std::make_shared<ActionParamChange<int> >(p_int, data_int->old_val, data_int->new_val, data_int->callback);
 		actions.insert(actions.begin(), action );	
 			
 	}else if((p_color3 = dynamic_cast<ParamColor3 *>(param.get())) && (data_color3 = dynamic_cast<ReleaseDataColor3 * >(data.get())))
 	{
-		//~ printf("old val  AGAIN -> %.3f %.3f %.3f\n", data_color3->old_val.x, data_color3->old_val.y, data_color3->old_val.z);
 		std::shared_ptr<ActionParamColor3Change > action = std::make_shared<ActionParamColor3Change >(p_color3, data_color3->old_val, data_color3->new_val, data_color3->callback);
 		actions.insert(actions.begin(), action );		
 	}else if((p_signal_range = dynamic_cast<Param<SignalRange> *>(param.get())) && (data_signal_range = dynamic_cast<ReleaseDataSignalRange * >(data.get())))
@@ -1165,22 +1140,19 @@ void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<Re
 			std::shared_ptr<ActionParamSignalRangeChange> action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), data_signal_range->old_val, data_signal_range->new_val, data_signal_range->callback);
 			actions.insert(actions.begin(), action );		
 		}
-	}	
-
+	}
 } 
 
 void UI_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
- 
-	//~ printf("button_action\n");
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
 		//~ printf("\tleft button press\n");
 	}
 	
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
-		if( is_param_clicked){
-			
+		if( is_param_clicked)
+		{	
 			execute_widget_release(active_param, current_param_data, current_param_data->parent_param);
 
 			is_param_clicked = false;
@@ -1190,7 +1162,7 @@ void UI_mouse_button_callback(GLFWwindow* window, int button, int action, int mo
 
 void UI_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-		//~ printf("scancode : %d, mods : %d\n", scancode, mods );
+	//~ printf("scancode : %d, mods : %d\n", scancode, mods );
     if (scancode == 25 /* z key */ && action == GLFW_PRESS && mods == 2 /* ctrl */){
 		
 		//~ printf("UNDO ?\n");
@@ -1199,16 +1171,12 @@ void UI_key_callback(GLFWwindow* window, int key, int scancode, int action, int 
 			actions[0]->undo();
 			actions.erase(actions.begin());
 		}		
-		
 	}
-        
 }
 /////////
 
 void make_sound(const char * wav_path)
-{
-	
-	
+{	
 	wave_reader.read(wav_path);
 	
 	while(true)
@@ -1216,133 +1184,99 @@ void make_sound(const char * wav_path)
 		wave_reader.play( &sound_player_cmd, &sound_player_mode, &sine_wave_frequency, true);
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	////////////////////////////////////////
-    //~ Sine sine;
-
-    //~ printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
-    
-    //~ ScopedPaHandler paInit;
-    //~ if( paInit.result() != paNoError ) goto error;
-
-    //~ if (sine.open(Pa_GetDefaultOutputDevice()))
-    //~ {
-        //~ if (sine.start())
-        //~ {
-            //~ printf("Play for %d seconds.\n", NUM_SECONDS );
-            //~ Pa_Sleep( NUM_SECONDS * 1000 );
-
-            //~ sine.stop();
-        //~ }
-
-        //~ sine.close();
-    //~ }
-
-    //~ printf("Test finished.\n");
-    
-	//~ error:
-		//~ fprintf( stderr, "An error occured while using the portaudio stream\n" );
-		//~ fprintf( stderr, "Error number: %d\n", paInit.result() );
-		//~ fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( paInit.result() ) );    
-		
-		////////////////////////////////////
 }
 
 void compute_fft_maximums(float threshold, float exponent)
 {
-		double max = abs(fft_out[0][0]);
-		int num_bands = NUM_BANDS;
-		int fft_num_samples = 256;
-		int num_per_band = fft_num_samples / num_bands;
-		for(size_t i=0; i < num_bands/2; i++)
+	double max = abs(fft_out[0][0]);
+	int num_bands = NUM_BANDS;
+	int fft_num_samples = 256;
+	int num_per_band = fft_num_samples / num_bands;
+	for(size_t i=0; i < num_bands/2; i++)
+	{			
+		double accum = 0.0;
+		for (int j = 0; j < num_per_band; j++)
 		{
+			double fft_val = (abs(fft_out[(i*num_per_band)+j][0])*2.0)/fft_num_samples;
+			accum += fft_val;
+		}
+		
+		accum /= (double)num_per_band;		
+		accum *= (double)(i+1)*(i != 0 ? exponent : 1.0);
+		
+		double height;
+		
+		if(accum < (double)threshold){
+			accum = 0.0;
+		}
+		
+		fft_values[i] = (float)accum;
+		
+		if( accum > fft_maximums[i])
+		{
+			fft_maximums[i] = (float)(accum);
 			
-			double accum = 0.0;
-			for (int j = 0; j < num_per_band; j++)
-			{
-				double fft_val = (abs(fft_out[(i*num_per_band)+j][0])*2.0)/fft_num_samples;
-				accum += fft_val;
-			}
-			
-			accum /= (double)num_per_band;
-			//~ accum = sqrt(accum);
-			accum *= (double)(i+1)*(i != 0 ? exponent : 1.0);
-			double height;
-			if(accum < (double)threshold){
-				accum = 0.0;
-			}
-			
-			
-			fft_values[i] = (float)accum;
-			if( accum > fft_maximums[i])
-			{
-				fft_maximums[i] = (float)(accum);
-			}else{
-				fft_maximums[i] *= 1.0f - 0.005 * (float)timer.getDeltaMillis();
-			}
-
-		}	
+		}else{
+			fft_maximums[i] *= 1.0f - 0.005 * (float)timer.getDeltaMillis();
+		}
+	}	
 }
 
 void display_fft_values()
 {
-		ImGui::Text("FFT :");
-		ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+	ImGui::Text("FFT :");
+	ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+	
+	//~ static float threshold  = 0.1;
+	//~ static float exponent  = 1.5;
+	if( ImGui::SliderFloat("##Threshold", &fft_threshold, 0.0, 1.0, "Threshold = %.3f"))
+	{
 		
-		//~ static float threshold  = 0.1;
-		//~ static float exponent  = 1.5;
-		if( ImGui::SliderFloat("##Threshold", &fft_threshold, 0.0, 1.0, "Threshold = %.3f"))
-		{
-			
-		}
+	}
+	
+	if( ImGui::SliderFloat("##Exponent", &fft_exponent, 0.0, 10.0, "Exponent = %.3f"))
+	{
 		
-		if( ImGui::SliderFloat("##Exponent", &fft_exponent, 0.0, 10.0, "Exponent = %.3f"))
-		{
-			
-		}		
-		
-		double max = abs(fft_out[0][0]);
-		int num_bands = NUM_BANDS;
-		int fft_num_samples = 256;
-		int num_per_band = fft_num_samples / num_bands;
-		for(size_t i=0; i < num_bands/2; i++){
-			
-
-			
-				
-			double height;
-			height = fft_values[i] * 200.0f;
-			
-			
-			ImGui::GetWindowDrawList()->AddRectFilled(
-						ImVec2(ImGui::GetCursorScreenPos().x + i*2*num_per_band, ImGui::GetCursorScreenPos().y),
-						ImVec2(
-								ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
-								ImGui::GetCursorScreenPos().y  + height
-						), 						
-						IM_COL32(255,255,255,30)
-			);
-		}
+	}		
+	
+	double max = abs(fft_out[0][0]);
+	int num_bands = NUM_BANDS;
+	int fft_num_samples = 256;
+	int num_per_band = fft_num_samples / num_bands;
+	for(size_t i=0; i < num_bands/2; i++)
+	{		
+		double height;
+		height = fft_values[i] * 200.0f;
 		
 		
-		
-		for (int i = 0; i < NUM_BANDS/2; i++)
-		{
-			double height = (double)fft_maximums[i] * 200.0;
-			ImGui::GetWindowDrawList()->AddRectFilled(
-						ImVec2(
-							ImGui::GetCursorScreenPos().x + i*2*num_per_band, 
-							ImGui::GetCursorScreenPos().y + height - 2
-						),
-						ImVec2(
-							ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
-							ImGui::GetCursorScreenPos().y  + height
-						), 						
-						IM_COL32(255,255,255,150)
-			);			
-		}
-		
-		
-		ImGui::EndChild();	
+		ImGui::GetWindowDrawList()->AddRectFilled(
+			ImVec2(ImGui::GetCursorScreenPos().x + i*2*num_per_band, ImGui::GetCursorScreenPos().y),
+			ImVec2(
+					ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
+					ImGui::GetCursorScreenPos().y  + height
+			), 						
+			IM_COL32(255,255,255,30)
+		);
+	}
+	
+	for (int i = 0; i < NUM_BANDS/2; i++)
+	{
+		double height = (double)fft_maximums[i] * 200.0;
+		ImGui::GetWindowDrawList()->AddRectFilled(
+			ImVec2(
+				ImGui::GetCursorScreenPos().x + i*2*num_per_band, 
+				ImGui::GetCursorScreenPos().y + height - 2
+			),
+			ImVec2(
+				ImGui::GetCursorScreenPos().x + i*2*(float)num_per_band + num_per_band*2, 
+				ImGui::GetCursorScreenPos().y  + height
+			), 						
+			IM_COL32(255,255,255,150)
+		);			
+	}
+	
+	
+	ImGui::EndChild();	
 }
 
 void sound_dialog()
@@ -1369,8 +1303,7 @@ void sound_dialog()
 
 			ImGui::EndCombo();
 		}
-			
-		//~ ImGui::SameLine();
+		
 		if(ImGui::Button("Change")){
 			sound_player_mode = (SOUND_PLAYER_MODE)choice;
 		}
@@ -1396,33 +1329,35 @@ void sound_dialog()
 				printf("%.3f\n",freq);
 			}
 		}
-
-		
 		
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
 		ImGui::Spacing();
-		
 				
-		if(ImGui::Button("Play")){
+		if(ImGui::Button("Play"))
+		{
 			if( sound_player_cmd == SOUND_PLAYER_CMD_STOP)
 			{
 				wave_reader.read(sound_player_wave_file_path_param->getValue().c_str());
+				sound_player_cmd = SOUND_PLAYER_CMD_PLAY;				
+			}else
+			{
 				sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
-				
-				
-			}else{
-				sound_player_cmd = SOUND_PLAYER_CMD_PLAY;
-			}
-			
+			}			
 		}
+		
 		ImGui::SameLine();
-		if(ImGui::Button("Pause")){
+		
+		if(ImGui::Button("Pause"))
+		{
 			sound_player_cmd = SOUND_PLAYER_CMD_PAUSE;
 		}
+		
 		ImGui::SameLine();
-		if(ImGui::Button("Stop")){
+		
+		if(ImGui::Button("Stop"))
+		{
 			sound_player_cmd = SOUND_PLAYER_CMD_STOP;
 		}
 		
@@ -1430,17 +1365,17 @@ void sound_dialog()
 		{
 			ImGui::BeginChild("child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
 			
-			for(size_t i=0; i < 512; i++){
+			for(size_t i=0; i < 512; i++)
+			{
 				ImGui::GetWindowDrawList()->AddRectFilled(
-							ImVec2(ImGui::GetCursorScreenPos().x + i, ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0)),
-							ImVec2(
-									ImGui::GetCursorScreenPos().x + i + 1, 
-									ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0) + sound_buffer[i*2]  * 100.0f
-							), 
-							IM_COL32(255,255,255,150)
+					ImVec2(ImGui::GetCursorScreenPos().x + i, ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0)),
+					ImVec2(
+							ImGui::GetCursorScreenPos().x + i + 1, 
+							ImGui::GetCursorScreenPos().y + (ImGui::GetContentRegionAvail().y / 2.0) + sound_buffer[i*2]  * 100.0f
+					), 
+					IM_COL32(255,255,255,150)
 				);
 			}
-			
 			
 			ImGui::EndChild();
 		}
@@ -1449,9 +1384,7 @@ void sound_dialog()
 		{		
 			display_fft_values();
 		}
-		
-		
-				
+						
 		ImGui::End();
 	}
 }
@@ -1460,6 +1393,7 @@ void parameter_signal_dialog()
 {
 	
 	ImGuiWindowFlags flags = ImGuiWindowFlags_NoDocking;
+	
 	if(ImGui::Begin("Signal", &signal_range_dialog_opened, flags)) //, &signal_range_dialog_opened, flags))
 	{
 		for( auto module : renderer.m_modules)
@@ -1472,7 +1406,6 @@ void parameter_signal_dialog()
 					has_signal = true;
 					break;
 				}
-			
 			}
 			
 			if( has_signal)
@@ -1487,12 +1420,9 @@ void parameter_signal_dialog()
 							UI_widget(module->p_signal_range, param);
 						}
 					}	
-					
 				}
-				
 			}
 		}
-		
 	}
 	
 	ImGui::End();
@@ -1501,7 +1431,6 @@ void parameter_signal_dialog()
 
 int main(int argc, char** argv)
 {
-
 	memset(fft_maximums, 0.0, sizeof(float) * NUM_BANDS);
 	FFT fft;
 	
