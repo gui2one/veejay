@@ -78,7 +78,7 @@ unsigned int live_w_height = 360;
 unsigned int bufid; 
 Shader fbo_shader;
 
-
+ImFont* small_font;
 bool signal_range_dialog_opened = true;
 
 Timer timer;
@@ -117,6 +117,9 @@ fftw_complex * fft_out;
 
 const unsigned int NUM_BANDS = 32;
 float fft_maximums[NUM_BANDS];
+float fft_values[NUM_BANDS];
+float fft_threshold = 0.01f;
+float fft_exponent = 1.5f;
 Renderer renderer( fft_maximums );
 
 WaveFileReader wave_reader(sound_buffer);
@@ -328,7 +331,7 @@ static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) // In C++11 yo
 void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> parent_param = nullptr, std::function<void()> callback = [](){})
 {
 	
-	float LABEL_WIDTH = 120.0f;
+	float LABEL_WIDTH = ImGui::GetContentRegionAvailWidth() * 0.25f;
 	
 	Param<float> * p_float  = nullptr;
 	Param<int> *   p_int    = nullptr;
@@ -341,7 +344,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	ParamSeparator *  p_separator = nullptr;
 	ParamFilePath *  p_file_path = nullptr;
 
-	
+	ImGui::PushFont(small_font);
 	ImGui::PushID(param_ptr->getName());
 	char _name[255];
 	      if((p_float  = dynamic_cast<Param<float> *>(param_ptr.get())) ){
@@ -531,7 +534,15 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		if( ImGui::SliderInt((const char *) _name, &new_val_min, 0, 31))
 		{
-			//~ p_float->setValue(_val);
+			
+			if( new_val_min >= new_val_max && new_val_min < NUM_BANDS)
+			{
+				new_val_max = new_val_min + 1;
+			}
+			if(new_val_min >= NUM_BANDS - 1){
+				new_val_min = NUM_BANDS - 2;
+			}
+			
 			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
 			if (state == GLFW_PRESS)
 			{
@@ -553,7 +564,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				if( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get())){
 					SignalRange result;
 					result.min = new_val_min;
-					result.max = parent_param->getSignalRange().max;
+					result.max = new_val_max;
 					//~ p_signal_range->setValue(result);					
 					data_signal_range->new_val = result; 
 					data_signal_range->parent_param = parent_param;
@@ -568,20 +579,20 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				SignalRange result;
 				result.min = new_val_min;
-				result.max = parent_param->getSignalRange().max;
+				result.max = new_val_max;
 
 				printf("result min -> %d\n", result.min);
 				printf("result max -> %d\n", result.max);				
 
 					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
-						printf("Signal Range action Input callback !!!!!!\n");
+						//~ printf("Signal Range action Input callback !!!!!!\n");
 					});
 					actions.insert(actions.begin(), action );
 					
 				//~ parent_param->setSignalRange(p_signal_range->getValue());	
 				
-				printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
-				printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
+				//~ printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
+				//~ printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
 			}
 		
 			
@@ -603,7 +614,14 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 		if( ImGui::SliderInt((const char *) _name, &new_val_max, 0, 31))
 		{
-			//~ p_float->setValue(_val);
+			if( new_val_max <= new_val_min && new_val_max > 0)
+			{
+				new_val_min = new_val_max - 1;
+			}	
+			
+			if(new_val_max < 1){
+				new_val_max = 1;
+			}
 			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
 			if (state == GLFW_PRESS)
 			{
@@ -616,7 +634,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					current_param_data = data;
 					data->old_val = old_val; 
 					data->callback = [](){
-						printf("Signal Range Maximum Param Release\n");
+						//~ printf("Signal Range Maximum Param Release\n");
 					};					
 				}
 				
@@ -624,7 +642,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				ReleaseDataSignalRange * data_signal_range = nullptr;
 				if( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get())){
 					SignalRange result;
-					result.min = parent_param->getSignalRange().min;
+					result.min = new_val_min;
 					result.max = new_val_max;
 					//~ p_signal_range->setValue(result);					
 					data_signal_range->new_val = result; 
@@ -639,21 +657,21 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			}else{
 				
 				SignalRange result;
-				result.min = parent_param->getSignalRange().min;
+				result.min = new_val_min;
 				result.max = new_val_max;
 
-				printf("result min -> %d\n", result.min);
-				printf("result max -> %d\n", result.max);				
+				//~ printf("result min -> %d\n", result.min);
+				//~ printf("result max -> %d\n", result.max);				
 
 					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
-						printf("Signal Range Maximum action Input callback !!!!!!\n");
+						//~ printf("Signal Range Maximum action Input callback !!!!!!\n");
 					});
 					actions.insert(actions.begin(), action );
 					
 				//~ parent_param->setSignalRange(p_signal_range->getValue());	
 				
-				printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
-				printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
+				//~ printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
+				//~ printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
 			}
 		
 			
@@ -825,6 +843,10 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	}
 
 	ImGui::PopID();
+	ImGui::PopFont();
+	
+	ImGui::Columns(1);
+	ImGui::Spacing();
 	
 }
 
@@ -1005,7 +1027,7 @@ void module_list_dialog()
 			ImGui::PushID(inc);
 
 			ImVec2 p = ImGui::GetCursorScreenPos();
-			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(10,20,10,255))	;				
+			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(20,20,40,255))	;				
 			if( Selectable("##title", inc == current_module_id, 0, ImVec2( ImGui::GetContentRegionAvailWidth(), GetFontSize() * 1.0 )))
 			{
 
@@ -1225,28 +1247,14 @@ void make_sound(const char * wav_path)
 		////////////////////////////////////
 }
 
-void display_fft_values()
+void compute_fft_maximums(float threshold, float exponent)
 {
-		ImGui::Text("FFT :");
-		ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
-		
-		static float threshold  = 0.1;
-		static float exponent  = 1.5;
-		if( ImGui::SliderFloat("##Threshold", &threshold, 0.0, 1.0, "Threshold = %.3f"))
-		{
-			
-		}
-		
-		if( ImGui::SliderFloat("##Exponent", &exponent, 0.0, 10.0, "Exponent = %.3f"))
-		{
-			
-		}		
-		
 		double max = abs(fft_out[0][0]);
 		int num_bands = NUM_BANDS;
 		int fft_num_samples = 256;
 		int num_per_band = fft_num_samples / num_bands;
-		for(size_t i=0; i < num_bands/2; i++){
+		for(size_t i=0; i < num_bands/2; i++)
+		{
 			
 			double accum = 0.0;
 			for (int j = 0; j < num_per_band; j++)
@@ -1263,16 +1271,46 @@ void display_fft_values()
 				accum = 0.0;
 			}
 			
+			
+			fft_values[i] = (float)accum;
 			if( accum > fft_maximums[i])
 			{
 				fft_maximums[i] = (float)(accum);
 			}else{
 				fft_maximums[i] *= 1.0f - 0.005 * (float)timer.getDeltaMillis();
 			}
+
+		}	
+}
+
+void display_fft_values()
+{
+		ImGui::Text("FFT :");
+		ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
+		
+		//~ static float threshold  = 0.1;
+		//~ static float exponent  = 1.5;
+		if( ImGui::SliderFloat("##Threshold", &fft_threshold, 0.0, 1.0, "Threshold = %.3f"))
+		{
+			
+		}
+		
+		if( ImGui::SliderFloat("##Exponent", &fft_exponent, 0.0, 10.0, "Exponent = %.3f"))
+		{
+			
+		}		
+		
+		double max = abs(fft_out[0][0]);
+		int num_bands = NUM_BANDS;
+		int fft_num_samples = 256;
+		int num_per_band = fft_num_samples / num_bands;
+		for(size_t i=0; i < num_bands/2; i++){
+			
+
 			
 				
-				
-			height = accum * 200.0f;
+			double height;
+			height = fft_values[i] * 200.0f;
 			
 			
 			ImGui::GetWindowDrawList()->AddRectFilled(
@@ -1472,15 +1510,7 @@ int main(int argc, char** argv)
 		sound_buffer[i] = 0.5;
 	}
 	
-	//~ if( argc < 2)
-	//~ {
-		//~ printf("I need a wav file path\n\n");
-		//~ return 0;
-	//~ } 
-	//~ WAV_PATH = argv[1];
-	//~ char temp_char[512] = "/home/pi/Downloads/2009-03-30-clairdelune.ogg\0";
-	//~ strcpy(WAV_PATH, (const char *)temp_char);
-	//~ WAV_PATH = "/home/pi/Downloads/2009-03-30-clairdelune.ogg";
+
 	std::string str_wav_path = "/home/pi/Downloads/guitar_riff.wav";
 	WAV_PATH = (char *)(str_wav_path.c_str());
 	std::thread t(make_sound, WAV_PATH);
@@ -1571,6 +1601,11 @@ int main(int argc, char** argv)
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     
+    io.Fonts->AddFontDefault(); // load default font 
+    // add second font
+    small_font = io.Fonts->AddFontFromFileTTF("../src/fonts/ProggyTiny.ttf", 10.0f);
+    
+    
     
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(ui_window, true);
@@ -1618,7 +1653,7 @@ int main(int argc, char** argv)
 		}
 		
 		fft_out = fft.execute_plan(fft_temp);
-
+		compute_fft_maximums(fft_threshold, fft_exponent);
 		
 		timer.update();
 		
