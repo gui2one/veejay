@@ -23,7 +23,10 @@ int WaveFileReader::read(const char * path)
     }
     
     /* init portaudio */
+    freopen("/dev/null", "w", stderr);
     error = Pa_Initialize();
+    freopen("/dev/tty", "w", stderr);
+    
     if(error != paNoError)
     {
         fprintf(stderr, "Problem initializing\n");
