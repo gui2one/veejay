@@ -1554,12 +1554,10 @@ int main(int argc, char** argv)
 	
 	sound_player_wave_file_path_param->setName("Sound File");
 	sound_player_wave_file_path_param->setValue(std::string(WAV_PATH));
-	sound_player_wave_file_path_param->setCallback( [](){
-		printf("changed file path \n");
-		//~ WAV_PATH = sound_player_wave_file_path_param->getValue().c_str();
-		strcpy(WAV_PATH, sound_player_wave_file_path_param->getValue().c_str());
-		printf("%s\n", WAV_PATH);
-	});
+	sound_player_wave_file_path_param->setCallback( []()
+		{
+			strcpy(WAV_PATH, sound_player_wave_file_path_param->getValue().c_str());
+		});
 
 	
 	std::shared_ptr<ParamButton > play_button = std::make_shared<ParamButton >();
@@ -1596,7 +1594,7 @@ int main(int argc, char** argv)
 		printf("glfw window error\n");
 		glfwTerminate();
 	}
-	printf("hello \n");
+	
 	
 	glfwSetWindowSizeCallback(live_window, live_window_size_callback);
 	
@@ -1610,8 +1608,8 @@ int main(int argc, char** argv)
 	
 
 	
-	printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
-	printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	//~ printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
+	//~ printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 	
     const char* glsl_version = "#version 100";

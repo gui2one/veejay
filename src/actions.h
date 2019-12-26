@@ -42,7 +42,7 @@ public:
 
 		m_new_value = _new_value;
 
-		//~ printf("old value stored : %s\n", param->getName().c_str());
+		
 		
 		
 		param->setValue(_new_value);
@@ -103,7 +103,7 @@ public:
 
 		m_new_value = _new_value;
 
-		//~ printf("old value stored : %s\n", param->getName().c_str());
+		
 		
 		
 		param->setSignalRange(_new_value);
@@ -130,12 +130,12 @@ class ActionParamMenuChange : public Action
 public:
 	ActionParamMenuChange(ParamMenu * param, int old, int val, std::function<void()> callback) : Action()
 	{
-		setName("Param Change");
+		setName("Param Menu Change");
 		m_param = param;
 		m_callback = callback;
 		old_value = old;
 		new_value = val;
-		printf("old value stored in %s : %d\n", param->getName(), param->getValue());
+		
 		param->setValue(val);
 		
 		callback();		
@@ -164,8 +164,8 @@ public:
 		m_callback = callback;
 		old_value = old;
 		new_value = val;
-		printf("old value stored in %s :  %.3f, %.3f, %.3f\n", param->getName(), old.x, old.y, old.z);
-		printf("New value stored in %s :  %.3f, %.3f, %.3f\n", param->getName(), new_value.x, new_value.y, new_value.z);
+		//~ printf("old value stored in %s :  %.3f, %.3f, %.3f\n", param->getName(), old.x, old.y, old.z);
+		//~ printf("New value stored in %s :  %.3f, %.3f, %.3f\n", param->getName(), new_value.x, new_value.y, new_value.z);
 		param->color = val;
 		
 		callback();		
