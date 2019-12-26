@@ -137,12 +137,12 @@ std::shared_ptr<ParamFilePath> sound_player_wave_file_path_param = std::make_sha
 // forward declarations ...
 void display_fft_values();
 
-static std::vector<std::string> split(const std::string& str, std::string delimiter = " ")
+std::vector<std::string> split(const std::string& str, std::string delimiter = " ")
 {
 	
 	std::vector<std::string> tokens;
 	std::string tmp = str;
-	std::string::size_type start = 0;
+	//~ std::string::size_type start = 0;
 	while(true)
 	{
 		std::string::size_type found = tmp.find_first_of(delimiter);
@@ -150,13 +150,14 @@ static std::vector<std::string> split(const std::string& str, std::string delimi
 		{
 			//std::cout << " reached end ------------------------------- " << std::endl;	
 			tokens.push_back(tmp);
+			
 			break;
 		}else{
 			std::string cut = tmp.substr(0, found);
 			tokens.push_back(cut);
 			tmp = tmp.substr(found+1, tmp.size() - (found-1));
 			//std::cout << tmp << std::endl;
-			start = found;
+			//~ start = found;
 		}
 	}
 	
@@ -268,7 +269,7 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 				
 				std::vector<std::string> splitted = split(explorer_V2_dir_path, "/");
 				
-				for (int i = 0; i < splitted.size()-2; i++)
+				for (size_t i = 0; i < splitted.size()-2; i++)
 				{
 					new_path += splitted[i];
 					new_path += "/";
@@ -279,7 +280,7 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 				explorer_V2_dir_path = new_path;		
 			}
 		}
-		for (int i = 0; i < dir_names.size(); i++)
+		for (size_t i = 0; i < dir_names.size(); i++)
 		{
 			if(ImGui::Selectable(dir_names[i].c_str(), false)){
 				
@@ -290,7 +291,7 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 		// revert back to default color
 		ImGui::PopStyleColor();
 		
-		for (int i = 0; i < file_names.size(); i++)
+		for (size_t i = 0; i < file_names.size(); i++)
 		{
 			if(ImGui::Selectable(file_names[i].c_str(), false)){
 
@@ -375,7 +376,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				
 				ReleaseDataFloat * data_float = nullptr;
-				if( data_float = dynamic_cast<ReleaseDataFloat *>( current_param_data.get())){
+				if( (data_float = dynamic_cast<ReleaseDataFloat *>( current_param_data.get()))){
 					
 					data_float->new_val = new_val; 
 					
@@ -444,7 +445,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				
 				ReleaseDataInt * data_int = nullptr;
-				if( data_int = dynamic_cast<ReleaseDataInt *>( current_param_data.get())){
+				if(( data_int = dynamic_cast<ReleaseDataInt *>( current_param_data.get()))){
 					
 					data_int->new_val = _val; 
 					
@@ -507,8 +508,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		SignalRange old_val = new_val;
 		int new_val_min = parent_param->getSignalRange().min;
 		int new_val_max = parent_param->getSignalRange().max;
-		int old_val_min = new_val_min;
-		int old_val_max = new_val_max;
+		//~ int old_val_min = new_val_min;
+		//~ int old_val_max = new_val_max;
 
 		
 		
@@ -529,12 +530,12 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		if( ImGui::SliderInt((const char *) _name, &new_val_min, 0, 31))
 		{
 			
-			if( new_val_min >= new_val_max && new_val_min < NUM_BANDS)
+			if( new_val_min >= new_val_max && new_val_min < (int)NUM_BANDS)
 			{
 				new_val_max = new_val_min + 1;
 			}
-			if(new_val_min >= NUM_BANDS - 1){
-				new_val_min = NUM_BANDS - 2;
+			if(new_val_min >= (int)NUM_BANDS - 1){
+				new_val_min = (int)NUM_BANDS - 2;
 			}
 			
 			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
@@ -555,7 +556,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				
 				ReleaseDataSignalRange * data_signal_range = nullptr;
-				if( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get())){
+				if(( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get()))){
 					SignalRange result;
 					result.min = new_val_min;
 					result.max = new_val_max;
@@ -629,7 +630,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				
 				ReleaseDataSignalRange * data_signal_range = nullptr;
-				if( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get())){
+				if( (data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get()))){
 					SignalRange result;
 					result.min = new_val_min;
 					result.max = new_val_max;
@@ -719,7 +720,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
-		ImGui::Text("");
+		ImGui::Text(" ");
 		ImGui::NextColumn();	
 		ImGui::PushItemWidth(-1);	
 		
@@ -769,7 +770,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				
 				ReleaseDataColor3 * data_color3 = nullptr;
-				if( data_color3 = dynamic_cast<ReleaseDataColor3 *>( current_param_data.get())){
+				if(( data_color3 = dynamic_cast<ReleaseDataColor3 *>( current_param_data.get()))){
 					
 					data_color3->new_val = temp_color; 
 					
@@ -1188,11 +1189,11 @@ void make_sound(const char * wav_path)
 
 void compute_fft_maximums(float threshold, float exponent)
 {
-	double max = abs(fft_out[0][0]);
+	//~ double max = abs(fft_out[0][0]);
 	int num_bands = NUM_BANDS;
 	int fft_num_samples = 256;
 	int num_per_band = fft_num_samples / num_bands;
-	for(size_t i=0; i < num_bands/2; i++)
+	for(size_t i=0; i < NUM_BANDS/2; i++)
 	{			
 		double accum = 0.0;
 		for (int j = 0; j < num_per_band; j++)
@@ -1204,7 +1205,7 @@ void compute_fft_maximums(float threshold, float exponent)
 		accum /= (double)num_per_band;		
 		accum *= (double)(i+1)*(i != 0 ? exponent : 1.0);
 		
-		double height;
+		
 		
 		if(accum < (double)threshold){
 			accum = 0.0;
@@ -1239,11 +1240,11 @@ void display_fft_values()
 		
 	}		
 	
-	double max = abs(fft_out[0][0]);
+	//~ double max = abs(fft_out[0][0]);
 	int num_bands = NUM_BANDS;
 	int fft_num_samples = 256;
 	int num_per_band = fft_num_samples / num_bands;
-	for(size_t i=0; i < num_bands/2; i++)
+	for(size_t i=0; i < NUM_BANDS/2; i++)
 	{		
 		double height;
 		height = fft_values[i] * 200.0f;
@@ -1259,7 +1260,7 @@ void display_fft_values()
 		);
 	}
 	
-	for (int i = 0; i < NUM_BANDS/2; i++)
+	for (size_t i = 0; i < NUM_BANDS/2; i++)
 	{
 		double height = (double)fft_maximums[i] * 200.0;
 		ImGui::GetWindowDrawList()->AddRectFilled(
@@ -1284,7 +1285,7 @@ void sound_dialog()
 	if(ImGui::Begin("Sound"), true)
 	{
 		const char * modes[2] = {"Wave file Player", "Sine Wave Generator"};
-		static int choice = 0;
+		static unsigned int choice = 0;
 		
 		ImGui::Text("Mode");
 		ImGui::SameLine();
@@ -1544,7 +1545,7 @@ int main(int argc, char** argv)
 
 	
 
-	static bool show_another_window = true;	
+	
 	glEnable(GL_TEXTURE_2D);
 
 
@@ -1605,7 +1606,7 @@ int main(int argc, char** argv)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
-			static ImGuiID dockspaceID = 0;
+			//~ static ImGuiID dockspaceID = 0;
 			
 			
 			bool active = true;

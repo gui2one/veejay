@@ -1,6 +1,7 @@
 CMake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_FLAGS -std=c++17)
+# -fcompare-debug-second to remove simplejson ugly notes when building
+set(CMAKE_CXX_FLAGS "-std=c++17 -fcompare-debug-second -Wall -Wno-unused-function -Wno-unused-but-set-variable")
 
 project(VeeJeh)
 

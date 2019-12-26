@@ -30,22 +30,22 @@ JSON JsonFileWriter::encodeModules(std::vector<std::shared_ptr<Module> >& module
 				
 				JSON json_param = json::Object();
 				
-				if( p_float = dynamic_cast<Param<float> *>(param.get()))
+				if(( p_float = dynamic_cast<Param<float> *>(param.get())))
 				{
 					json_param["name"] = p_float->getName();
 					json_param["value"] = p_float->getValue();
 				}
-				else if( p_int = dynamic_cast<Param<int> *>(param.get()))
+				else if(( p_int = dynamic_cast<Param<int> *>(param.get())))
 				{
 					json_param["name"] = p_int->getName();
 					json_param["value"] = p_int->getValue();
 				}	
-				else if( p_menu = dynamic_cast<ParamMenu *>(param.get()))
+				else if(( p_menu = dynamic_cast<ParamMenu *>(param.get())))
 				{
 					json_param["name"] = p_menu->getName();
 					json_param["value"] = p_menu->getValue();
 				}
-				else if( p_color3 = dynamic_cast<ParamColor3 *>(param.get()))
+				else if(( p_color3 = dynamic_cast<ParamColor3 *>(param.get())))
 				{
 					JSON json_color = json::Array();
 					json_param["name"] = p_color3->getName();

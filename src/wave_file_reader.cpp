@@ -23,6 +23,7 @@ int WaveFileReader::read(const char * path)
     }
     
     /* init portaudio */
+    //// temporarely redirect Port audio init messages to /dev/null to avoid ugly start
     freopen("/dev/null", "w", stderr);
     error = Pa_Initialize();
     freopen("/dev/tty", "w", stderr);

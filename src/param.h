@@ -7,27 +7,31 @@
 class BaseParam;
 struct SignalRange;
 
+enum SignalRangeMode
+{
+	SignalRangeMode_MULTIPLY,
+	SignalRangeMode_ADD,
+	SignalRangeMode_AROUND
+};
 
 struct SignalRange
 {
-	SignalRange(int _min = 0, int _max = 31)
+	SignalRange(int _min = 0, int _max = 31, SignalRangeMode _mode = SignalRangeMode_ADD, float _multiplier = 1.0f)
 	{
 		min = _min;
 		max = _max;
-		
+		mode = _mode;
+		multiplier = _multiplier;		
 	}
+	
 	int min = 0;
 	int max = 31;
+	SignalRangeMode mode;
+	float multiplier;
 	
 };
 
-union ReturnValue{
-	
-	float Float;
-	int Int;
-	std::string String;
-	SignalRange Signal;
-};
+
 
 class ParamLayout{
 public:
@@ -79,8 +83,6 @@ class BaseParam
 		
 		bool use_signal_range = false;
 };
-
-
 
 template<typename T>
 class Param : public BaseParam
@@ -137,6 +139,8 @@ class Param<float> : public BaseParam
 		float value;
 		
 };
+
+
 
 class ParamSeparator : public BaseParam
 {
