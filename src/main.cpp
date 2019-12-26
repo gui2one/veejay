@@ -508,10 +508,9 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		SignalRange old_val = new_val;
 		int new_val_min = parent_param->getSignalRange().min;
 		int new_val_max = parent_param->getSignalRange().max;
-		//~ int old_val_min = new_val_min;
-		//~ int old_val_max = new_val_max;
-
 		
+		float new_multiplier = new_val.multiplier;
+		SignalRangeMode new_mode = new_val.mode;
 		
 		
 		ImGui::Text(parent_param->getName() );
@@ -587,7 +586,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		
 			
 		}
-		ImGui::PopID();
+		//~ ImGui::PopID();
 		ImGui::PopItemWidth();
 		ImGui::Columns(1);
 	
@@ -598,7 +597,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		ImGui::NextColumn();
 		ImGui::PushItemWidth(-1);
 		
-		ImGui::PushID(p_signal_range);
+		//~ ImGui::PushID(p_signal_range);
 		
 		sprintf((char *)_name, "##%s --> max", parent_param->getName());
 
@@ -649,27 +648,129 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				SignalRange result;
 				result.min = new_val_min;
 				result.max = new_val_max;
+			
 
-				//~ printf("result min -> %d\n", result.min);
-				//~ printf("result max -> %d\n", result.max);				
-
-					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
-						//~ printf("Signal Range Maximum action Input callback !!!!!!\n");
-					});
-					actions.insert(actions.begin(), action );
+				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 					
-				//~ parent_param->setSignalRange(p_signal_range->getValue());	
-				
-				//~ printf("new_val_min -> %d\n", parent_param->getSignalRange().min);
-				//~ printf("new_val_max -> %d\n", parent_param->getSignalRange().max);
+				});
+				actions.insert(actions.begin(), action );
+
 			}
 		
 			
 		}
-		ImGui::PopID();
+		//~ ImGui::PopID();
 		ImGui::PopItemWidth();
 		ImGui::Columns(1);	
 		
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
+		ImGui::Text("Mode" );
+		
+		ImGui::NextColumn();
+		ImGui::PushItemWidth(-1);		
+		
+		int choice = parent_param->getSignalRange().mode;
+		const char * modes[3] = {"Multiply", "Add", "Around"};
+		sprintf((char *)_name, "##%s --> signal_modes", parent_param->getName());
+		if(ImGui::BeginCombo((const char *)_name, modes[choice]))
+		{
+			if(ImGui::Selectable("Multiply"))
+			{
+				choice = 0;
+				SignalRange result = parent_param->getSignalRange();
+				result.mode = (SignalRangeMode)choice;			
+
+				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
+					
+				});
+				actions.insert(actions.begin(), action );	
+			}
+			
+			if(ImGui::Selectable("Add"))
+			{
+				choice = 1;
+				SignalRange result = parent_param->getSignalRange();
+				result.mode = (SignalRangeMode)choice;			
+
+				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
+					
+				});
+				actions.insert(actions.begin(), action );					
+			}
+			
+			if(ImGui::Selectable("Around"))
+			{
+				choice = 2;
+				SignalRange result = parent_param->getSignalRange();
+				result.mode = (SignalRangeMode)choice;			
+
+				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
+					
+				});
+				actions.insert(actions.begin(), action );					
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::Columns(1);
+		
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
+		ImGui::Text("Multiplier" );
+		
+		ImGui::NextColumn();
+		ImGui::PushItemWidth(-1);
+		
+		sprintf((char *)_name, "##%s --> multiplier", parent_param->getName());
+		
+		if( ImGui::SliderFloat((const char *)_name, &new_multiplier, 0.0f , 4.0f)){
+			int state = glfwGetMouseButton(ui_window, GLFW_MOUSE_BUTTON_LEFT);
+			if (state == GLFW_PRESS)
+			{
+				if( !is_param_clicked){
+					
+					active_param = param_ptr;
+					is_param_clicked = true;
+					
+					std::shared_ptr<ReleaseDataSignalRange> data = std::make_shared<ReleaseDataSignalRange>();
+					current_param_data = data;
+					data->old_val = old_val; 
+					data->callback = [](){
+						//~ printf("Signal Range Maximum Param Release\n");
+					};					
+				}
+				
+				
+				ReleaseDataSignalRange * data_signal_range = nullptr;
+				if( (data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get()))){
+					SignalRange result = parent_param->getSignalRange();
+					result.multiplier = new_multiplier;
+					//~ p_signal_range->setValue(result);					
+					data_signal_range->new_val = result; 
+					data_signal_range->parent_param = parent_param;
+						
+					parent_param->setSignalRange(result);
+				}
+				
+				
+				
+
+			}else{
+				SignalRange result = parent_param->getSignalRange();
+				result.multiplier = new_multiplier;
+			
+
+				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
+					//~ printf("Signal Range Maximum action Input callback !!!!!!\n");
+				});
+				actions.insert(actions.begin(), action );				
+				
+			}
+		}
+		
+		ImGui::PopItemWidth();
+		ImGui::Columns(1);
+		ImGui::PopID();
 		
 	}else if((p_menu   = dynamic_cast<ParamMenu *>   (param_ptr.get()) )){
 		

@@ -117,8 +117,9 @@ class Param<float> : public BaseParam
 		{
 			if( getUseSignalRange() )
 			{
-				size_t min = getSignalRange().min;
-				size_t max = getSignalRange().max;
+				SignalRange signal_range = getSignalRange();
+				size_t min = signal_range.min;
+				size_t max = signal_range.max;
 				
 				float accum = 0.0f;
 			
@@ -129,6 +130,25 @@ class Param<float> : public BaseParam
 				
 				accum /= (float)(max - min);
 				accum *= 10.0f;	
+				
+				accum *= signal_range.multiplier;
+				
+				switch(signal_range.mode) 
+				{
+					case SignalRangeMode_MULTIPLY : 
+						return getValue() * accum;
+						break;
+
+					case SignalRangeMode_ADD : 
+						return getValue() + accum;
+						break;
+
+					case SignalRangeMode_AROUND : 
+						return getValue() + (accum * signal_range.multiplier * 2.0) - signal_range.multiplier;
+						break;
+					default : 
+						break;
+				}
 				return getValue() * accum;
 			}else{
 				return getValue();
