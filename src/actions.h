@@ -238,7 +238,7 @@ class ActionAddModule : public Action
 public : 
 	ActionAddModule( 
 		MODULE_TYPE type,
-		std::shared_ptr<Module> module_ptr, 
+		
 		std::function<void(MODULE_TYPE, unsigned int)> add_func, 
 		std::function<void(unsigned int)> remove_func, 
 		std::function<void()> callback = [](){}
@@ -254,6 +254,7 @@ public :
 	}
 	
 	void undo()override{
+		printf("---- UNDO Add Module\n");
 		m_remove_module_function(0);
 	}
 	

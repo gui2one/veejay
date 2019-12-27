@@ -1064,15 +1064,15 @@ void move_module( int from , int to)
 
 void add_module(MODULE_TYPE type, unsigned int layer_num)
 {
-	//~ std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
-																				//~ (MODULE_TYPE)type, 
-																				//~ renderer.m_modules[current_module_id],
-																				//~ add_module, 
-																				//~ remove_module
-																				//~ );
+	std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
+																				(MODULE_TYPE)type, 
+																				
+																				add_module, 
+																				remove_module
+																				);
 	
 	
-	//~ register_action(action);	
+	register_action(action);	
 
 	if( (MODULE_TYPE)type == MODULE_TYPE_ORBITER)
 	{
@@ -1115,12 +1115,11 @@ void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
 
 void remove_module(unsigned int id)
 {
-	if( renderer.m_modules.size() > 0)
-	{
+
 				std::shared_ptr<ActionRemoveModule> action = std::make_shared<ActionRemoveModule>(
-																						(MODULE_TYPE)id, 
-																						renderer.m_modules[current_module_id], 
-																						current_module_id, 
+																						renderer.m_modules[id]->getType(), 
+																						renderer.m_modules[id], 
+																						id, 
 																						add_module_ptr, 
 																						remove_module
 																						);
@@ -1128,7 +1127,7 @@ void remove_module(unsigned int id)
 				//~ actions.insert(actions.begin(), action);
 				register_action(action);	
 		renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
-	}
+	
 }
 
 void module_list_dialog()
@@ -1164,16 +1163,20 @@ void module_list_dialog()
 			add_module((MODULE_TYPE)choice);
 		}
 		SameLine();
-		if(Button("Remove"))
+		if( renderer.m_modules.size() > 0)
 		{
-			if( current_module_id != -1)
+			if(Button("Remove"))
 			{
+				if( current_module_id != -1)
+				{
 
-				remove_module(current_module_id);
-			}
-				
+					remove_module(current_module_id);
+					if(renderer.m_modules.size() == 0)
+						current_module_id = -1;
+				}
+					
+			}		
 		}		
-		
 		
 		int inc = 0;
 		
