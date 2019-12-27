@@ -22,6 +22,10 @@
 #include "fft.h"
 /*******************************************************************/
 
+// forward declarations ...
+void display_fft_values();
+void register_action(std::shared_ptr<Action> action);
+
 struct ReleaseData{	
 	virtual ~ReleaseData(){};
 	virtual void funcA() = 0;
@@ -135,8 +139,7 @@ std::vector<std::shared_ptr<BaseParam> > pinned_params;
 // sound player params
 std::shared_ptr<ParamFilePath> sound_player_wave_file_path_param = std::make_shared<ParamFilePath>();
 
-// forward declarations ...
-void display_fft_values();
+
 
 std::vector<std::string> split(const std::string& str, std::string delimiter = " ")
 {
@@ -388,7 +391,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, old_val, new_val, [](){
 						//~ printf("Float action callback !!!!!!\n");
 					});
-					actions.insert(actions.begin(), action );
+					//~ actions.insert(actions.begin(), action );
+					register_action(action);
 					//~ p_float->setValue(new_val);
 					
 			}
@@ -406,7 +410,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			std::shared_ptr<ActionParamUseSignalChange > action = std::make_shared<ActionParamUseSignalChange >(p_float, old_val, new_val, [](){
 				//~ printf("Use Signal Action Log\n");
 			});
-			actions.insert(actions.begin(), action );			
+			//~ actions.insert(actions.begin(), action );	
+			register_action(action);		
 			
 			param_ptr->setUseSignalRange( checked);
 		}
@@ -471,7 +476,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			std::shared_ptr<ActionParamChange<bool> > action = std::make_shared<ActionParamChange<bool> >(p_bool, old, _val, [](){
 					
 			});
-			actions.insert(actions.begin(), action );
+			//~ actions.insert(actions.begin(), action );
+			register_action(action);
 		}
 		ImGui::Columns(1);
 		
@@ -498,7 +504,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					
 					
 			});
-			actions.insert(actions.begin(), action );
+			//~ actions.insert(actions.begin(), action );
+			register_action(action);
 			p_text->setValue(temp_char);
 		}
 		ImGui::Columns(1);
@@ -581,7 +588,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 			
 					});
-					actions.insert(actions.begin(), action );
+					//~ actions.insert(actions.begin(), action );
+					register_action(action);
 
 			}
 		
@@ -654,7 +662,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 					
 				});
-				actions.insert(actions.begin(), action );
+				//~ actions.insert(actions.begin(), action );
+				register_action(action);
 
 			}
 		
@@ -685,7 +694,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 					
 				});
-				actions.insert(actions.begin(), action );	
+				//~ actions.insert(actions.begin(), action );	
+				register_action(action);
 			}
 			
 			if(ImGui::Selectable("Add"))
@@ -697,7 +707,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 					
 				});
-				actions.insert(actions.begin(), action );					
+				//~ actions.insert(actions.begin(), action );		
+				register_action(action);			
 			}
 			
 			if(ImGui::Selectable("Around"))
@@ -709,7 +720,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 					
 				});
-				actions.insert(actions.begin(), action );					
+				//~ actions.insert(actions.begin(), action );		
+				register_action(action);			
 			}
 			ImGui::EndCombo();
 		}
@@ -764,7 +776,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				std::shared_ptr<ActionParamSignalRangeChange > action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), old_val, result, [](){
 					//~ printf("Signal Range Maximum action Input callback !!!!!!\n");
 				});
-				actions.insert(actions.begin(), action );				
+				//~ actions.insert(actions.begin(), action );	
+				register_action(action);			
 				
 			}
 		}
@@ -802,7 +815,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					std::shared_ptr<ActionParamMenuChange> action = std::make_shared<ActionParamMenuChange >(p_menu, old, inc, [old, inc](){
 							//~ printf("Menu action callback old : %d, new %d\n", old, inc);
 					});
-					actions.insert(actions.begin(), action );
+					//~ actions.insert(actions.begin(), action );
+					register_action(action);
 					choice = inc;
 				}
 				inc++;
@@ -884,7 +898,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					std::shared_ptr<ActionParamColor3Change> action = std::make_shared<ActionParamColor3Change>(p_color3, old, temp_color, [](){
 						//~ printf("Color3 action callback !!!!!!\n");
 					});
-					actions.insert(actions.begin(), action );
+					//~ actions.insert(actions.begin(), action );
+					register_action(action);
 					p_color3->color = temp_color;
 			}
 			
@@ -926,7 +941,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 					
 					
 					current_explorer_callback = [](){};
-					actions.insert(actions.begin(), action );
+					//~ actions.insert(actions.begin(), action );
+					register_action(action);
 				};			
 		}
 		ImGui::Columns(1);		
@@ -940,6 +956,11 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	ImGui::Columns(1);
 	ImGui::Spacing();
 	
+}
+
+void register_action(std::shared_ptr<Action> action){
+	actions.insert(actions.begin(), action);
+	actions_redos.clear();
 }
 
 void action_undo(){
@@ -962,36 +983,44 @@ void action_redo(){
 
 void actions_dialog()
 {
-	using namespace ImGui;
-	if(Begin("Actions"), true)
+	
+	if(ImGui::Begin("Actions"), true)
 	{
-		Columns(2);
-		Text("Undos");
-		PushItemWidth(-1);
-		if (ListBoxHeader("##Undos", 10))
+		ImGui::Columns(2);
+		ImGui::Text("Undos");
+		ImGui::PushItemWidth(-1);
+		if (ImGui::ListBoxHeader("##Undos", 10))
 		{
 			for(auto action : actions)
 			{
-				Selectable(action->getName(), false);
+				ImGui::Selectable(action->getName(), false);
 			}
 			
-			ListBoxFooter();
+			ImGui::ListBoxFooter();
 		}
 
-		NextColumn();
-		Text("Redos"); 
-		PushItemWidth(-1);
-		if (ListBoxHeader("##Redos", 10))
+		ImGui::NextColumn();
+		ImGui::Text("Redos"); 
+		ImGui::PushItemWidth(-1);
+		if (ImGui::ListBoxHeader("##Redos", 10))
 		{
 			for(auto action : actions_redos)
 			{
-				Selectable(action->getName(), false);
+				ImGui::Selectable(action->getName(), false);
 			}
 			
-			ListBoxFooter();
+			ImGui::ListBoxFooter();
 		}        
 
-		End();
+		ImGui::Columns(1);
+		
+		if(ImGui::Button("Clear History"))
+		{
+			actions.clear();
+			actions_redos.clear();
+		}
+
+		ImGui::End();
 	}
 }
 
@@ -1104,7 +1133,8 @@ void module_list_dialog()
 		{
 			std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>((MODULE_TYPE)choice, add_module, remove_module);
 			
-			actions.insert(actions.begin(), action);
+			//~ actions.insert(actions.begin(), action);
+			register_action(action);
 			add_module((MODULE_TYPE)choice);
 		}
 		SameLine();
@@ -1120,7 +1150,8 @@ void module_list_dialog()
 																						remove_module
 																						);
 				
-				actions.insert(actions.begin(), action);
+				//~ actions.insert(actions.begin(), action);
+				register_action(action);
 				remove_module(current_module_id);
 			}
 				
@@ -1176,7 +1207,8 @@ void module_list_dialog()
 						
 					});
 					action->m_move_function = move_module;
-					actions.insert(actions.begin(), action );					
+					//~ actions.insert(actions.begin(), action );	
+					register_action(action);				
 					move_module(*(const int*)payload->Data, inc);
 				}
 				
@@ -1243,23 +1275,27 @@ void execute_widget_release(std::shared_ptr<BaseParam> param, std::shared_ptr<Re
 	if((p_float = dynamic_cast<Param<float> *>(param.get())) && (data_float = dynamic_cast<ReleaseDataFloat * >(data.get())))
 	{		
 		std::shared_ptr<ActionParamChange<float> > action = std::make_shared<ActionParamChange<float> >(p_float, data_float->old_val, data_float->new_val, data_float->callback);
-		actions.insert(actions.begin(), action );
+		//~ actions.insert(actions.begin(), action );
+		register_action(action);
 				
 	}else if((p_int = dynamic_cast<Param<int> *>(param.get())) && (data_int = dynamic_cast<ReleaseDataInt * >(data.get())))
 	{		
 		std::shared_ptr<ActionParamChange<int> > action = std::make_shared<ActionParamChange<int> >(p_int, data_int->old_val, data_int->new_val, data_int->callback);
-		actions.insert(actions.begin(), action );	
+		//~ actions.insert(actions.begin(), action );	
+		register_action(action);
 			
 	}else if((p_color3 = dynamic_cast<ParamColor3 *>(param.get())) && (data_color3 = dynamic_cast<ReleaseDataColor3 * >(data.get())))
 	{
 		std::shared_ptr<ActionParamColor3Change > action = std::make_shared<ActionParamColor3Change >(p_color3, data_color3->old_val, data_color3->new_val, data_color3->callback);
-		actions.insert(actions.begin(), action );		
+		//~ actions.insert(actions.begin(), action );		
+		register_action(action);
 	}else if((p_signal_range = dynamic_cast<Param<SignalRange> *>(param.get())) && (data_signal_range = dynamic_cast<ReleaseDataSignalRange * >(data.get())))
 	{
 		if(parent_param != nullptr)
 		{			
 			std::shared_ptr<ActionParamSignalRangeChange> action = std::make_shared<ActionParamSignalRangeChange >(parent_param.get(), data_signal_range->old_val, data_signal_range->new_val, data_signal_range->callback);
-			actions.insert(actions.begin(), action );		
+			//~ actions.insert(actions.begin(), action );	
+			register_action(action);	
 		}
 	}
 } 
