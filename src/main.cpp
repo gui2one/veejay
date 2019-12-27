@@ -509,8 +509,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		int new_val_min = parent_param->getSignalRange().min;
 		int new_val_max = parent_param->getSignalRange().max;
 		
-		float new_multiplier = new_val.multiplier;
-		SignalRangeMode new_mode = new_val.mode;
+		float new_multiplier = parent_param->getSignalRange().multiplier;
+		SignalRangeMode new_mode = parent_param->getSignalRange().mode;
 		
 		
 		ImGui::Text(parent_param->getName() );
@@ -556,9 +556,9 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				ReleaseDataSignalRange * data_signal_range = nullptr;
 				if(( data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get()))){
-					SignalRange result;
+					SignalRange result = parent_param->getSignalRange();
 					result.min = new_val_min;
-					result.max = new_val_max;
+					//~ result.max = new_val_max;
 					//~ p_signal_range->setValue(result);					
 					data_signal_range->new_val = result; 
 					data_signal_range->parent_param = parent_param;
@@ -630,8 +630,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 				
 				ReleaseDataSignalRange * data_signal_range = nullptr;
 				if( (data_signal_range = dynamic_cast<ReleaseDataSignalRange *>( current_param_data.get()))){
-					SignalRange result;
-					result.min = new_val_min;
+					SignalRange result = parent_param->getSignalRange();
+					//~ result.min = new_val_min;
 					result.max = new_val_max;
 					//~ p_signal_range->setValue(result);					
 					data_signal_range->new_val = result; 
@@ -645,7 +645,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 			}else{
 				
-				SignalRange result;
+				SignalRange result = parent_param->getSignalRange();
 				result.min = new_val_min;
 				result.max = new_val_max;
 			
