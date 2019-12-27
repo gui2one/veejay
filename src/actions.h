@@ -50,7 +50,7 @@ public:
 		callback();
 	};
 	void redo()override{
-		printf("------ redo action ....\n");
+		
 		m_param->setValue(m_new_value);
 		m_callback();
 	};
@@ -113,11 +113,14 @@ public:
 		
 		
 		
-		param->setSignalRange(_new_value);
+		param->setSignalRange(m_new_value);
 		
 		callback();
 	};
-	void redo()override{};
+	void redo()override{
+		m_param->setSignalRange(m_new_value);
+		m_callback();		
+	};
 	
 	void undo()override{
 		m_param->setSignalRange(m_old_value);
@@ -140,23 +143,26 @@ public:
 		setName("Param Menu Change");
 		m_param = param;
 		m_callback = callback;
-		old_value = old;
-		new_value = val;
+		m_old_value = old;
+		m_new_value = val;
 		
-		param->setValue(val);
+		m_param->setValue(val);
 		
-		callback();		
+		m_callback();		
 	}
 	
-	void redo()override{};
+	void redo()override{
+		m_param->setValue(m_new_value);
+		m_callback();	
+	};
 	
 	void undo()override{
-		m_param->setValue(old_value);
+		m_param->setValue(m_old_value);
 		m_callback();
 	} ;
 	
 	ParamMenu * m_param;
-	int old_value, new_value;
+	int m_old_value, m_new_value;
 	std::function<void()> m_callback;	
 private:
 };
@@ -169,24 +175,27 @@ public:
 		setName("Color3 action");
 		m_param = param;
 		m_callback = callback;
-		old_value = old;
-		new_value = val;
+		m_old_value = old;
+		m_new_value = val;
 		//~ printf("old value stored in %s :  %.3f, %.3f, %.3f\n", param->getName(), old.x, old.y, old.z);
 		//~ printf("New value stored in %s :  %.3f, %.3f, %.3f\n", param->getName(), new_value.x, new_value.y, new_value.z);
-		param->color = val;
+		m_param->color = val;
 		
-		callback();		
+		m_callback();		
 	}
 	
-	void redo()override{};
+	void redo()override{
+		m_param->setValue(m_new_value);
+		m_callback();		
+	};
 	
 	void undo()override{
-		m_param->setValue(old_value);
+		m_param->setValue(m_old_value);
 		m_callback();
 	} ;
 	
 	ParamColor3 * m_param;
-	glm::vec3 old_value, new_value;
+	glm::vec3 m_old_value, m_new_value;
 	std::function<void()> m_callback;	
 private:
 };
@@ -198,25 +207,28 @@ public :
 	{
 		setName("File Path action");
 		m_param = param;
-		old_value = old;
-		new_value = val;
+		m_old_value = old;
+		m_new_value = val;
 		m_callback = callback;
 		m_param->setValue(val);
 		m_callback();
 	}
 	
-	void redo()override{}
+	void redo()override{
+		m_param->setValue(m_new_value);
+		m_callback();		
+	}
 	
 	void undo()override
 	{
-		m_param->setValue(old_value);
+		m_param->setValue(m_old_value);
 		m_callback();
 	}
 	
 private:
 	ParamFilePath * m_param;
-	std::string old_value;
-	std::string new_value;
+	std::string m_old_value;
+	std::string m_new_value;
 	
 	std::function<void()> m_callback;
 };
@@ -225,7 +237,8 @@ class ActionAddModule : public Action
 {
 public : 
 	ActionAddModule( 
-		MODULE_TYPE type, 
+		MODULE_TYPE type,
+		std::shared_ptr<Module> module_ptr, 
 		std::function<void(MODULE_TYPE, unsigned int)> add_func, 
 		std::function<void(unsigned int)> remove_func, 
 		std::function<void()> callback = [](){}
@@ -236,7 +249,9 @@ public :
 		m_remove_module_function = remove_func;
 	}
 	
-	void redo()override{}
+	void redo()override{
+		
+	}
 	
 	void undo()override{
 		m_remove_module_function(0);

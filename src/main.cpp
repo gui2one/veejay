@@ -26,6 +26,9 @@
 void display_fft_values();
 void register_action(std::shared_ptr<Action> action);
 
+void add_module(MODULE_TYPE type, unsigned int layer_num = 0);
+void remove_module(unsigned int id);
+
 struct ReleaseData{	
 	virtual ~ReleaseData(){};
 	virtual void funcA() = 0;
@@ -1059,8 +1062,18 @@ void move_module( int from , int to)
 	renderer.m_modules.insert( renderer.m_modules.begin() + to, save);
 }
 
-void add_module(MODULE_TYPE type, unsigned int layer_num = 0)
+void add_module(MODULE_TYPE type, unsigned int layer_num)
 {
+	//~ std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
+																				//~ (MODULE_TYPE)type, 
+																				//~ renderer.m_modules[current_module_id],
+																				//~ add_module, 
+																				//~ remove_module
+																				//~ );
+	
+	
+	//~ register_action(action);	
+
 	if( (MODULE_TYPE)type == MODULE_TYPE_ORBITER)
 	{
 		
@@ -1089,17 +1102,33 @@ void add_module(MODULE_TYPE type, unsigned int layer_num = 0)
 		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
 	}
+	
+	
 }
 
 void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
 {
+
+				
 	renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, ptr);
 }
 
 void remove_module(unsigned int id)
 {
-	renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
-	
+	if( renderer.m_modules.size() > 0)
+	{
+				std::shared_ptr<ActionRemoveModule> action = std::make_shared<ActionRemoveModule>(
+																						(MODULE_TYPE)id, 
+																						renderer.m_modules[current_module_id], 
+																						current_module_id, 
+																						add_module_ptr, 
+																						remove_module
+																						);
+				
+				//~ actions.insert(actions.begin(), action);
+				register_action(action);	
+		renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
+	}
 }
 
 void module_list_dialog()
@@ -1131,10 +1160,7 @@ void module_list_dialog()
 		SameLine();
 		if(Button("Add Module"))
 		{
-			std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>((MODULE_TYPE)choice, add_module, remove_module);
-			
-			//~ actions.insert(actions.begin(), action);
-			register_action(action);
+
 			add_module((MODULE_TYPE)choice);
 		}
 		SameLine();
@@ -1142,16 +1168,7 @@ void module_list_dialog()
 		{
 			if( current_module_id != -1)
 			{
-				std::shared_ptr<ActionRemoveModule> action = std::make_shared<ActionRemoveModule>(
-																						(MODULE_TYPE)choice, 
-																						renderer.m_modules[current_module_id], 
-																						current_module_id, 
-																						add_module_ptr, 
-																						remove_module
-																						);
-				
-				//~ actions.insert(actions.begin(), action);
-				register_action(action);
+
 				remove_module(current_module_id);
 			}
 				
@@ -1703,7 +1720,7 @@ int main(int argc, char** argv)
 	glEnable(GL_TEXTURE_2D);
 
 
-	
+	/*
 	std::shared_ptr<Orbiter> orbiter = std::make_shared<Orbiter>();
 	orbiter->setName("Orbiter");
 	orbiter->init();
@@ -1719,7 +1736,7 @@ int main(int argc, char** argv)
 	circles->setName("Circles Module");
 	circles->init();
 	renderer.m_modules.push_back(circles);
-
+	*/
 	
 	renderer.initTexture();
 	renderer.initFBO(live_w_width, live_w_height);
