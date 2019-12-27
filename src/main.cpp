@@ -94,6 +94,7 @@ std::shared_ptr<ReleaseData> current_param_data;
 std::vector<std::shared_ptr<Module>> modules;
 
 std::vector< std::shared_ptr<Action> > actions;
+std::vector< std::shared_ptr<Action> > actions_redos;
 
 
 //~ std::string current_explorer_path = "/home/pi/";
@@ -510,7 +511,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		int new_val_max = parent_param->getSignalRange().max;
 		
 		float new_multiplier = parent_param->getSignalRange().multiplier;
-		SignalRangeMode new_mode = parent_param->getSignalRange().mode;
+		//~ SignalRangeMode new_mode = parent_param->getSignalRange().mode;
 		
 		
 		ImGui::Text(parent_param->getName() );
@@ -941,6 +942,24 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	
 }
 
+void action_undo(){
+	if(actions.size() > 0)
+	{
+		actions[0]->undo();
+		actions_redos.insert(actions_redos.begin(), actions[0]);
+		actions.erase(actions.begin());
+	}	
+}
+
+void action_redo(){
+	if(actions_redos.size() > 0)
+	{
+		actions_redos[0]->redo();
+		actions.insert(actions.begin(), actions_redos[0]);
+		actions_redos.erase(actions_redos.begin());
+	}		
+}
+
 void actions_dialog()
 {
 	using namespace ImGui;
@@ -964,11 +983,11 @@ void actions_dialog()
 		PushItemWidth(-1);
 		if (ListBoxHeader("##Redos", 10))
 		{
-			//~ for(auto action : actions)
-			//~ {
-				//~ Selectable("Selected", false);
-			//~ }
-			Selectable("None", false);
+			for(auto action : actions_redos)
+			{
+				Selectable(action->getName(), false);
+			}
+			
 			ListBoxFooter();
 		}        
 
@@ -1265,14 +1284,14 @@ void UI_mouse_button_callback(GLFWwindow* window, int button, int action, int mo
 void UI_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	//~ printf("scancode : %d, mods : %d\n", scancode, mods );
-    if (scancode == 25 /* z key */ && action == GLFW_PRESS && mods == 2 /* ctrl */){
-		
-		//~ printf("UNDO ?\n");
-		if(actions.size() > 0)
-		{
-			actions[0]->undo();
-			actions.erase(actions.begin());
-		}		
+    if (scancode == 25 /* z key */ && action == GLFW_PRESS && mods == 2 /* ctrl */)
+    {
+
+			action_undo();
+	}else if (scancode == 29 /* y key */ && action == GLFW_PRESS && mods == 2 /* ctrl */)
+	{
+
+			action_redo();
 	}
 }
 /////////
@@ -1755,12 +1774,13 @@ int main(int argc, char** argv)
 				{
 					if(ImGui::MenuItem("Undo"))
 					{
-						if(actions.size() > 0)
-						{
-							actions[0]->undo();
-							actions.erase(actions.begin());
-						}
+						action_undo();
 					}
+					
+					if(ImGui::MenuItem("Redo"))
+					{
+						action_redo();
+					}					
 					
 					ImGui::EndMenu();
 				}	

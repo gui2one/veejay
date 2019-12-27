@@ -49,7 +49,11 @@ public:
 		
 		callback();
 	};
-	void redo()override{};
+	void redo()override{
+		printf("------ redo action ....\n");
+		m_param->setValue(m_new_value);
+		m_callback();
+	};
 	
 	void undo()override{
 		m_param->setValue(m_old_value);
@@ -78,7 +82,10 @@ public :
 		callback();
 	}
 	
-	void redo()override{};
+	void redo()override{
+		m_param->setUseSignalRange(m_new_value);
+		m_callback();	
+	};
 	
 	void undo()override{
 		m_param->setUseSignalRange(m_old_value);
