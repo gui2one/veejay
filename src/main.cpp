@@ -1149,7 +1149,7 @@ void module_list_dialog()
 			std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
 																						(MODULE_TYPE)choice, 
 																						module_ptr,
-																						add_module, 
+																						add_module_ptr, 
 																						remove_module
 																						);
 			

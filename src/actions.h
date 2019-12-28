@@ -239,7 +239,7 @@ public :
 	ActionAddModule( 
 		MODULE_TYPE type,
 		std::shared_ptr<Module> module_ptr,
-		std::function< std::shared_ptr<Module > (MODULE_TYPE, unsigned int) >  add_func, 
+		std::function< void (std::shared_ptr<Module>, unsigned int) >  add_func, 
 		std::function<void(unsigned int)> remove_func, 
 		std::function<void()> callback = [](){}
 	) : Action()
@@ -253,7 +253,7 @@ public :
 	
 	void redo()override{
 		printf("---- REDO Add Module\n");
-		m_add_module_function(m_type, 0);
+		m_add_module_function(m_module_ptr, 0);
 	}
 	
 	void undo()override{
@@ -263,7 +263,7 @@ public :
 	
 	MODULE_TYPE m_type;
 	std::shared_ptr<Module> m_module_ptr;
-	std::function< std::shared_ptr<Module > (MODULE_TYPE, unsigned int) > m_add_module_function;
+	std::function< void (std::shared_ptr<Module>, unsigned int) >  m_add_module_function;
 	std::function<void(unsigned int)> m_remove_module_function;
 private:
 
