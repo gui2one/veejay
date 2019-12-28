@@ -1064,15 +1064,7 @@ void move_module( int from , int to)
 
 void add_module(MODULE_TYPE type, unsigned int layer_num)
 {
-	std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
-																				(MODULE_TYPE)type, 
-																				
-																				add_module, 
-																				remove_module
-																				);
-	
-	
-	register_action(action);	
+
 
 	if( (MODULE_TYPE)type == MODULE_TYPE_ORBITER)
 	{
@@ -1116,16 +1108,7 @@ void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
 void remove_module(unsigned int id)
 {
 
-				std::shared_ptr<ActionRemoveModule> action = std::make_shared<ActionRemoveModule>(
-																						renderer.m_modules[id]->getType(), 
-																						renderer.m_modules[id], 
-																						id, 
-																						add_module_ptr, 
-																						remove_module
-																						);
-				
-				//~ actions.insert(actions.begin(), action);
-				register_action(action);	
+
 		renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
 	
 }
@@ -1159,7 +1142,15 @@ void module_list_dialog()
 		SameLine();
 		if(Button("Add Module"))
 		{
-
+		std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
+																					(MODULE_TYPE)choice, 
+																					
+																					add_module, 
+																					remove_module
+																					);
+		
+		
+		register_action(action);	
 			add_module((MODULE_TYPE)choice);
 		}
 		SameLine();
@@ -1169,6 +1160,16 @@ void module_list_dialog()
 			{
 				if( current_module_id != -1)
 				{
+					std::shared_ptr<ActionRemoveModule> action = std::make_shared<ActionRemoveModule>(
+																							renderer.m_modules[current_module_id]->getType(), 
+																							renderer.m_modules[current_module_id], 
+																							current_module_id, 
+																							add_module_ptr, 
+																							remove_module
+																							);
+					
+					//~ actions.insert(actions.begin(), action);
+					register_action(action);						
 
 					remove_module(current_module_id);
 					if(renderer.m_modules.size() == 0)
