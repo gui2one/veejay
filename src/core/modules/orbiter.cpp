@@ -22,10 +22,14 @@ Orbiter::Orbiter()
 	//~ setBlendingMode(MODULE_BLENDING_ADD);
 }
 
+Orbiter::~Orbiter(){
+	GLCall(glDeleteBuffers(1, &m_vbo));
+}
+
 void Orbiter::init(){
 	
-	if(m_vbo != 0)
-		GLCall(glDeleteBuffers(1, &m_vbo));
+	//~ if(m_vbo != 0)
+		//~ GLCall(glDeleteBuffers(1, &m_vbo));
 		
 	GLCall(glGenBuffers(1, &m_vbo));
 	

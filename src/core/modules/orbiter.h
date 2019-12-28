@@ -9,6 +9,7 @@ class Orbiter: public Module
 {
 	public:
 		Orbiter();
+		~Orbiter();
 		void init();
 		void update(float * fft_maximums);
 		void render();

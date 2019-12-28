@@ -26,7 +26,7 @@
 void display_fft_values();
 void register_action(std::shared_ptr<Action> action);
 
-void add_module(MODULE_TYPE type, unsigned int layer_num = 0);
+std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num = 0);
 void remove_module(unsigned int id);
 
 struct ReleaseData{	
@@ -1062,7 +1062,7 @@ void move_module( int from , int to)
 	renderer.m_modules.insert( renderer.m_modules.begin() + to, save);
 }
 
-void add_module(MODULE_TYPE type, unsigned int layer_num)
+std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 {
 
 
@@ -1075,6 +1075,7 @@ void add_module(MODULE_TYPE type, unsigned int layer_num)
 		mod->init();
 		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		return mod;
 	}
 	else if( (MODULE_TYPE)type == MODULE_TYPE_CIRCLES)
 	{
@@ -1084,6 +1085,7 @@ void add_module(MODULE_TYPE type, unsigned int layer_num)
 		mod->init();
 		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		return mod;
 	}	
 	else if( (MODULE_TYPE)type == MODULE_TYPE_IMAGE)
 	{
@@ -1093,9 +1095,10 @@ void add_module(MODULE_TYPE type, unsigned int layer_num)
 		mod->init();
 		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		return mod;
 	}
 	
-	
+	return nullptr;
 }
 
 void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
@@ -1142,16 +1145,17 @@ void module_list_dialog()
 		SameLine();
 		if(Button("Add Module"))
 		{
-		std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
-																					(MODULE_TYPE)choice, 
-																					
-																					add_module, 
-																					remove_module
-																					);
-		
-		
-		register_action(action);	
-			add_module((MODULE_TYPE)choice);
+			std::shared_ptr<Module> module_ptr = add_module((MODULE_TYPE)choice);
+			std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
+																						(MODULE_TYPE)choice, 
+																						module_ptr,
+																						add_module, 
+																						remove_module
+																						);
+			
+			
+			register_action(action);	
+			
 		}
 		SameLine();
 		if( renderer.m_modules.size() > 0)
