@@ -45,20 +45,23 @@ public:
 		
 		
 		
-		param->setValue(_new_value);
+		param->setValue(m_new_value);
 		
-		callback();
+		m_callback();
 	};
-	void redo()override{
-		
+	void redo()override
+	{	
+		//~ std::cout << "New Value : " << m_new_value << std::endl;
+		//~ std::cout << "Old Value : " << m_old_value << std::endl;
 		m_param->setValue(m_new_value);
 		m_callback();
 	};
 	
-	void undo()override{
+	void undo()override
+	{
 		m_param->setValue(m_old_value);
 		m_callback();
-	} ;
+	};
 	
 	Param<T> * m_param;
 	T m_old_value, m_new_value;

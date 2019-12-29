@@ -487,7 +487,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	}else if((p_text   = dynamic_cast<Param<std::string> *> (param_ptr.get())) ){
 		//~ ImGui::Text(p_text->getValue());
 		std::string _val = p_text->getValue();
-		std::string old = _val;
+		std::string old = std::string(_val);
 
 		sprintf(_name, "##%s", p_text->getName());		
 		ImGui::Columns(2);
@@ -503,7 +503,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		if( ImGui::InputText( _name, temp_char, 256, 
 			ImGuiInputTextFlags_EnterReturnsTrue|ImGuiInputTextFlags_CallbackCompletion|ImGuiInputTextFlags_CallbackHistory, &TextEditCallbackStub))
 		{
-			std::shared_ptr<ActionParamChange<std::string> > action = std::make_shared<ActionParamChange<std::string> >(p_text, old, _val, [](){
+			std::shared_ptr<ActionParamChange<std::string> > action = std::make_shared<ActionParamChange<std::string> >(p_text, old, std::string(temp_char), [](){
 					
 					
 			});
