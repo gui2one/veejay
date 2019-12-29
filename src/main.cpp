@@ -1019,8 +1019,9 @@ void actions_dialog()
 		
 		if(ImGui::Button("Clear History"))
 		{
-			actions.clear();
 			actions_redos.clear();
+			actions.clear();
+			
 		}
 
 		ImGui::End();
@@ -1102,20 +1103,16 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 }
 
 void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
-{
-
-				
+{				
 	renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, ptr);
 }
 
 void remove_module(unsigned int id)
 {
-
-
-		renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
-	
+	renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
+	if(renderer.m_modules.size() == 0)
+		current_module_id = -1;
 }
-
 
 void remove_module_ptr(std::shared_ptr<Module> module_ptr)
 {
@@ -1159,12 +1156,14 @@ void module_list_dialog()
 		if(Button("Add Module"))
 		{
 			std::shared_ptr<Module> module_ptr = add_module((MODULE_TYPE)choice);
-			std::shared_ptr<ActionAddModule> action = std::make_shared<ActionAddModule>(
-																						(MODULE_TYPE)choice, 
-																						module_ptr,
-																						add_module, 
-																						remove_module
-																						);
+			
+			std::shared_ptr<ActionAddModule> 
+			action = std::make_shared<ActionAddModule>(
+					(MODULE_TYPE)choice, 
+					module_ptr,
+					add_module_ptr, 
+					remove_module_ptr
+			);
 			
 			
 			register_action(action);	
@@ -1188,7 +1187,7 @@ void module_list_dialog()
 					//~ actions.insert(actions.begin(), action);
 					register_action(action);						
 
-					remove_module(current_module_id);
+					//~ remove_module(current_module_id);
 					if(renderer.m_modules.size() == 0)
 						current_module_id = -1;
 				}

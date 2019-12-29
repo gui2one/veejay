@@ -51,6 +51,8 @@ public:
 	};
 	void redo()override
 	{
+		//~ std::cout << " New Value : " << m_new_value << std::endl;
+		//~ std::cout << " Old Value : " << m_old_value << std::endl;
 		m_param->setValue(m_new_value);
 		m_callback();
 	};
@@ -240,8 +242,8 @@ public :
 	ActionAddModule( 
 		MODULE_TYPE type,
 		std::shared_ptr<Module> module_ptr,
-		std::function< std::shared_ptr<Module > (MODULE_TYPE, unsigned int) >  add_func, 
-		std::function<void(unsigned int)> remove_func, 
+		std::function< void(std::shared_ptr<Module>,unsigned int)>  add_func, 
+		std::function<void(std::shared_ptr<Module>)> remove_func, 
 		std::function<void()> callback = [](){}
 	) : Action()
 	{
@@ -253,19 +255,19 @@ public :
 	}
 	
 	void redo()override{
-		printf("---- REDO Add Module\n");
-		m_add_module_function(m_type, 0);
+		//~ printf("---- REDO Add Module\n");
+		m_add_module_function(m_module_ptr, 0);
 	}
 	
 	void undo()override{
 		printf("---- UNDO Add Module\n");
-		m_remove_module_function(0);
+		m_remove_module_function(m_module_ptr);
 	}
 	
 	MODULE_TYPE m_type;
 	std::shared_ptr<Module> m_module_ptr;
-	std::function< std::shared_ptr<Module > (MODULE_TYPE, unsigned int) > m_add_module_function;
-	std::function<void(unsigned int)> m_remove_module_function;
+	std::function< void(std::shared_ptr<Module>, unsigned int)> m_add_module_function;
+	std::function<void(std::shared_ptr<Module>)> m_remove_module_function;
 private:
 
 
@@ -291,6 +293,9 @@ public :
 		m_type = type;
 		m_module_id = module_id;
 		m_module_ptr = module_ptr;
+		
+		//actually remove the module from list
+		m_remove_module_function(m_module_ptr);
 	}
 	
 	void redo()override{
