@@ -1116,6 +1116,19 @@ void remove_module(unsigned int id)
 	
 }
 
+
+void remove_module_ptr(std::shared_ptr<Module> module_ptr)
+{
+	auto it = std::find(renderer.m_modules.begin(), renderer.m_modules.end(), module_ptr);
+	
+	if( it != renderer.m_modules.end())
+	{
+		
+		int index = std::distance(renderer.m_modules.begin(), it);
+		remove_module(index);
+	}
+}
+
 void module_list_dialog()
 {
 	using namespace ImGui;
@@ -1169,7 +1182,7 @@ void module_list_dialog()
 																							renderer.m_modules[current_module_id], 
 																							current_module_id, 
 																							add_module_ptr, 
-																							remove_module
+																							remove_module_ptr
 																							);
 					
 					//~ actions.insert(actions.begin(), action);

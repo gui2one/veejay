@@ -50,9 +50,7 @@ public:
 		m_callback();
 	};
 	void redo()override
-	{	
-		//~ std::cout << "New Value : " << m_new_value << std::endl;
-		//~ std::cout << "Old Value : " << m_old_value << std::endl;
+	{
 		m_param->setValue(m_new_value);
 		m_callback();
 	};
@@ -281,7 +279,7 @@ public :
 		std::shared_ptr<Module> module_ptr, 
 		int module_id, 
 		std::function<void(std::shared_ptr<Module>, unsigned int )> add_func, 
-		std::function<void(unsigned int)> remove_func, 
+		std::function<void(std::shared_ptr<Module>)> remove_func, 
 		std::function<void()> callback = [](){}
 		
 	) : Action()
@@ -295,14 +293,16 @@ public :
 		m_module_ptr = module_ptr;
 	}
 	
-	void redo()override{}
+	void redo()override{
+		m_remove_module_function(m_module_ptr);
+	}
 	
 	void undo()override{
 		m_add_module_function(m_module_ptr, m_module_id);
 	}
 	
 	std::function<void(std::shared_ptr<Module>, unsigned int)> m_add_module_function;
-	std::function<void(unsigned int)> m_remove_module_function;
+	std::function<void(std::shared_ptr<Module>)> m_remove_module_function;
 	
 	MODULE_TYPE m_type;
 	int m_module_id;
