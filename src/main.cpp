@@ -16,6 +16,9 @@
 #include <sys/stat.h>
 
 
+
+#include <regex>
+
 #include "wave_file_reader.h"
 #include <sndfile.h>
 
@@ -327,7 +330,44 @@ static int TextEditCallbackStub(ImGuiInputTextCallbackData* data) // In C++11 yo
 	return 42;
 }
 
+static std::string increment_name(std::string _name)
+{
+	std::string s = _name;
+	std::smatch m;
+	std::regex e("\\d+?$");
+	bool found = std::regex_search(_name, m, e);
+	if(found)
+	{
+		int num = std::stoi(m.str());
+		for(size_t i=0; i < std::strlen(m.str().c_str()); i++){
+			s.pop_back();
+		}
+		printf("found digit ! %d\n", num);
+		s += std::to_string(num+1);
+	}else{
+		s += "2";
+	}
+		
+	return s;
+}
 
+std::string uniqueName(std::string _str)
+{
+	
+
+	for(auto module : renderer.m_modules)
+	{
+		if(_str == module->getName())
+		{
+			//~ printf("same name \n");
+			_str = increment_name(_str);
+			_str = uniqueName(_str);
+			break;
+		}
+	}
+	
+	return _str;
+}
 
 
 void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> parent_param = nullptr, std::function<void()> callback = [](){})
@@ -1071,7 +1111,7 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 	{
 		
 		std::shared_ptr<Orbiter> mod = std::make_shared<Orbiter>();
-		mod->setName("Orbiter 2");
+		mod->setName(uniqueName("Orbiter"));
 		mod->p_color->color = glm::vec3(1.0, 1.0, 1.0);
 		mod->init();
 		//~ renderer.m_modules.push_back(mod);
@@ -1081,7 +1121,7 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 	else if( (MODULE_TYPE)type == MODULE_TYPE_CIRCLES)
 	{
 		std::shared_ptr<Circles> mod = std::make_shared<Circles>();
-		mod->setName("Circles 2");
+		mod->setName(uniqueName("Circles"));
 		mod->p_color->color = glm::vec3(1.0, 0.0, 1.0);
 		mod->init();
 		//~ renderer.m_modules.push_back(mod);
@@ -1091,7 +1131,7 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 	else if( (MODULE_TYPE)type == MODULE_TYPE_IMAGE)
 	{
 		std::shared_ptr<Image> mod = std::make_shared<Image>();
-		mod->setName("Image");
+		mod->setName(uniqueName("Image"));
 		mod->p_color->color = glm::vec3(1.0, 1.0, 1.0);
 		mod->init();
 		//~ renderer.m_modules.push_back(mod);
@@ -1202,7 +1242,7 @@ void module_list_dialog()
 		
 			
 			
-			ImGui::PushID(inc);
+			ImGui::PushID(module.get());
 
 			ImVec2 p = ImGui::GetCursorScreenPos();
 			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(20,20,40,255))	;				

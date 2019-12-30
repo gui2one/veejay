@@ -260,8 +260,9 @@ public :
 	}
 	
 	void undo()override{
-		printf("---- UNDO Add Module\n");
+		
 		m_remove_module_function(m_module_ptr);
+		printf("---- UNDID Add Module\n");
 	}
 	
 	MODULE_TYPE m_type;
