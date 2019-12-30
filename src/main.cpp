@@ -1665,6 +1665,14 @@ void parameter_signal_dialog()
 
 int main(int argc, char** argv)
 {
+	
+	Log::init();
+	//~ Log::getLogger()->warn("warning");
+	//~ VJ_LOG_TRACE("Simple message ");
+	//~ VJ_LOG_INFO("Info ");
+	//~ VJ_LOG_WARN("Warning");
+	//~ VJ_LOG_ERROR("Error in main ");
+	
 	memset(fft_maximums, 0.0, sizeof(float) * NUM_BANDS);
 	FFT fft;
 	

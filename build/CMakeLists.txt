@@ -8,13 +8,16 @@ project(VeeJeh)
 include_directories(
 	/usr/include
 	../src/vendor/imgui
+	../src/vendor
 )
 
 link_directories(
 	/usr/local/lib
+	/home/pi/projects/veejay/src/libs
 )
 add_library(PCHLib
 	../src/pch.cpp
+	
 	../src/vendor/imgui/imgui.cpp
 	../src/vendor/imgui/imgui_draw.cpp
 	../src/vendor/imgui/imgui_widgets.cpp
@@ -24,6 +27,7 @@ add_library(PCHLib
 
 add_library(CoreLib
 	../src/core.cpp
+	
 	../src/core/texture.cpp
 	../src/core/shader.cpp
 	../src/core/modules/module.cpp
@@ -31,6 +35,8 @@ add_library(CoreLib
 	../src/core/modules/circles.cpp
 	../src/core/modules/image.cpp
 	../src/core/timer.cpp
+	../src/core/log.cpp
+	
 	
 	../src/core/renderer.cpp
 
@@ -62,6 +68,7 @@ target_link_libraries( vj_editor
 	-L/usr/local/lib -lportaudio -lasound -lm -lpthread
 	-lsndfile
 	-lfftw3 -lm
+	-lspdlog
 	
 )
 

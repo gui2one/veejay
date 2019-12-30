@@ -6,6 +6,7 @@
 #include "core/texture.h"
 #include "core/shader.h"
 #include "core/timer.h"
+#include "core/log.h"
 #include "core/modules/module.h"
 #include "core/modules/orbiter.h"
 #include "core/modules/circles.h"

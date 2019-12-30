@@ -216,6 +216,33 @@ home/pi/projects/veejay/src/core.cpp.s:
 	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core.cpp.s
 .PHONY : home/pi/projects/veejay/src/core.cpp.s
 
+home/pi/projects/veejay/src/core/log.o: home/pi/projects/veejay/src/core/log.cpp.o
+
+.PHONY : home/pi/projects/veejay/src/core/log.o
+
+# target to build an object file
+home/pi/projects/veejay/src/core/log.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/log.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/log.cpp.o
+
+home/pi/projects/veejay/src/core/log.i: home/pi/projects/veejay/src/core/log.cpp.i
+
+.PHONY : home/pi/projects/veejay/src/core/log.i
+
+# target to preprocess a source file
+home/pi/projects/veejay/src/core/log.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/log.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/log.cpp.i
+
+home/pi/projects/veejay/src/core/log.s: home/pi/projects/veejay/src/core/log.cpp.s
+
+.PHONY : home/pi/projects/veejay/src/core/log.s
+
+# target to generate assembly for a file
+home/pi/projects/veejay/src/core/log.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/log.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/log.cpp.s
+
 home/pi/projects/veejay/src/core/modules/circles.o: home/pi/projects/veejay/src/core/modules/circles.cpp.o
 
 .PHONY : home/pi/projects/veejay/src/core/modules/circles.o
@@ -828,6 +855,9 @@ help:
 	@echo "... home/pi/projects/veejay/src/core.o"
 	@echo "... home/pi/projects/veejay/src/core.i"
 	@echo "... home/pi/projects/veejay/src/core.s"
+	@echo "... home/pi/projects/veejay/src/core/log.o"
+	@echo "... home/pi/projects/veejay/src/core/log.i"
+	@echo "... home/pi/projects/veejay/src/core/log.s"
 	@echo "... home/pi/projects/veejay/src/core/modules/circles.o"
 	@echo "... home/pi/projects/veejay/src/core/modules/circles.i"
 	@echo "... home/pi/projects/veejay/src/core/modules/circles.s"

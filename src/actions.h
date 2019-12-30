@@ -4,7 +4,7 @@
 #include "pch.h"
 
 #include "param.h"
-#include "core/modules/module.h"
+#include "core.h"
 
 
 
@@ -262,7 +262,8 @@ public :
 	void undo()override{
 		
 		m_remove_module_function(m_module_ptr);
-		printf("---- UNDID Add Module\n");
+		//~ printf("---- UNDID Add Module\n");
+		VJ_LOG_TRACE("UNDID Add Module");
 	}
 	
 	MODULE_TYPE m_type;
