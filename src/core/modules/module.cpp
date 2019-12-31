@@ -1,6 +1,6 @@
 #include "module.h"
 
-Module::Module(){
+Module::Module(std::shared_ptr<Timer> timer){
 	//~ param_layout.params.clear();
 	
 	p_name = std::make_shared<Param<std::string> >();

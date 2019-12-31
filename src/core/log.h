@@ -2,6 +2,8 @@
 #define LOG_H
 
 #include "../pch.h"
+
+#define SPDLOG_HEADER_ONLY
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 

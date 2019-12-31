@@ -1,8 +1,8 @@
 #include "circles.h"
 
 
-Circles::Circles()
-	: Module()
+Circles::Circles(std::shared_ptr<Timer> timer)
+	: Module(timer)
 {
 	setType(MODULE_TYPE_CIRCLES);
 	m_shader.loadVertexShaderSource("../src/shaders/basic_shader.vert");

@@ -1,8 +1,8 @@
 #include "orbiter.h"
 
 
-Orbiter::Orbiter()
-	: Module()
+Orbiter::Orbiter(std::shared_ptr<Timer> timer)
+	: Module(timer)
 {
 	//~ printf("Building Orbiter\n");
 	

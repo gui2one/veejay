@@ -1,7 +1,7 @@
 #include "image.h"
 
-Image::Image()
-	: Module()
+Image::Image(std::shared_ptr<Timer> timer)
+	: Module(timer)
 {
 	setType(MODULE_TYPE_IMAGE);
 	

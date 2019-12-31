@@ -3,13 +3,15 @@
 
 #include "../../pch.h"
 #include "../../param.h"
+#include "../timer.h"
 
 enum MODULE_TYPE
 {
 	MODULE_TYPE_NULL,
 	MODULE_TYPE_ORBITER,
 	MODULE_TYPE_CIRCLES,
-	MODULE_TYPE_IMAGE
+	MODULE_TYPE_IMAGE,
+	MODULE_TYPE_PARTICLES
 };
 
 enum MODULE_BLENDING
@@ -23,7 +25,7 @@ enum MODULE_BLENDING
 class Module
 {
 	public:
-		Module();
+		Module(std::shared_ptr<Timer> timer = nullptr);
 		virtual ~Module();
 		virtual void init(){};
 		virtual void update(float * fft_maximums){};
@@ -51,6 +53,7 @@ class Module
 		MODULE_BLENDING blending_mode = MODULE_BLENDING_NORMAL;
 		MODULE_TYPE type = MODULE_TYPE_NULL;
 		std::string name = "default name";
+		std::shared_ptr<Timer> m_timer;
 		
 		/* add your private declarations */
 };

@@ -54,12 +54,14 @@ public:
 		//~ std::cout << " New Value : " << m_new_value << std::endl;
 		//~ std::cout << " Old Value : " << m_old_value << std::endl;
 		m_param->setValue(m_new_value);
+		//~ VJ_LOG_TRACE("Redo param action");
 		m_callback();
 	};
 	
 	void undo()override
 	{
 		m_param->setValue(m_old_value);
+		//~ VJ_LOG_TRACE("Undo param action");
 		m_callback();
 	};
 	
@@ -263,7 +265,7 @@ public :
 		
 		m_remove_module_function(m_module_ptr);
 		//~ printf("---- UNDID Add Module\n");
-		VJ_LOG_TRACE("UNDID Add Module");
+		//~ VJ_LOG_TRACE("UNDID Add Module");
 	}
 	
 	MODULE_TYPE m_type;

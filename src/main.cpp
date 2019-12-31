@@ -1137,7 +1137,16 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
 		return mod;
-	}
+	}else if( (MODULE_TYPE)type == MODULE_TYPE_PARTICLES)
+	{
+		std::shared_ptr<Particles> mod = std::make_shared<Particles>();
+		mod->setName(uniqueName("Particles"));
+		
+		mod->init();
+		
+		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		return mod;
+	}	
 	
 	return nullptr;
 }
@@ -1171,7 +1180,7 @@ void module_list_dialog()
 	using namespace ImGui;
 	if( ImGui::Begin("Module List"), true)
 	{
-		const char * choices[] = {"Orbiter", "Circles", "Image"};
+		const char * choices[] = {"Orbiter", "Circles", "Image", "Particles"};
 		static int choice = 1;
 		SetNextItemWidth(100);
 		if(BeginCombo("##label", choices[choice - 1])){
@@ -1187,7 +1196,10 @@ void module_list_dialog()
 			}
 			if(Selectable("Image", false)){
 				choice = (int)MODULE_TYPE_IMAGE;
-			}			
+			}
+			if(Selectable("Particles", false)){
+				choice = (int)MODULE_TYPE_PARTICLES;
+			}
 			
 			EndCombo();
 		}
@@ -1666,7 +1678,7 @@ void parameter_signal_dialog()
 int main(int argc, char** argv)
 {
 	
-	Log::init();
+	//~ Log::init();
 	//~ Log::getLogger()->warn("warning");
 	//~ VJ_LOG_TRACE("Simple message ");
 	//~ VJ_LOG_INFO("Info ");

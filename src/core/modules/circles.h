@@ -8,7 +8,7 @@
 class Circles: public Module
 {
 	public:
-		Circles();
+		Circles(std::shared_ptr<Timer> timer = nullptr);
 		void init();
 		void update(float * fft_maximums);
 		void render();		

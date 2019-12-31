@@ -30,12 +30,17 @@ add_library(CoreLib
 	
 	../src/core/texture.cpp
 	../src/core/shader.cpp
+	../src/core/particle_system.cpp
+	
 	../src/core/modules/module.cpp
 	../src/core/modules/orbiter.cpp
 	../src/core/modules/circles.cpp
 	../src/core/modules/image.cpp
+	../src/core/modules/particles.cpp
+	
+	
 	../src/core/timer.cpp
-	../src/core/log.cpp
+	#~ ../src/core/log.cpp
 	
 	
 	../src/core/renderer.cpp
@@ -57,7 +62,8 @@ add_executable(vj_editor
 	
 )
 
-target_link_libraries( vj_editor 
+target_link_libraries( vj_editor #PRIVATE spdlog
+	
 	PCHLib
 	CoreLib
 	-lglfw
@@ -68,9 +74,9 @@ target_link_libraries( vj_editor
 	-L/usr/local/lib -lportaudio -lasound -lm -lpthread
 	-lsndfile
 	-lfftw3 -lm
-	-lspdlog
 	
 )
+
 
 add_executable(vj_player
 	../src/player.cpp

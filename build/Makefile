@@ -216,33 +216,6 @@ home/pi/projects/veejay/src/core.cpp.s:
 	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core.cpp.s
 .PHONY : home/pi/projects/veejay/src/core.cpp.s
 
-home/pi/projects/veejay/src/core/log.o: home/pi/projects/veejay/src/core/log.cpp.o
-
-.PHONY : home/pi/projects/veejay/src/core/log.o
-
-# target to build an object file
-home/pi/projects/veejay/src/core/log.cpp.o:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/log.cpp.o
-.PHONY : home/pi/projects/veejay/src/core/log.cpp.o
-
-home/pi/projects/veejay/src/core/log.i: home/pi/projects/veejay/src/core/log.cpp.i
-
-.PHONY : home/pi/projects/veejay/src/core/log.i
-
-# target to preprocess a source file
-home/pi/projects/veejay/src/core/log.cpp.i:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/log.cpp.i
-.PHONY : home/pi/projects/veejay/src/core/log.cpp.i
-
-home/pi/projects/veejay/src/core/log.s: home/pi/projects/veejay/src/core/log.cpp.s
-
-.PHONY : home/pi/projects/veejay/src/core/log.s
-
-# target to generate assembly for a file
-home/pi/projects/veejay/src/core/log.cpp.s:
-	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/log.cpp.s
-.PHONY : home/pi/projects/veejay/src/core/log.cpp.s
-
 home/pi/projects/veejay/src/core/modules/circles.o: home/pi/projects/veejay/src/core/modules/circles.cpp.o
 
 .PHONY : home/pi/projects/veejay/src/core/modules/circles.o
@@ -350,6 +323,60 @@ home/pi/projects/veejay/src/core/modules/orbiter.s: home/pi/projects/veejay/src/
 home/pi/projects/veejay/src/core/modules/orbiter.cpp.s:
 	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/orbiter.cpp.s
 .PHONY : home/pi/projects/veejay/src/core/modules/orbiter.cpp.s
+
+home/pi/projects/veejay/src/core/modules/particles.o: home/pi/projects/veejay/src/core/modules/particles.cpp.o
+
+.PHONY : home/pi/projects/veejay/src/core/modules/particles.o
+
+# target to build an object file
+home/pi/projects/veejay/src/core/modules/particles.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/particles.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/modules/particles.cpp.o
+
+home/pi/projects/veejay/src/core/modules/particles.i: home/pi/projects/veejay/src/core/modules/particles.cpp.i
+
+.PHONY : home/pi/projects/veejay/src/core/modules/particles.i
+
+# target to preprocess a source file
+home/pi/projects/veejay/src/core/modules/particles.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/particles.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/modules/particles.cpp.i
+
+home/pi/projects/veejay/src/core/modules/particles.s: home/pi/projects/veejay/src/core/modules/particles.cpp.s
+
+.PHONY : home/pi/projects/veejay/src/core/modules/particles.s
+
+# target to generate assembly for a file
+home/pi/projects/veejay/src/core/modules/particles.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/modules/particles.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/modules/particles.cpp.s
+
+home/pi/projects/veejay/src/core/particle_system.o: home/pi/projects/veejay/src/core/particle_system.cpp.o
+
+.PHONY : home/pi/projects/veejay/src/core/particle_system.o
+
+# target to build an object file
+home/pi/projects/veejay/src/core/particle_system.cpp.o:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/particle_system.cpp.o
+.PHONY : home/pi/projects/veejay/src/core/particle_system.cpp.o
+
+home/pi/projects/veejay/src/core/particle_system.i: home/pi/projects/veejay/src/core/particle_system.cpp.i
+
+.PHONY : home/pi/projects/veejay/src/core/particle_system.i
+
+# target to preprocess a source file
+home/pi/projects/veejay/src/core/particle_system.cpp.i:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/particle_system.cpp.i
+.PHONY : home/pi/projects/veejay/src/core/particle_system.cpp.i
+
+home/pi/projects/veejay/src/core/particle_system.s: home/pi/projects/veejay/src/core/particle_system.cpp.s
+
+.PHONY : home/pi/projects/veejay/src/core/particle_system.s
+
+# target to generate assembly for a file
+home/pi/projects/veejay/src/core/particle_system.cpp.s:
+	$(MAKE) -f CMakeFiles/CoreLib.dir/build.make CMakeFiles/CoreLib.dir/home/pi/projects/veejay/src/core/particle_system.cpp.s
+.PHONY : home/pi/projects/veejay/src/core/particle_system.cpp.s
 
 home/pi/projects/veejay/src/core/renderer.o: home/pi/projects/veejay/src/core/renderer.cpp.o
 
@@ -855,9 +882,6 @@ help:
 	@echo "... home/pi/projects/veejay/src/core.o"
 	@echo "... home/pi/projects/veejay/src/core.i"
 	@echo "... home/pi/projects/veejay/src/core.s"
-	@echo "... home/pi/projects/veejay/src/core/log.o"
-	@echo "... home/pi/projects/veejay/src/core/log.i"
-	@echo "... home/pi/projects/veejay/src/core/log.s"
 	@echo "... home/pi/projects/veejay/src/core/modules/circles.o"
 	@echo "... home/pi/projects/veejay/src/core/modules/circles.i"
 	@echo "... home/pi/projects/veejay/src/core/modules/circles.s"
@@ -870,6 +894,12 @@ help:
 	@echo "... home/pi/projects/veejay/src/core/modules/orbiter.o"
 	@echo "... home/pi/projects/veejay/src/core/modules/orbiter.i"
 	@echo "... home/pi/projects/veejay/src/core/modules/orbiter.s"
+	@echo "... home/pi/projects/veejay/src/core/modules/particles.o"
+	@echo "... home/pi/projects/veejay/src/core/modules/particles.i"
+	@echo "... home/pi/projects/veejay/src/core/modules/particles.s"
+	@echo "... home/pi/projects/veejay/src/core/particle_system.o"
+	@echo "... home/pi/projects/veejay/src/core/particle_system.i"
+	@echo "... home/pi/projects/veejay/src/core/particle_system.s"
 	@echo "... home/pi/projects/veejay/src/core/renderer.o"
 	@echo "... home/pi/projects/veejay/src/core/renderer.i"
 	@echo "... home/pi/projects/veejay/src/core/renderer.s"
