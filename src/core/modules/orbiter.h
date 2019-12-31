@@ -8,7 +8,7 @@
 class Orbiter: public Module
 {
 	public:
-		Orbiter(std::shared_ptr<Timer> timer = nullptr);
+		Orbiter(std::shared_ptr<Timer> timer);
 		~Orbiter();
 		void init();
 		void update(float * fft_maximums);

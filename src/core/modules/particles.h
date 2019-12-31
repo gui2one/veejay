@@ -9,7 +9,7 @@
 class Particles: public Module
 {
 	public:
-		Particles(std::shared_ptr<Timer> timer = nullptr);
+		Particles(std::shared_ptr<Timer> timer);
 		~Particles();
 		
 		void init();
@@ -23,6 +23,8 @@ class Particles: public Module
 		}
 	private:
 	
+	
+		std::shared_ptr<ParamButton> p_spawn_button;
 		unsigned int m_vbo = 0;
 		std::vector<float> m_positions;
 		std::shared_ptr<ParticleSystem> m_psystem;

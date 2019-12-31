@@ -91,7 +91,7 @@ Shader fbo_shader;
 ImFont* small_font;
 bool signal_range_dialog_opened = true;
 
-Timer timer;
+std::shared_ptr<Timer> timer = std::make_shared<Timer>();
 
 int counter = 0;
 
@@ -1110,38 +1110,37 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 	if( (MODULE_TYPE)type == MODULE_TYPE_ORBITER)
 	{
 		
-		std::shared_ptr<Orbiter> mod = std::make_shared<Orbiter>();
+		std::shared_ptr<Orbiter> mod = std::make_shared<Orbiter>(timer);
 		mod->setName(uniqueName("Orbiter"));
 		mod->p_color->color = glm::vec3(1.0, 1.0, 1.0);
 		mod->init();
-		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		
 		return mod;
 	}
 	else if( (MODULE_TYPE)type == MODULE_TYPE_CIRCLES)
 	{
-		std::shared_ptr<Circles> mod = std::make_shared<Circles>();
+		std::shared_ptr<Circles> mod = std::make_shared<Circles>(timer);
 		mod->setName(uniqueName("Circles"));
 		mod->p_color->color = glm::vec3(1.0, 0.0, 1.0);
 		mod->init();
-		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		
 		return mod;
 	}	
 	else if( (MODULE_TYPE)type == MODULE_TYPE_IMAGE)
 	{
-		std::shared_ptr<Image> mod = std::make_shared<Image>();
+		std::shared_ptr<Image> mod = std::make_shared<Image>(timer);
 		mod->setName(uniqueName("Image"));
 		mod->p_color->color = glm::vec3(1.0, 1.0, 1.0);
 		mod->init();
-		//~ renderer.m_modules.push_back(mod);
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
+		
 		return mod;
 	}else if( (MODULE_TYPE)type == MODULE_TYPE_PARTICLES)
 	{
-		std::shared_ptr<Particles> mod = std::make_shared<Particles>();
-		mod->setName(uniqueName("Particles"));
-		
+		std::shared_ptr<Particles> mod = std::make_shared<Particles>(timer);
+		mod->setName(uniqueName("Particles"));		
 		mod->init();
 		
 		renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, mod);
@@ -1463,7 +1462,7 @@ void compute_fft_maximums(float threshold, float exponent)
 			fft_maximums[i] = (float)(accum);
 			
 		}else{
-			fft_maximums[i] *= 1.0f - 0.005 * (float)timer.getDeltaMillis();
+			fft_maximums[i] *= 1.0f - 0.005 * (float)timer->getDeltaMillis();
 		}
 	}	
 }
@@ -1822,7 +1821,7 @@ int main(int argc, char** argv)
 	renderer.initFBO(live_w_width, live_w_height);
 	//~ init_viewport_FBO();
 
-	timer.start();
+	timer->start();
 	int cur_time = 0;
 	int old_time = 0;
 	while (!glfwWindowShouldClose(live_window)){
@@ -1836,9 +1835,9 @@ int main(int argc, char** argv)
 		fft_out = fft.execute_plan(fft_temp);
 		compute_fft_maximums(fft_threshold, fft_exponent);
 		
-		timer.update();
+		timer->update();
 		
-		cur_time = timer.getMillis();
+		cur_time = timer->getMillis();
 		
 		old_time = cur_time;
 		

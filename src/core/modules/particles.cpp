@@ -5,8 +5,30 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	: Module(timer)
 {
 	init();
+	
+	
 	m_psystem = std::make_shared<ParticleSystem>();
 	m_psystem->spawnParticles(50);
+	
+	p_spawn_button = std::make_shared<ParamButton>();
+	p_spawn_button->setCallback([this](){
+		this->m_psystem->spawnParticles(10);
+		std::mt19937 twister(1234);
+		
+		float rand_speed = 0.05f;
+		for(auto p : this->m_psystem->getParticles())
+		{
+			float rand_x = ((float)twister() / twister.max()) * rand_speed;
+			float rand_y = ((float)twister() / twister.max()) * rand_speed;
+			float rand_z = ((float)twister() / twister.max()) * rand_speed;
+			
+			p->velocity = glm::vec3(rand_x, rand_y, rand_z);
+		}		
+	});
+	param_layout.addParam(p_spawn_button);
+	
+	
+
 }
 
 Particles::~Particles()

@@ -3,6 +3,8 @@
 Module::Module(std::shared_ptr<Timer> timer){
 	//~ param_layout.params.clear();
 	
+	m_timer = timer;
+	
 	p_name = std::make_shared<Param<std::string> >();
 	p_name->setName("name");
 	p_name->setValue(getName());

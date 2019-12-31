@@ -25,7 +25,7 @@ enum MODULE_BLENDING
 class Module
 {
 	public:
-		Module(std::shared_ptr<Timer> timer = nullptr);
+		Module(std::shared_ptr<Timer> timer);
 		virtual ~Module();
 		virtual void init(){};
 		virtual void update(float * fft_maximums){};

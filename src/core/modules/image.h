@@ -8,7 +8,7 @@
 class Image: public Module
 {
 	public:
-		Image(std::shared_ptr<Timer> timer = nullptr);
+		Image(std::shared_ptr<Timer> timer);
 		//~ ~Image();
 		void loadFile(const char * path);
 		void init();

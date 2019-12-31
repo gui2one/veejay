@@ -12,9 +12,22 @@ struct Emitter{
 	glm::vec3 position;
 };
 
+struct RectEmitter : public Emitter
+{
+	RectEmitter() : Emitter(){
+		
+	}
+	
+	
+};
+
 struct Particle{
 	
-	Particle(){
+	Particle() : 
+		position(glm::vec3(0.0,0.0,0.0)), 
+		velocity(glm::vec3(0.0,0.0,0.0)), 
+		acceleration(glm::vec3(0.0,0.0,0.0))
+	{
 		
 	}
 	
@@ -39,7 +52,7 @@ class ParticleSystem
 	private:
 		/* add your private declarations */
 		std::vector<std::shared_ptr<Particle> > m_particles;
-		std::vector<std::shared_ptr<Emitter> > m_emitters;
+		std::vector<Emitter > m_emitters;
 		
 };
 
