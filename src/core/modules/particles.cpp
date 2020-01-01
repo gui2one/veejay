@@ -17,7 +17,7 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 		this->m_psystem->spawnParticles(50);
 		std::mt19937 twister(1234);
 		
-		float delta_t = (float)getTimer()->getDeltaMillis() / 1000;
+		//~ float delta_t = (float)getTimer()->getDeltaMillis() / 1000;
 		float rand_speed = 0.05f;
 		for(size_t i=0; i < 50; i++)
 		{
@@ -50,6 +50,10 @@ Particles::~Particles()
 void Particles::init()
 {
 	GLCall(glGenBuffers(1, &m_vbo));
+	
+	m_shader.loadVertexShaderSource("../src/shaders/basic_particle_shader.vert");
+	m_shader.loadFragmentShaderSource("../src/shaders/basic_particle_shader.frag");
+	m_shader.createShader();
 }
 
 void Particles::update(float * fft_maximums)
@@ -59,20 +63,25 @@ void Particles::update(float * fft_maximums)
 	
 	m_psystem->update();
 	
-	m_positions.clear();
+	m_vertices.clear();
 	
-	m_positions.reserve( m_psystem->getParticles().size() * 3);
+	
+	m_vertices.reserve( m_psystem->getParticles().size() * 4);
+	
 	
 	for( auto particle : m_psystem->getParticles())
 	{
 		
-		m_positions.emplace_back( particle->position.x);
-		m_positions.emplace_back( particle->position.y);
-		m_positions.emplace_back( particle->position.z);
+		m_vertices.emplace_back( particle->position.x);
+		m_vertices.emplace_back( particle->position.y);
+		m_vertices.emplace_back( particle->position.z);
+		
+		// opacity
+		m_vertices.emplace_back( 1.0 - ( particle->age / particle->life));
 	}
 	
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-	GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(float) * m_positions.size(), m_positions.data(), GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(float) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	
 }
@@ -81,17 +90,23 @@ void Particles::update(float * fft_maximums)
 
 void Particles::render()
 {
+	
+	m_shader.useProgram();
 	GLCall(glPointSize(3));
 	
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0));
+	GLCall(glEnableVertexAttribArray(1));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void *)0));
+	GLCall(glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void *)(sizeof(float)*3)));
 	
-	GLCall(glDrawArrays(GL_POINTS, 0, m_positions.size()/3));
+	GLCall(glDrawArrays(GL_POINTS, 0, m_vertices.size()/4));
 	
 	
 	GLCall(glDisableVertexAttribArray(0));
+	GLCall(glDisableVertexAttribArray(1));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glUseProgram(0));
 }
 
 

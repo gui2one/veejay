@@ -15,20 +15,16 @@ ParticleSystem::~ParticleSystem()
 }
 
 void ParticleSystem::update()
-{
-	//~ printf("num particles %d \n", m_particles.size());
-	unsigned int num_p = getParticles().size();
+{	
 	// delete too old
-	for(size_t j = num_p-1; j>=0; j--)
+	for(unsigned int i = getParticles().size(); i>0; --i)
 	{
-		std::cout<< "deleting particle " << j << std::endl;
-		//~ if(m_particles[i]->age >= m_particles[i]->life)
-		//~ {
-			//~ printf("deleting particle %d \n", i);
-			
-			//~ m_particles.erase(m_particles.begin() + i , m_particles.begin() + i + 1);
-		//~ }
-	}	
+	
+		if( m_particles[i-1]->age >= m_particles[i-1]->life)
+		{
+			m_particles.erase(m_particles.begin() + (i-1), m_particles.begin() + (i-1) + 1);
+		}
+	}
 	
 	float delta_t = (float)m_timer->getDeltaMillis() / 1000;
 	for(auto particle : m_particles){
@@ -47,8 +43,6 @@ void ParticleSystem::update()
 		particle->position.x += particle->velocity.x;
 		particle->position.y += particle->velocity.y;			
 	}
-	
-
 }
 
 void ParticleSystem::spawnParticles(unsigned int n)
