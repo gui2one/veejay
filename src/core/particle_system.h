@@ -1,7 +1,31 @@
 #ifndef PARTICLE_SYSTEM_H
 #define PARTICLE_SYSTEM_H
 #include "../pch.h"
+#include "timer.h"
 
+class Force
+{
+public:
+	Force(){};
+	virtual void funcA() = 0;
+	
+private:
+};
+
+class DirectionalForce : public Force
+{
+public:
+	DirectionalForce() : Force()
+	{
+	
+		
+	}
+	void funcA(){}
+	
+	glm::vec2 magnitude;
+private:
+
+};
 
 class Emitter{
 public :
@@ -32,7 +56,9 @@ public :
 	Particle() : 
 		position(glm::vec3(0.0,0.0,0.0)), 
 		velocity(glm::vec3(0.0,0.0,0.0)), 
-		acceleration(glm::vec3(0.0,0.0,0.0))
+		acceleration(glm::vec3(0.0,0.0,0.0)),
+		age(0.0f),
+		life(1.0f)
 	{
 		
 	}
@@ -41,25 +67,39 @@ public :
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
+	float age, life;
 private :
 };
 
 class ParticleSystem
 {
 	public:
-		ParticleSystem();
+		ParticleSystem(std::shared_ptr<Timer> timer);
 		virtual ~ParticleSystem();
 		
 		void spawnParticles(unsigned int n);
 		void update();
 		
-		inline std::vector<std::shared_ptr<Particle> > getParticles(){
+		inline std::vector<std::shared_ptr<Particle> >& getParticles(){
 			return m_particles;
 		}
+		
+		inline std::vector< std::shared_ptr<Force> >& getForces(){
+			return m_forces;
+		}
+		
+		inline void addForce(std::shared_ptr<Force> force)
+		{
+			m_forces.push_back(force);
+		}
+		
 	private:
 		/* add your private declarations */
 		std::vector<std::shared_ptr<Particle> > m_particles;
 		std::vector<Emitter > m_emitters;
+		std::shared_ptr<Timer> m_timer;
+		
+		std::vector< std::shared_ptr<Force> > m_forces;
 		
 };
 

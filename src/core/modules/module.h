@@ -42,6 +42,10 @@ class Module
 		
 		inline void 	   setBlendingMode(MODULE_BLENDING _mode){ blending_mode = _mode; }		
 		inline MODULE_BLENDING getBlendingMode(){ return blending_mode; }	
+		
+		inline std::shared_ptr<Timer>& getTimer(){
+			return m_timer;
+		}
 				
 		ParamLayout param_layout;
 		std::shared_ptr<Param<std::string> > p_name;

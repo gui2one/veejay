@@ -7,17 +7,21 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	init();
 	
 	
-	m_psystem = std::make_shared<ParticleSystem>();
-	m_psystem->spawnParticles(50);
+	m_psystem = std::make_shared<ParticleSystem>(timer);
+	//~ m_psystem->spawnParticles(50);
+	
+
 	
 	p_spawn_button = std::make_shared<ParamButton>();
 	p_spawn_button->setCallback([this](){
-		this->m_psystem->spawnParticles(10);
+		this->m_psystem->spawnParticles(50);
 		std::mt19937 twister(1234);
 		
+		float delta_t = (float)getTimer()->getDeltaMillis() / 1000;
 		float rand_speed = 0.05f;
-		for(auto p : this->m_psystem->getParticles())
+		for(size_t i=0; i < 50; i++)
 		{
+			auto p = m_psystem->getParticles()[m_psystem->getParticles().size() - 50 + i];
 			float rand_x = ((float)twister() / twister.max()) * rand_speed;
 			float rand_y = ((float)twister() / twister.max()) * rand_speed;
 			float rand_z = ((float)twister() / twister.max()) * rand_speed;
@@ -28,6 +32,13 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	param_layout.addParam(p_spawn_button);
 	
 	
+	p_gravity = std::make_shared<Param<float> >();
+	p_gravity->setName("Gravity");
+	param_layout.addParam(p_gravity);
+	
+	gravity_force = std::make_shared<DirectionalForce>();
+	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getValue());
+	m_psystem->addForce(gravity_force);	
 
 }
 
@@ -44,7 +55,10 @@ void Particles::init()
 void Particles::update(float * fft_maximums)
 {
 
+	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getFilteredValue(fft_maximums));
+	
 	m_psystem->update();
+	
 	m_positions.clear();
 	
 	m_positions.reserve( m_psystem->getParticles().size() * 3);

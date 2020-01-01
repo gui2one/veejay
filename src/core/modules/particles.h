@@ -25,6 +25,9 @@ class Particles: public Module
 	
 	
 		std::shared_ptr<ParamButton> p_spawn_button;
+		std::shared_ptr<Param<float> > p_gravity;
+		
+		std::shared_ptr<DirectionalForce> gravity_force;
 		unsigned int m_vbo = 0;
 		std::vector<float> m_positions;
 		std::shared_ptr<ParticleSystem> m_psystem;
