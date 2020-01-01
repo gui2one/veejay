@@ -3,26 +3,32 @@
 #include "../pch.h"
 
 
-struct Emitter{
-	
+class Emitter{
+public :
 	Emitter(){
 		
 	}
 	
 	glm::vec3 position;
+private :
 };
 
-struct RectEmitter : public Emitter
+class RectEmitter : public Emitter
 {
-	RectEmitter() : Emitter(){
+public :
+	RectEmitter() : 		
+		Emitter(),
+		size(glm::vec2(50.0f,50.0f))
+	{
 		
 	}
 	
-	
+	glm::vec2 size;
+private :
 };
 
-struct Particle{
-	
+class Particle{
+public :
 	Particle() : 
 		position(glm::vec3(0.0,0.0,0.0)), 
 		velocity(glm::vec3(0.0,0.0,0.0)), 
@@ -35,6 +41,7 @@ struct Particle{
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
+private :
 };
 
 class ParticleSystem
