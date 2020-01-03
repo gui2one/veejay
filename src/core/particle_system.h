@@ -3,6 +3,12 @@
 #include "../pch.h"
 #include "timer.h"
 
+enum PARTICLE_EMITTER_TYPE
+{
+	PARTICLE_EMITTER_POINT,
+	PARTICLE_EMITTER_RECT
+};
+
 class Force
 {
 public:
@@ -92,6 +98,10 @@ class ParticleSystem
 		{
 			m_forces.push_back(force);
 		}
+		
+		void addEmitter(PARTICLE_EMITTER_TYPE type);
+			
+		
 		
 	private:
 		/* add your private declarations */

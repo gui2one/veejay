@@ -1759,8 +1759,8 @@ int main(int argc, char** argv)
 	
 
 	
-	//~ printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
-	//~ printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
+	printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 	
     const char* glsl_version = "#version 100";

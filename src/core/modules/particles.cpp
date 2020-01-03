@@ -4,10 +4,24 @@
 Particles::Particles(std::shared_ptr<Timer> timer)
 	: Module(timer)
 {
-	init();
+
 	
 	
-	m_psystem = std::make_shared<ParticleSystem>(timer);
+	m_timer = timer;
+	
+	// init is called in main.cpp
+	//~ init();
+
+}
+
+Particles::~Particles()
+{
+	GLCall(glDeleteBuffers(1, &m_vbo));
+}
+
+void Particles::init()
+{
+	m_psystem = std::make_shared<ParticleSystem>(m_timer);
 	//~ m_psystem->spawnParticles(50);
 	
 
@@ -18,7 +32,7 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 		std::mt19937 twister(1234);
 		
 		//~ float delta_t = (float)getTimer()->getDeltaMillis() / 1000;
-		float rand_speed = 0.05f;
+		float rand_speed = 1.0f;
 		for(size_t i=0; i < 50; i++)
 		{
 			auto p = m_psystem->getParticles()[m_psystem->getParticles().size() - 50 + i];
@@ -38,22 +52,16 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	
 	gravity_force = std::make_shared<DirectionalForce>();
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getValue());
-	m_psystem->addForce(gravity_force);	
-
-}
-
-Particles::~Particles()
-{
-	GLCall(glDeleteBuffers(1, &m_vbo));
-}
-
-void Particles::init()
-{
+	m_psystem->addForce(gravity_force);		
+	
 	GLCall(glGenBuffers(1, &m_vbo));
 	
 	m_shader.loadVertexShaderSource("../src/shaders/basic_particle_shader.vert");
 	m_shader.loadFragmentShaderSource("../src/shaders/basic_particle_shader.frag");
 	m_shader.createShader();
+	
+	
+	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);	
 }
 
 void Particles::update(float * fft_maximums)

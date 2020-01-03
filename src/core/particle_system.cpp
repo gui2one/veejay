@@ -5,8 +5,7 @@ ParticleSystem::ParticleSystem(std::shared_ptr<Timer> timer)
 {
 	m_timer = timer;
 	m_particles.clear();
-	RectEmitter emitter; 
-	m_emitters.push_back(emitter);
+
 }
 
 ParticleSystem::~ParticleSystem()
@@ -34,14 +33,14 @@ void ParticleSystem::update()
 			
 			if( (p_direct = dynamic_cast<DirectionalForce *>(force.get())))
 			{
-				particle->velocity.x += p_direct->magnitude.x * delta_t;
-				particle->velocity.y += p_direct->magnitude.y * delta_t;
+				particle->velocity.x += p_direct->magnitude.x ;
+				particle->velocity.y += p_direct->magnitude.y;
 			}
 		}
 		
 		particle->age += delta_t;
-		particle->position.x += particle->velocity.x;
-		particle->position.y += particle->velocity.y;			
+		particle->position.x += particle->velocity.x  * delta_t;
+		particle->position.y += particle->velocity.y  * delta_t;			
 	}
 }
 
@@ -59,3 +58,22 @@ void ParticleSystem::spawnParticles(unsigned int n)
 	
 }
 
+void ParticleSystem::addEmitter(PARTICLE_EMITTER_TYPE type)
+{
+	switch(type)
+	{
+		case PARTICLE_EMITTER_POINT :
+		{
+			Emitter point_emitter;
+			m_emitters.push_back(point_emitter);
+			break;
+		}
+		case PARTICLE_EMITTER_RECT :
+		{
+			RectEmitter rect_emitter;
+			m_emitters.push_back(rect_emitter);
+			break;		
+		}
+			
+	}
+}

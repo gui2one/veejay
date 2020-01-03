@@ -34,6 +34,7 @@ class Particles: public Module
 		std::shared_ptr<ParticleSystem> m_psystem;
 		
 		Shader m_shader;
+		std::shared_ptr<Timer> m_timer;
 		/* add your private declarations */
 };
 
