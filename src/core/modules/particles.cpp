@@ -50,6 +50,11 @@ void Particles::init()
 	p_gravity->setName("Gravity");
 	param_layout.addParam(p_gravity);
 	
+	
+	p_info = std::make_shared<ParamInfo>();
+	p_info->setName("Num Particles");
+	param_layout.addParam(p_info);
+	
 	gravity_force = std::make_shared<DirectionalForce>();
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getValue());
 	m_psystem->addForce(gravity_force);		
@@ -66,7 +71,11 @@ void Particles::init()
 
 void Particles::update(float * fft_maximums)
 {
-
+	char info_buffer[512];
+	sprintf(info_buffer, "%d", (int)m_psystem->getParticles().size()); 
+	
+	p_info->setValue((const char *)info_buffer);
+	
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getFilteredValue(fft_maximums));
 	
 	m_psystem->update();

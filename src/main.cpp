@@ -379,6 +379,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	Param<int> *   p_int    = nullptr;
 	Param<bool> *  p_bool   = nullptr;
 	Param<std::string> *  p_text   = nullptr;
+	ParamInfo *  p_info   = nullptr;
 	Param<SignalRange> *  p_signal_range   = nullptr;
 	ParamMenu *    p_menu   = nullptr;
 	ParamButton *  p_button = nullptr;
@@ -552,6 +553,17 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			p_text->setValue(temp_char);
 		}
 		ImGui::Columns(1);
+		
+	}else if((p_info   = dynamic_cast<ParamInfo *> (param_ptr.get()))){
+		sprintf(_name, "##%s", p_info->getName());		
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
+		ImGui::Text(p_info->getName() );
+		ImGui::NextColumn();	
+		ImGui::PushItemWidth(-1);	
+		ImGui::Text((char *)p_info->getValue().data());
+		
+		ImGui::PopItemWidth();	
 		
 	}else if((p_signal_range = dynamic_cast<Param<SignalRange > *>(param_ptr.get()))){
 	

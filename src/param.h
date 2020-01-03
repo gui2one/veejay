@@ -160,7 +160,30 @@ class Param<float> : public BaseParam
 		
 };
 
+class ParamInfo : public BaseParam
+{
+public :
+	ParamInfo() : BaseParam()
+	{
+		
+	}
+	
+	ParamInfo(const ParamInfo& other){}
+	~ParamInfo(){};
+	
+	inline std::string_view getValue()
+	{
+		return value;
+	}
+	
+	inline void setValue(std::string _value)
+	{
+		value = _value;
+	}
 
+private :
+	std::string value = "";
+};
 
 class ParamSeparator : public BaseParam
 {
