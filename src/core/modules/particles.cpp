@@ -24,30 +24,32 @@ void Particles::init()
 	m_psystem = std::make_shared<ParticleSystem>(m_timer);
 	//~ m_psystem->spawnParticles(50);
 	
-
+	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);
+	m_psystem->getEmitters()[0]->amount = 200;
 	
 	p_spawn_button = std::make_shared<ParamButton>();
 	p_spawn_button->setCallback([this](){
 		this->m_psystem->spawnParticles(50);
-		std::mt19937 twister(1234);
+		//~ std::mt19937 twister(1234);
 		
-		//~ float delta_t = (float)getTimer()->getDeltaMillis() / 1000;
-		float rand_speed = 1.0f;
-		for(size_t i=0; i < 50; i++)
-		{
-			auto p = m_psystem->getParticles()[m_psystem->getParticles().size() - 50 + i];
-			float rand_x = ((float)twister() / twister.max()) * rand_speed;
-			float rand_y = ((float)twister() / twister.max()) * rand_speed;
-			float rand_z = ((float)twister() / twister.max()) * rand_speed;
+		
+		//~ float rand_speed = 1.0f;
+		//~ for(size_t i=0; i < 50; i++)
+		//~ {
+			//~ auto p = m_psystem->getParticles()[m_psystem->getParticles().size() - 50 + i];
+			//~ float rand_x = ((float)twister() / twister.max()) * rand_speed;
+			//~ float rand_y = ((float)twister() / twister.max()) * rand_speed;
+			//~ float rand_z = ((float)twister() / twister.max()) * rand_speed;
 			
-			p->velocity = glm::vec3(rand_x, rand_y, rand_z);
-		}		
+			//~ p->velocity = glm::vec3(rand_x, rand_y, rand_z);
+		//~ }		
 	});
 	param_layout.addParam(p_spawn_button);
 	
 	
 	p_gravity = std::make_shared<Param<float> >();
 	p_gravity->setName("Gravity");
+	p_gravity->setValue(-0.05f);
 	param_layout.addParam(p_gravity);
 	
 	
@@ -66,17 +68,15 @@ void Particles::init()
 	m_shader.createShader();
 	
 	
-	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);	
+	//~ m_psystem->addEmitter(PARTICLE_EMITTER_RECT);	
 }
 
 void Particles::update(float * fft_maximums)
 {
-	char info_buffer[512];
-	sprintf(info_buffer, "%d", (int)m_psystem->getParticles().size()); 
-	
-	p_info->setValue((const char *)info_buffer);
+
 	
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getFilteredValue(fft_maximums));
+	m_psystem->spawnParticles(0);
 	
 	m_psystem->update();
 	
@@ -100,6 +100,12 @@ void Particles::update(float * fft_maximums)
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 	GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(float) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	
+	
+	char info_buffer[512];
+	sprintf(info_buffer, "%d", (int)m_psystem->getParticles().size()); 
+	
+	p_info->setValue((const char *)info_buffer);	
 	
 }
 

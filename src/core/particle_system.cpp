@@ -47,13 +47,39 @@ void ParticleSystem::update()
 void ParticleSystem::spawnParticles(unsigned int n)
 {
 	
-	//~ m_particles.reserve(n);
-	for(size_t i = 0; i < n; i++)
+	
+	for(auto emitter : m_emitters)
 	{
-		std::shared_ptr<Particle> p = std::make_shared<Particle>();
-		m_particles.push_back(p);
+		
+		RectEmitter * p_rect = nullptr;
+		
+		if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
+		{
+			//~ std::cout << "RectEmitter Found" << std::endl;
+			p_rect->internal_counter += m_timer->getDeltaMillis();
+			if( p_rect->internal_counter > (1000 / p_rect->amount))
+			{
+				
+				unsigned int num = (unsigned int)((float)(p_rect->internal_counter) / (1000.0 / p_rect->amount));
+				//~ std::cout << "num : " << num << std::endl;
+				for(size_t i=0; i<num; i++)
+				{
+					std::shared_ptr<Particle> p = std::make_shared<Particle>();
+					m_particles.push_back(p);						
+				}
+
+				
+				p_rect->internal_counter = 0;			
+			}
+		}
 	}
-	printf("spawning %d particles\n", n);
+	
+	//~ for(size_t i = 0; i < n; i++)
+	//~ {
+		//~ std::shared_ptr<Particle> p = std::make_shared<Particle>();
+		//~ m_particles.push_back(p);
+	//~ }
+	//~ printf("spawning %d particles\n", n);
 	//~ std::cout<<"spawned " << n << " particles" << std::endl;
 	
 }
@@ -64,13 +90,13 @@ void ParticleSystem::addEmitter(PARTICLE_EMITTER_TYPE type)
 	{
 		case PARTICLE_EMITTER_POINT :
 		{
-			Emitter point_emitter;
+			std::shared_ptr<PointEmitter> point_emitter = std::make_shared<PointEmitter>();
 			m_emitters.push_back(point_emitter);
 			break;
 		}
 		case PARTICLE_EMITTER_RECT :
 		{
-			RectEmitter rect_emitter;
+			std::shared_ptr<RectEmitter> rect_emitter = std::make_shared<RectEmitter>();
 			m_emitters.push_back(rect_emitter);
 			break;		
 		}

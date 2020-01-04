@@ -1013,12 +1013,14 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	
 }
 
-void register_action(std::shared_ptr<Action> action){
+void register_action(std::shared_ptr<Action> action)
+{
 	actions.insert(actions.begin(), action);
 	actions_redos.clear();
 }
 
-void action_undo(){
+void action_undo()
+{
 	if(actions.size() > 0)
 	{
 		actions[0]->undo();
@@ -1027,7 +1029,8 @@ void action_undo(){
 	}	
 }
 
-void action_redo(){
+void action_redo()
+{
 	if(actions_redos.size() > 0)
 	{
 		actions_redos[0]->redo();

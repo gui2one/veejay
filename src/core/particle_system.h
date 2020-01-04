@@ -38,8 +38,27 @@ public :
 	Emitter(){
 		
 	}
+	virtual ~Emitter(){};
+	virtual void funcA() = 0;
 	
 	glm::vec3 position;
+	int amount = 10;
+	long int internal_counter = 0;
+private :
+};
+
+class PointEmitter : public Emitter
+{
+public :
+	PointEmitter() : Emitter()
+	{
+		
+	}
+	~PointEmitter(){};
+	
+	void funcA(){};
+	
+	
 private :
 };
 
@@ -52,6 +71,9 @@ public :
 	{
 		
 	}
+	~RectEmitter(){};
+	
+	void funcA(){};
 	
 	glm::vec2 size;
 private :
@@ -100,13 +122,17 @@ class ParticleSystem
 		}
 		
 		void addEmitter(PARTICLE_EMITTER_TYPE type);
+		std::vector<std::shared_ptr<Emitter> >& getEmitters()
+		{
+			return m_emitters;
+		}
 			
 		
 		
 	private:
 		/* add your private declarations */
 		std::vector<std::shared_ptr<Particle> > m_particles;
-		std::vector<Emitter > m_emitters;
+		std::vector<std::shared_ptr<Emitter> > m_emitters;
 		std::shared_ptr<Timer> m_timer;
 		
 		std::vector< std::shared_ptr<Force> > m_forces;

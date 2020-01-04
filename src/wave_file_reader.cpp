@@ -66,7 +66,7 @@ void WaveFileReader::play(SOUND_PLAYER_CMD * cmd, SOUND_PLAYER_MODE * mode, floa
     error = Pa_StartStream(stream);
     if(error != paNoError && *cmd != SOUND_PLAYER_CMD_STOP)
     {
-        fprintf(stderr, "Problem opening starting Stream\n");        
+        fprintf(stderr, "Problem Starting Stream\n");        
     }
 
     /* Run until EOF is reached */
@@ -105,59 +105,51 @@ static int callback
     /* clear output buffer */
     memset(out, 0, sizeof(float) * frameCount * p_data->info.channels);
 	
-
-
-    
     
     // copy data into main soud buffer
-    if( *(p_data->sound_player_cmd) == SOUND_PLAYER_CMD_PLAY){
-		if( *(p_data->sound_player_mode) == SOUND_PLAYER_MODE_FILE)
-		{
-			/* read directly into output buffer */
+    if( *(p_data->sound_player_cmd) == SOUND_PLAYER_CMD_PLAY)
+    {
+	if( *(p_data->sound_player_mode) == SOUND_PLAYER_MODE_FILE)
+	{
+	    /* read directly into output buffer */
+    
+	    num_read = sf_read_float(p_data->file, out, frameCount * p_data->info.channels);		
+	    memcpy(p_data->sound_buffer, out, sizeof(float) * frameCount * p_data->info.channels);
 		
-			num_read = sf_read_float(p_data->file, out, frameCount * p_data->info.channels);		
-			memcpy(p_data->sound_buffer, out, sizeof(float) * frameCount * p_data->info.channels);
-			
-		}
-		else if( *(p_data->sound_player_mode) == SOUND_PLAYER_MODE_SINE_WAVE)
-		{
-			
-			
-			float ratio = ( frameCount / 44100.0) / (1.0/ *(p_data->sine_wave_frequency)) ;
-			//~ memcpy(p_data->sound_buffer, p_data->sine_wave, sizeof(double) * 512);
-			for(size_t i = 0; i < frameCount * 2; i++)
-			{
-				float wave_val = (sin( ((float)(i + p_data->sine_wave_offset) / (float)frameCount * PI * 1.0) * ratio )) * 0.05;
-				*out++ = (float)wave_val;
-				if( i % 2 == 0)
-					p_data->sound_buffer[i/2] = wave_val;
-			}	
-			
-			p_data->sine_wave_offset += frameCount * p_data->info.channels;
-			
+	}else if( *(p_data->sound_player_mode) == SOUND_PLAYER_MODE_SINE_WAVE){		
+		
+	    float ratio = ( frameCount / 44100.0) / (1.0/ *(p_data->sine_wave_frequency)) ;
 
-			//~ memcpy(p_data->sound_buffer, out, sizeof(double) * 512);
-			//~ num_read = 512 * 2;
-		}
+	    for(size_t i = 0; i < frameCount * 2; i++)
+	    {
+		    float wave_val = (sin( ((float)(i + p_data->sine_wave_offset) / (float)frameCount * PI * 1.0) * ratio )) * 0.05;
+		    *out++ = (float)wave_val;
+		    if( i % 2 == 0)
+			    p_data->sound_buffer[i/2] = wave_val;
+	    }	
+	    
+	    p_data->sine_wave_offset += frameCount * p_data->info.channels;
 		
-	}else if( *(p_data->sound_player_cmd) == SOUND_PLAYER_CMD_PAUSE){
-		//~ printf("PAUSE \n");
-		//~ num_read = sf_read_float(p_data->file, out, frameCount * p_data->info.channels);
-				
-		memset(p_data->sound_buffer, 0, sizeof(float) * frameCount * p_data->info.channels);		
+
 	}
+		
+    }else if( *(p_data->sound_player_cmd) == SOUND_PLAYER_CMD_PAUSE){
+				
+	memset(p_data->sound_buffer, 0, sizeof(float) * frameCount * p_data->info.channels);		
+    }
     	
-    //~ std::cout << p_data->sound_buffer[0] << std::endl;
+
     
     
     /*  If we couldn't read a full frameCount of samples we've reached EOF */
     if (num_read < frameCount && p_data->loop)
     {
-		sf_seek(p_data->file, 0, SEEK_SET);
+	sf_seek(p_data->file, 0, SEEK_SET);
         
     }else if(num_read < frameCount){
-		return paComplete;
-	}
+	
+	return paComplete;
+    }
     
     return paContinue;
 }
