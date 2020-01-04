@@ -21,37 +21,22 @@ Particles::~Particles()
 
 void Particles::init()
 {
-	m_psystem = std::make_shared<ParticleSystem>(m_timer);
-	//~ m_psystem->spawnParticles(50);
-	
+	m_psystem = std::make_shared<ParticleSystem>(m_timer);	
 	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);
 	m_psystem->getEmitters()[0]->amount = 200;
+	m_psystem->getEmitters()[0]->position = glm::vec3(0.5f, 0.0f, 0.0f);
 	
 	p_spawn_button = std::make_shared<ParamButton>();
 	p_spawn_button->setCallback([this](){
 		this->m_psystem->spawnParticles(50);
-		//~ std::mt19937 twister(1234);
-		
-		
-		//~ float rand_speed = 1.0f;
-		//~ for(size_t i=0; i < 50; i++)
-		//~ {
-			//~ auto p = m_psystem->getParticles()[m_psystem->getParticles().size() - 50 + i];
-			//~ float rand_x = ((float)twister() / twister.max()) * rand_speed;
-			//~ float rand_y = ((float)twister() / twister.max()) * rand_speed;
-			//~ float rand_z = ((float)twister() / twister.max()) * rand_speed;
-			
-			//~ p->velocity = glm::vec3(rand_x, rand_y, rand_z);
-		//~ }		
+	
 	});
 	param_layout.addParam(p_spawn_button);
-	
 	
 	p_gravity = std::make_shared<Param<float> >();
 	p_gravity->setName("Gravity");
 	p_gravity->setValue(-0.05f);
 	param_layout.addParam(p_gravity);
-	
 	
 	p_emit_amount = std::make_shared<Param<float> >();
 	p_emit_amount->setName("Emit Amount");
@@ -66,14 +51,15 @@ void Particles::init()
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getValue());
 	m_psystem->addForce(gravity_force);		
 	
+	
 	GLCall(glGenBuffers(1, &m_vbo));
+	
+	
 	
 	m_shader.loadVertexShaderSource("../src/shaders/basic_particle_shader.vert");
 	m_shader.loadFragmentShaderSource("../src/shaders/basic_particle_shader.frag");
 	m_shader.createShader();
 	
-	
-	//~ m_psystem->addEmitter(PARTICLE_EMITTER_RECT);	
 }
 
 void Particles::update(float * fft_maximums)

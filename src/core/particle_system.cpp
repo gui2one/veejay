@@ -44,28 +44,24 @@ void ParticleSystem::update()
 	}
 }
 
-void ParticleSystem::spawnParticles(unsigned int n)
-{
-	
-	
+void ParticleSystem::spawnParticles(unsigned int num)
+{	
 	for(auto emitter : m_emitters)
 	{
-		
 		RectEmitter * p_rect = nullptr;
 		
 		if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
 		{
-			//~ std::cout << "RectEmitter Found" << std::endl;
+
 			p_rect->internal_counter += m_timer->getDeltaMillis();
 			if( p_rect->internal_counter > (1000 / p_rect->amount))
 			{
 				
-				unsigned int num = (unsigned int)((float)(p_rect->internal_counter) / (1000.0 / p_rect->amount));
-				//~ std::cout << "num : " << num << std::endl;
 				for(size_t i=0; i<num; i++)
 				{
 					std::shared_ptr<Particle> p = std::make_shared<Particle>();
 					
+					p->position = emitter->position; 
 					
 					float rand_speed = 1.0f;
 					float rand_x = ((float)rng() / rng.max()) * rand_speed;
@@ -76,46 +72,34 @@ void ParticleSystem::spawnParticles(unsigned int n)
 							
 					m_particles.push_back(p);						
 				}
-
 				
 				p_rect->internal_counter = 0;			
 			}
 		}
 	}
-	
-	//~ for(size_t i = 0; i < n; i++)
-	//~ {
-		//~ std::shared_ptr<Particle> p = std::make_shared<Particle>();
-		//~ m_particles.push_back(p);
-	//~ }
-	//~ printf("spawning %d particles\n", n);
-	//~ std::cout<<"spawned " << n << " particles" << std::endl;
-	
 }
 
-
-void ParticleSystem::emitParticles(float amount_mult)
+void ParticleSystem::emitParticles(float amount_mult) 
 {
-	
-	
 	for(auto emitter : m_emitters)
-	{
-		
+	{		
 		RectEmitter * p_rect = nullptr;
 		
 		if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
-		{
-			
+		{			
 			p_rect->internal_counter += m_timer->getDeltaMillis();
+			
 			if( p_rect->internal_counter > (1000 / p_rect->amount))
-			{
-				
-				unsigned int num = (unsigned int)((float)(p_rect->internal_counter) / (1000.0 / p_rect->amount) * amount_mult);
+			{				
+				unsigned int num = (unsigned int)((float)(p_rect->internal_counter) / (1000.0 / p_rect->amount) * amount_mult);				
 				
 				m_particles.reserve(m_particles.size() + num);
+								
 				for(size_t i=0; i<num; i++)
 				{
 					std::shared_ptr<Particle> p = std::make_shared<Particle>();
+					
+					p->position = emitter->position; 
 					
 					float rand_speed = 1.0f;
 					float rand_x = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
@@ -126,15 +110,11 @@ void ParticleSystem::emitParticles(float amount_mult)
 										
 					m_particles.emplace_back(p);						
 				}
-
 				
 				p_rect->internal_counter = 0;			
 			}
 		}
 	}
-	
-
-	
 }
 
 void ParticleSystem::addEmitter(PARTICLE_EMITTER_TYPE type)

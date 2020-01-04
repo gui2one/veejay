@@ -6,6 +6,11 @@
 #include "../shader.h"
 #include "../particle_system.h"
 
+struct gl_particle{
+	float x, y, z;
+	float opacity;
+};
+
 class Particles: public Module
 {
 	public:
