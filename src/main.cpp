@@ -1257,7 +1257,7 @@ void module_list_dialog()
 					if(renderer.m_modules.size() == 0)
 					{
 						current_module_id = -1;
-					}else if(current_module_id > renderer.m_modules.size() -1){
+					}else if(current_module_id > (int)(renderer.m_modules.size() -1)){
 						current_module_id = renderer.m_modules.size() - 1;
 					}
 					
