@@ -71,25 +71,33 @@ void Particles::update(float * fft_maximums)
 	
 	m_psystem->update();
 	
-	m_vertices.clear();
+	m_gl_particles.clear();
 	
 	
-	m_vertices.reserve( m_psystem->getParticles().size() * 4);
+	m_gl_particles.reserve( m_psystem->getParticles().size() );
 	
 	
 	for( auto particle : m_psystem->getParticles())
 	{
+		gl_particle p;
+		p.x = particle->position.x;
+		p.y = particle->position.y;
+		p.z = particle->position.z;
 		
-		m_vertices.emplace_back( particle->position.x);
-		m_vertices.emplace_back( particle->position.y);
-		m_vertices.emplace_back( particle->position.z);
+		
+		//~ m_vertices.emplace_back( particle->position.x);
+		//~ m_vertices.emplace_back( particle->position.y);
+		//~ m_vertices.emplace_back( particle->position.z);
 		
 		// opacity
-		m_vertices.emplace_back( 1.0 - ( particle->age / particle->life));
+		p.opacity =  1.0 - ( particle->age / particle->life);
+		
+		
+		m_gl_particles.emplace_back(p);
 	}
 	
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-	GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(float) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(gl_particle) * m_gl_particles.size(), m_gl_particles.data(), GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	
 	
@@ -111,10 +119,10 @@ void Particles::render()
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 	GLCall(glEnableVertexAttribArray(0));
 	GLCall(glEnableVertexAttribArray(1));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void *)0));
-	GLCall(glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float)*4, (void *)(sizeof(float)*3)));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(gl_particle), (void *)0));
+	GLCall(glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(gl_particle), (void *)(sizeof(float)*3)));
 	
-	GLCall(glDrawArrays(GL_POINTS, 0, m_vertices.size()/4));
+	GLCall(glDrawArrays(GL_POINTS, 0, m_gl_particles.size()));
 	
 	
 	GLCall(glDisableVertexAttribArray(0));

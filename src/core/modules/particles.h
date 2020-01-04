@@ -38,6 +38,7 @@ class Particles: public Module
 		std::shared_ptr<DirectionalForce> gravity_force;
 		unsigned int m_vbo = 0;
 		std::vector<float> m_vertices;
+		std::vector<gl_particle> m_gl_particles;
 		
 		std::shared_ptr<ParticleSystem> m_psystem;
 		

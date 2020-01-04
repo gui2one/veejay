@@ -1250,12 +1250,17 @@ void module_list_dialog()
 																							remove_module_ptr
 																							);
 					
-					//~ actions.insert(actions.begin(), action);
+					
 					register_action(action);						
 
-					//~ remove_module(current_module_id);
+					
 					if(renderer.m_modules.size() == 0)
+					{
 						current_module_id = -1;
+					}else if(current_module_id > renderer.m_modules.size() -1){
+						current_module_id = renderer.m_modules.size() - 1;
+					}
+					
 				}
 					
 			}		
