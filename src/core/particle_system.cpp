@@ -65,6 +65,15 @@ void ParticleSystem::spawnParticles(unsigned int n)
 				for(size_t i=0; i<num; i++)
 				{
 					std::shared_ptr<Particle> p = std::make_shared<Particle>();
+					
+					
+					float rand_speed = 1.0f;
+					float rand_x = ((float)rng() / rng.max()) * rand_speed;
+					float rand_y = ((float)rng() / rng.max()) * rand_speed;
+					float rand_z = ((float)rng() / rng.max()) * rand_speed;
+					
+					p->velocity = glm::vec3(rand_x, rand_y, rand_z);
+							
 					m_particles.push_back(p);						
 				}
 
@@ -81,6 +90,50 @@ void ParticleSystem::spawnParticles(unsigned int n)
 	//~ }
 	//~ printf("spawning %d particles\n", n);
 	//~ std::cout<<"spawned " << n << " particles" << std::endl;
+	
+}
+
+
+void ParticleSystem::emitParticles(float amount_mult)
+{
+	
+	
+	for(auto emitter : m_emitters)
+	{
+		
+		RectEmitter * p_rect = nullptr;
+		
+		if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
+		{
+			
+			p_rect->internal_counter += m_timer->getDeltaMillis();
+			if( p_rect->internal_counter > (1000 / p_rect->amount))
+			{
+				
+				unsigned int num = (unsigned int)((float)(p_rect->internal_counter) / (1000.0 / p_rect->amount) * amount_mult);
+				
+				m_particles.reserve(m_particles.size() + num);
+				for(size_t i=0; i<num; i++)
+				{
+					std::shared_ptr<Particle> p = std::make_shared<Particle>();
+					
+					float rand_speed = 1.0f;
+					float rand_x = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
+					float rand_y = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
+					float rand_z = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
+					
+					p->velocity = glm::vec3(rand_x, rand_y, rand_z);
+										
+					m_particles.emplace_back(p);						
+				}
+
+				
+				p_rect->internal_counter = 0;			
+			}
+		}
+	}
+	
+
 	
 }
 

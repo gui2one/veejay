@@ -53,6 +53,11 @@ void Particles::init()
 	param_layout.addParam(p_gravity);
 	
 	
+	p_emit_amount = std::make_shared<Param<float> >();
+	p_emit_amount->setName("Emit Amount");
+	p_emit_amount->setValue(1.0f);
+	param_layout.addParam(p_emit_amount);	
+	
 	p_info = std::make_shared<ParamInfo>();
 	p_info->setName("Num Particles");
 	param_layout.addParam(p_info);
@@ -76,7 +81,7 @@ void Particles::update(float * fft_maximums)
 
 	
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getFilteredValue(fft_maximums));
-	m_psystem->spawnParticles(0);
+	m_psystem->emitParticles(p_emit_amount->getFilteredValue(fft_maximums));
 	
 	m_psystem->update();
 	

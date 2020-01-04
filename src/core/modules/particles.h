@@ -25,6 +25,8 @@ class Particles: public Module
 	
 	
 		std::shared_ptr<ParamButton> p_spawn_button;
+		
+		std::shared_ptr<Param<float> > p_emit_amount;
 		std::shared_ptr<Param<float> > p_gravity;
 		std::shared_ptr<ParamInfo> p_info;
 		

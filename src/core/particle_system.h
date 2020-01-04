@@ -106,6 +106,7 @@ class ParticleSystem
 		virtual ~ParticleSystem();
 		
 		void spawnParticles(unsigned int n);
+		void emitParticles(float amout_mult);
 		void update();
 		
 		inline std::vector<std::shared_ptr<Particle> >& getParticles(){
@@ -136,6 +137,8 @@ class ParticleSystem
 		std::shared_ptr<Timer> m_timer;
 		
 		std::vector< std::shared_ptr<Force> > m_forces;
+		
+		std::mt19937 rng;
 		
 };
 
