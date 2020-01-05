@@ -91,11 +91,14 @@ void ParticleSystem::emitParticles(float amount_mult)
 			if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
 			{			
 
-				if( amount_mult == 0) continue;
-				if( p_rect->amount == 0) continue;
 				
-				if( amount_mult > 0.0 && p_rect->amount > 0.0)
+				
+					
 					p_rect->internal_counter += m_timer->getDeltaMillis();
+				if( p_rect->internal_counter > 200) // greater than 200 milliseconds
+				{
+					p_rect->internal_counter = 0;
+				}
 				
 
 				
@@ -126,12 +129,12 @@ void ParticleSystem::emitParticles(float amount_mult)
 						
 						p->position = emitter->position; 
 						
-						float rand_speed = 1.0f;
-						float rand_x = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
-						float rand_y = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
-						float rand_z = (((float)rng() / rng.max()) * 2.0 - 1.0) * rand_speed;
+						float rand_speed = ((float)rng() / rng.max());
+						float rand_x = ((float)rng() / rng.max()) * 2.0 - 1.0;
+						float rand_y = ((float)rng() / rng.max()) * 2.0 - 1.0;
+						//~ float rand_z = ((float)rng() / rng.max()) * 2.0 - 1.0;
 						
-						p->velocity = glm::vec3(rand_x, rand_y, rand_z);
+						p->velocity = glm::normalize(glm::vec3(rand_x, rand_y, 0.0f)) * rand_speed;
 											
 						m_particles.emplace_back(p);						
 					}
