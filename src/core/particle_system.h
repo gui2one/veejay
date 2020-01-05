@@ -42,8 +42,9 @@ public :
 	virtual void funcA() = 0;
 	
 	glm::vec3 position;
-	int amount = 10;
+	int amount = 1;
 	long int internal_counter = 0;
+	float partial_counter = 0.0f;
 private :
 };
 
@@ -139,6 +140,8 @@ class ParticleSystem
 		std::vector< std::shared_ptr<Force> > m_forces;
 		
 		std::mt19937 rng;
+		
+		unsigned int max_particles = 1000;
 		
 };
 

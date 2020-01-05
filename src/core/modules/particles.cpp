@@ -23,15 +23,15 @@ void Particles::init()
 {
 	m_psystem = std::make_shared<ParticleSystem>(m_timer);	
 	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);
-	m_psystem->getEmitters()[0]->amount = 200;
+	m_psystem->getEmitters()[0]->amount = 1;
 	m_psystem->getEmitters()[0]->position = glm::vec3(0.5f, 0.0f, 0.0f);
 	
-	p_spawn_button = std::make_shared<ParamButton>();
-	p_spawn_button->setCallback([this](){
-		this->m_psystem->spawnParticles(50);
+	//~ p_spawn_button = std::make_shared<ParamButton>();
+	//~ p_spawn_button->setCallback([this](){
+		//~ this->m_psystem->spawnParticles(50);
 	
-	});
-	param_layout.addParam(p_spawn_button);
+	//~ });
+	//~ param_layout.addParam(p_spawn_button);
 	
 	p_gravity = std::make_shared<Param<float> >();
 	p_gravity->setName("Gravity");
