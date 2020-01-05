@@ -90,7 +90,14 @@ void ParticleSystem::emitParticles(float amount_mult)
 			
 			if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
 			{			
-				p_rect->internal_counter += m_timer->getDeltaMillis();
+
+				if( amount_mult == 0) continue;
+				if( p_rect->amount == 0) continue;
+				
+				if( amount_mult > 0.0 && p_rect->amount > 0.0)
+					p_rect->internal_counter += m_timer->getDeltaMillis();
+				
+
 				
 				if( p_rect->internal_counter > (1000 / (p_rect->amount* amount_mult)))
 				{				
@@ -101,11 +108,11 @@ void ParticleSystem::emitParticles(float amount_mult)
 					
 					unsigned int num;
 					num = (unsigned int)temp_partial;
-					if( p_rect->partial_counter > 1.0f && num == 0)
-					{
-						num += 1;
-						p_rect->partial_counter = 0.0f;
-					}	
+					//~ if( p_rect->partial_counter > 1.0f && num == 0)
+					//~ {
+						//~ num += 1;
+						//~ p_rect->partial_counter = 0.0f;
+					//~ }	
 						
 					 				
 					
