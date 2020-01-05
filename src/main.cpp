@@ -23,7 +23,13 @@
 #include <sndfile.h>
 
 #include "fft.h"
+
+#include "FastNoise/FastNoise.h"
 /*******************************************************************/
+
+FastNoise noise;
+
+
 
 // forward declarations ...
 void display_fft_values();
@@ -140,6 +146,10 @@ char * WAV_PATH;
 
 float sine_wave_frequency = 440.0f;
 
+
+// noise
+
+GLuint noise_texture;
 
 std::vector<std::shared_ptr<BaseParam> > pinned_params;
 // sound player params
@@ -1703,6 +1713,15 @@ int main(int argc, char** argv)
 	//~ VJ_LOG_INFO("Info ");
 	//~ VJ_LOG_WARN("Warning");
 	//~ VJ_LOG_ERROR("Error in main ");
+
+
+	
+		
+	for (int i = 0; i < 10; i++)
+	{
+		std::cout << noise.GetValue((double)i * 10.0, 0.0) << std::endl;
+	}	
+	
 	
 	memset(fft_maximums, 0.0, sizeof(float) * NUM_BANDS);
 	FFT fft;
@@ -1786,6 +1805,37 @@ int main(int argc, char** argv)
     const char* glsl_version = "#version 100";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);		
+	
+	
+	unsigned char noise_data[128*128 * 4];
+	for (int y = 0; y < 128; y++)
+	{
+		for (int x = 0; x < 128; x++)
+		{
+			unsigned char noise_val = (unsigned char)(((noise.GetValueFractal((float)x * 10.0f, (float)y * 10.0f) + 1.0f) / 2.0f) * 255);
+			noise_data[(x*4) + ( y * 128 * 4) + 0] = noise_val;
+			noise_data[(x*4) + ( y * 128 * 4) + 1] = noise_val;
+			noise_data[(x*4) + ( y * 128 * 4) + 2] = noise_val;
+			noise_data[(x*4) + ( y * 128 * 4) + 3] = 255;
+		}
+	}
+	
+	glGenTextures(1, &noise_texture); // Generate noise texture
+	
+	
+	glBindTexture(GL_TEXTURE_2D, noise_texture); // Bind the texture fbo_texture
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0]); // Create a standard texture with the width and height of our window
+
+	// Setup the basic texture parameters
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// Unbind the texture
+	glBindTexture(GL_TEXTURE_2D, 0);	
+	
 	
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -1948,6 +1998,15 @@ int main(int argc, char** argv)
 				ImGui::Image((void*)(uintptr_t)renderer.m_texture, ImVec2(avail_width,(int)((float)avail_width / _ratio)),ImVec2(0,1), ImVec2(1,0));
 				ImGui::End(); 
 			}
+			
+			if (ImGui::Begin("Noise Viewer"), &active)
+			{
+				int avail_width = ImGui::GetContentRegionAvail().x;				
+				
+				
+				ImGui::Image((void*)(uintptr_t)noise_texture, ImVec2(avail_width,(int)((float)avail_width)),ImVec2(0,1), ImVec2(1,0));
+				ImGui::End(); 
+			}			
 			
 			
 			if (ImGui::Begin("Player"), &active)

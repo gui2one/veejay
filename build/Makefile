@@ -675,6 +675,33 @@ home/pi/projects/veejay/src/player.cpp.s:
 	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/player.cpp.s
 .PHONY : home/pi/projects/veejay/src/player.cpp.s
 
+home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.o: home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o
+
+.PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.o
+
+# target to build an object file
+home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o
+.PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o
+
+home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.i: home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
+
+.PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.i
+
+# target to preprocess a source file
+home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
+.PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
+
+home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.s: home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
+
+.PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.s
+
+# target to generate assembly for a file
+home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
+.PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
+
 home/pi/projects/veejay/src/vendor/SimpleJSON/json.o: home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.o
 
 .PHONY : home/pi/projects/veejay/src/vendor/SimpleJSON/json.o
@@ -933,6 +960,9 @@ help:
 	@echo "... home/pi/projects/veejay/src/player.o"
 	@echo "... home/pi/projects/veejay/src/player.i"
 	@echo "... home/pi/projects/veejay/src/player.s"
+	@echo "... home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.o"
+	@echo "... home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.i"
+	@echo "... home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.s"
 	@echo "... home/pi/projects/veejay/src/vendor/SimpleJSON/json.o"
 	@echo "... home/pi/projects/veejay/src/vendor/SimpleJSON/json.i"
 	@echo "... home/pi/projects/veejay/src/vendor/SimpleJSON/json.s"

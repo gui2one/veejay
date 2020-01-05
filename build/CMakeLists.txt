@@ -58,6 +58,7 @@ add_executable(vj_editor
 	
 	../src/wave_file_reader.cpp
 	../src/fft.cpp
+	../src/vendor/FastNoise/FastNoise.cpp
 
 	
 )
