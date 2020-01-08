@@ -24,10 +24,10 @@
 
 #include "fft.h"
 
-#include "FastNoise/FastNoise.h"
+
 /*******************************************************************/
 
-FastNoise noise;
+
 
 
 
@@ -148,14 +148,77 @@ float sine_wave_frequency = 440.0f;
 
 
 // noise
-
+FastNoise noise;
 GLuint noise_texture;
+const size_t noise_texture_size = 128;
+float noise_frequency = 1.0;
+unsigned char noise_data[noise_texture_size*noise_texture_size * 4];
 
-std::vector<std::shared_ptr<BaseParam> > pinned_params;
+
+
+std::vector<std::shared_ptr<BaseParam> > pinned_params; //// ????
 // sound player params
 std::shared_ptr<ParamFilePath> sound_player_wave_file_path_param = std::make_shared<ParamFilePath>();
 
 
+void generate_noise(float freq)
+{
+
+	
+	
+	noise.SetFrequency( 0.005f * noise_frequency);
+	for (size_t y = 0; y < noise_texture_size; y++)
+	{
+		for (size_t x = 0; x < noise_texture_size; x++)
+		{
+			unsigned char noise_val = (unsigned char)(((noise.GetValueFractal((float)x * 10.0f, (float)y * 10.0f) + 1.0f) / 2.0f) * 255);
+			noise_data[(x*4) + ( y * noise_texture_size * 4) + 0] = noise_val;
+			noise_data[(x*4) + ( y * noise_texture_size * 4) + 1] = noise_val;
+			noise_data[(x*4) + ( y * noise_texture_size * 4) + 2] = noise_val;
+			noise_data[(x*4) + ( y * noise_texture_size * 4) + 3] = 255;
+		}
+	}
+	
+	if(noise_texture)
+		glDeleteTextures(1, &noise_texture);
+	
+	glGenTextures(1, &noise_texture); // Generate noise texture
+	
+	glBindTexture(GL_TEXTURE_2D, noise_texture); // Bind the texture fbo_texture
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, noise_texture_size, noise_texture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0]); // Create a standard texture with the width and height of our window
+
+	// Setup the basic texture parameters
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// Unbind the texture
+	glBindTexture(GL_TEXTURE_2D, 0);		
+	
+
+}
+
+void noise_dialog()
+{
+	if(ImGui::Begin("Fast Noise"))
+	{
+		if(ImGui::DragFloat("Frequency", &noise_frequency, 0.05f ))
+		{
+			generate_noise(noise_frequency);
+		}
+		if(ImGui::Button("Generate"))
+		{
+			generate_noise(noise_frequency);
+		}
+		
+		int avail_width = ImGui::GetContentRegionAvail().x;
+		ImGui::Image((void*)(uintptr_t)noise_texture, ImVec2(avail_width,(int)((float)avail_width)),ImVec2(0,1), ImVec2(1,0));	
+		
+		ImGui::End();
+	}
+}
 
 std::vector<std::string> split(const std::string& str, std::string delimiter = " ")
 {
@@ -1765,12 +1828,14 @@ int main(int argc, char** argv)
 	player_layout.addParam(stop_button);			
 	
 
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);		
 	
 	if( !glfwInit()){
 		printf("glfw init error\n");
 		return -1;
 	}
-	
 	
 	
 	ui_window = glfwCreateWindow(w_width, w_height,"UI Window", NULL, NULL);
@@ -1802,39 +1867,7 @@ int main(int argc, char** argv)
 	printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 	
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);		
-	
-	
-	unsigned char noise_data[128*128 * 4];
-	for (int y = 0; y < 128; y++)
-	{
-		for (int x = 0; x < 128; x++)
-		{
-			unsigned char noise_val = (unsigned char)(((noise.GetValueFractal((float)x * 10.0f, (float)y * 10.0f) + 1.0f) / 2.0f) * 255);
-			noise_data[(x*4) + ( y * 128 * 4) + 0] = noise_val;
-			noise_data[(x*4) + ( y * 128 * 4) + 1] = noise_val;
-			noise_data[(x*4) + ( y * 128 * 4) + 2] = noise_val;
-			noise_data[(x*4) + ( y * 128 * 4) + 3] = 255;
-		}
-	}
-	
-	glGenTextures(1, &noise_texture); // Generate noise texture
-	
-	
-	glBindTexture(GL_TEXTURE_2D, noise_texture); // Bind the texture fbo_texture
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0]); // Create a standard texture with the width and height of our window
-
-	// Setup the basic texture parameters
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	// Unbind the texture
-	glBindTexture(GL_TEXTURE_2D, 0);	
 	
 	
     // Setup Dear ImGui context
@@ -1852,6 +1885,7 @@ int main(int argc, char** argv)
     ImGui::StyleColorsDark();
     
     io.Fonts->AddFontDefault(); // load default font 
+    io.ConfigDockingWithShift = true;
     // add second font
     small_font = io.Fonts->AddFontFromFileTTF("../src/fonts/ProggyTiny.ttf", 10.0f);
     
@@ -1868,28 +1902,10 @@ int main(int argc, char** argv)
 	
 	glEnable(GL_TEXTURE_2D);
 
-
-	/*
-	std::shared_ptr<Orbiter> orbiter = std::make_shared<Orbiter>();
-	orbiter->setName("Orbiter");
-	orbiter->init();
-	renderer.m_modules.push_back(orbiter);	
-	
-	std::shared_ptr<Orbiter> orbiter_2 = std::make_shared<Orbiter>();
-	orbiter_2->setName("Orbiter 2");
-	orbiter_2->p_color->color = glm::vec3(0.0, 0.0, 1.0);
-	orbiter_2->init();
-	renderer.m_modules.push_back(orbiter_2);		
-		
-	std::shared_ptr<Circles> circles = std::make_shared<Circles>();
-	circles->setName("Circles Module");
-	circles->init();
-	renderer.m_modules.push_back(circles);
-	*/
 	
 	renderer.initTexture();
 	renderer.initFBO(live_w_width, live_w_height);
-	//~ init_viewport_FBO();
+
 
 	timer->start();
 	int cur_time = 0;
@@ -1919,9 +1935,9 @@ int main(int argc, char** argv)
 		
 		renderer.updateModules();
 		renderer.render();
-		//~ render_viewport_FBO();
+
 		
-		       // Start the Dear ImGui frame
+		// Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -1949,6 +1965,7 @@ int main(int argc, char** argv)
 			module_list_dialog();
 			actions_dialog();
 			sound_dialog();
+			noise_dialog();
 			
 			if (ImGui::Begin("Main Menu",  &active))
 			{
@@ -2001,10 +2018,10 @@ int main(int argc, char** argv)
 			
 			if (ImGui::Begin("Noise Viewer"), &active)
 			{
-				int avail_width = ImGui::GetContentRegionAvail().x;				
+				//~ int avail_width = ImGui::GetContentRegionAvail().x;				
 				
 				
-				ImGui::Image((void*)(uintptr_t)noise_texture, ImVec2(avail_width,(int)((float)avail_width)),ImVec2(0,1), ImVec2(1,0));
+				//~ ImGui::Image((void*)(uintptr_t)noise_texture, ImVec2(avail_width,(int)((float)avail_width)),ImVec2(0,1), ImVec2(1,0));
 				ImGui::End(); 
 			}			
 			

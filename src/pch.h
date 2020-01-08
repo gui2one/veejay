@@ -13,7 +13,7 @@
 #include "vendor/glm/gtc/type_ptr.hpp"
 
 
-
+#include "vendor/FastNoise/FastNoise.h"
 
 #include <vector>
 #include <memory>

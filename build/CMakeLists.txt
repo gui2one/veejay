@@ -23,6 +23,8 @@ add_library(PCHLib
 	../src/vendor/imgui/imgui_widgets.cpp
 	../src/vendor/imgui/imgui_impl_glfw.cpp
 	../src/vendor/imgui/imgui_impl_opengl3.cpp	
+	
+	../src/vendor/FastNoise/FastNoise.cpp
 )
 
 add_library(CoreLib
@@ -58,8 +60,6 @@ add_executable(vj_editor
 	
 	../src/wave_file_reader.cpp
 	../src/fft.cpp
-	../src/vendor/FastNoise/FastNoise.cpp
-
 	
 )
 

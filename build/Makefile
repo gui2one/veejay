@@ -681,7 +681,7 @@ home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.o: home/pi/projects/veeja
 
 # target to build an object file
 home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o
 .PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.o
 
 home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.i: home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
@@ -690,7 +690,7 @@ home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.i: home/pi/projects/veeja
 
 # target to preprocess a source file
 home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
 .PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.i
 
 home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.s: home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
@@ -699,7 +699,7 @@ home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.s: home/pi/projects/veeja
 
 # target to generate assembly for a file
 home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s:
-	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
+	$(MAKE) -f CMakeFiles/PCHLib.dir/build.make CMakeFiles/PCHLib.dir/home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
 .PHONY : home/pi/projects/veejay/src/vendor/FastNoise/FastNoise.cpp.s
 
 home/pi/projects/veejay/src/vendor/SimpleJSON/json.o: home/pi/projects/veejay/src/vendor/SimpleJSON/json.cpp.o
