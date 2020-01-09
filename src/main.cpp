@@ -153,7 +153,8 @@ GLuint noise_texture;
 const size_t noise_texture_size = 256;
 float noise_frequency = 1.0;
 unsigned char noise_data[noise_texture_size*noise_texture_size * 4];
-
+bool noise_trigger = false;
+bool noise_trigger_update = false;
 
 
 std::vector<std::shared_ptr<BaseParam> > pinned_params; //// ????
@@ -169,6 +170,7 @@ void generate_noise(float freq)
 	noise.SetFrequency( noise_frequency);
 	for (size_t y = 0; y < noise_texture_size; y++)
 	{
+		//~ std::cout << "generating noise" << std::endl;
 		for (size_t x = 0; x < noise_texture_size; x++)
 		{
 			unsigned char noise_val = (unsigned char)(((noise.GetNoise((float)x /noise_texture_size, (float)y /noise_texture_size) + 1.0f) / 2.0f) * 255);
@@ -179,26 +181,50 @@ void generate_noise(float freq)
 		}
 	}
 	
-	if(noise_texture)
-		glDeleteTextures(1, &noise_texture);
 	
-	glGenTextures(1, &noise_texture); // Generate noise texture
-	
-	glBindTexture(GL_TEXTURE_2D, noise_texture); // Bind the texture fbo_texture
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, noise_texture_size, noise_texture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0]); // Create a standard texture with the width and height of our window
-
-	// Setup the basic texture parameters
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	// Unbind the texture
-	glBindTexture(GL_TEXTURE_2D, 0);		
 	
 
 }
+
+static void update_noise_texture()
+{
+	if(noise_texture)
+		GLCall(glDeleteTextures(1, &noise_texture));
+	
+	GLCall(glGenTextures(1, &noise_texture)); // Generate noise texture
+	
+	GLCall(glBindTexture(GL_TEXTURE_2D, noise_texture)); // Bind the texture fbo_texture
+
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, noise_texture_size, noise_texture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0])); // Create a standard texture with the width and height of our window
+
+	// Setup the basic texture parameters
+	GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+
+	// Unbind the texture
+	GLCall(glBindTexture(GL_TEXTURE_2D, 0));		
+}
+
+void noise_threaded( bool * trigger = nullptr)
+{
+	while(true)
+	{
+		if(noise_trigger)
+		{
+			generate_noise(noise_frequency);
+			
+			noise_trigger = false;
+			*trigger = true;
+		}
+		
+		
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	
+}
+
 
 void noise_dialog()
 {
@@ -206,7 +232,7 @@ void noise_dialog()
 	{
 		if(ImGui::DragFloat("Frequency", &noise_frequency, 0.05f ))
 		{
-			generate_noise(noise_frequency);
+			noise_trigger = true;
 		}
 		
 		const char * noise_types[3] = {"PerlinFractal", "SimplexFractal", "Cellular"};
@@ -218,26 +244,28 @@ void noise_dialog()
 			if(ImGui::Selectable(noise_types[0], choice == 0))
 			{
 				noise.SetNoiseType(FastNoise::PerlinFractal);
-				generate_noise(noise_frequency);
+				
+				noise_trigger = true;
 				choice = 0;
 			}
 			if(ImGui::Selectable(noise_types[1], choice == 1))
 			{
 				noise.SetNoiseType(FastNoise::SimplexFractal);
-				generate_noise(noise_frequency);
+				noise_trigger = true;
 				choice = 1;
 			}			
 			if(ImGui::Selectable(noise_types[2], choice == 2))
 			{
 				noise.SetNoiseType(FastNoise::Cellular);
-				generate_noise(noise_frequency);
+				noise_trigger = true;
 				choice = 2;
 			}				
 			ImGui::EndCombo();
 		}
 		if(ImGui::Button("Generate"))
 		{
-			generate_noise(noise_frequency);
+			//~ noise_trigger = true;
+			update_noise_texture();
 		}
 		
 		int avail_width = ImGui::GetContentRegionAvail().x;
@@ -1822,9 +1850,13 @@ int main(int argc, char** argv)
 	}
 	
 
+	//sound thread
 	std::string str_wav_path = "/home/pi/Downloads/guitar_riff.wav";
 	WAV_PATH = (char *)(str_wav_path.c_str());
 	std::thread t(make_sound, WAV_PATH);
+	
+	//noise thread
+	std::thread noise_thread(noise_threaded, &noise_trigger_update);
 	
 	Client client;
 	int res;
@@ -1939,6 +1971,12 @@ int main(int argc, char** argv)
 	int old_time = 0;
 	while (!glfwWindowShouldClose(live_window)){
 		
+		if( noise_trigger_update)
+		{
+			update_noise_texture();
+			noise_trigger_update = false;
+		}
+			
 		double fft_temp[512];
 		for (size_t i = 0; i < 512; i++)
 		{

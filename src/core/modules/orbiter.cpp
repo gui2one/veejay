@@ -19,6 +19,8 @@ Orbiter::Orbiter(std::shared_ptr<Timer> timer)
 	setType(MODULE_TYPE_ORBITER);
 	
 	p_color->color = glm::vec3(0.0, 1.0, 0.0);
+	
+	m_angle = 0.0f;
 	//~ setBlendingMode(MODULE_BLENDING_ADD);
 }
 
@@ -52,9 +54,12 @@ void Orbiter::init(){
 void Orbiter::update(float * fft_maximums){
 	//~ printf("orbiter update \n");
 	m_counter++;
+	
+	
 	m_radius = p_radius->getFilteredValue(fft_maximums);
 	m_opacity = p_opacity->getFilteredValue(fft_maximums);
 	m_speed = p_speed->getFilteredValue(fft_maximums);
+	m_angle += m_speed * getTimer()->getDeltaMillis();
 	
 }
 
@@ -80,7 +85,7 @@ void Orbiter::render(){
 		
 		
 		glScalef(m_radius, m_radius, m_radius);
-		glRotatef((float)m_counter * m_speed * -0.25, 0.0, 0.0, 1.0);
+		glRotatef(m_angle, 0.0, 0.0, 1.0);
 
 		GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 		

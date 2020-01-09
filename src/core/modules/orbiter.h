@@ -21,6 +21,8 @@ class Orbiter: public Module
 		
 		Shader m_shader;
 		int m_counter = 0;
+		
+		float m_angle;
 		float m_radius;
 		float m_opacity;
 		float m_speed;
