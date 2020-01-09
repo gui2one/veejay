@@ -150,7 +150,7 @@ float sine_wave_frequency = 440.0f;
 // noise
 FastNoise noise;
 GLuint noise_texture;
-const size_t noise_texture_size = 128;
+const size_t noise_texture_size = 256;
 float noise_frequency = 1.0;
 unsigned char noise_data[noise_texture_size*noise_texture_size * 4];
 
@@ -166,12 +166,12 @@ void generate_noise(float freq)
 
 	
 	
-	noise.SetFrequency( 0.005f * noise_frequency);
+	noise.SetFrequency( noise_frequency);
 	for (size_t y = 0; y < noise_texture_size; y++)
 	{
 		for (size_t x = 0; x < noise_texture_size; x++)
 		{
-			unsigned char noise_val = (unsigned char)(((noise.GetValueFractal((float)x * 10.0f, (float)y * 10.0f) + 1.0f) / 2.0f) * 255);
+			unsigned char noise_val = (unsigned char)(((noise.GetNoise((float)x /noise_texture_size, (float)y /noise_texture_size) + 1.0f) / 2.0f) * 255);
 			noise_data[(x*4) + ( y * noise_texture_size * 4) + 0] = noise_val;
 			noise_data[(x*4) + ( y * noise_texture_size * 4) + 1] = noise_val;
 			noise_data[(x*4) + ( y * noise_texture_size * 4) + 2] = noise_val;
@@ -202,11 +202,38 @@ void generate_noise(float freq)
 
 void noise_dialog()
 {
-	if(ImGui::Begin("Fast Noise"))
+	if(ImGui::Begin("Fast Noise"), true)
 	{
 		if(ImGui::DragFloat("Frequency", &noise_frequency, 0.05f ))
 		{
 			generate_noise(noise_frequency);
+		}
+		
+		const char * noise_types[3] = {"PerlinFractal", "SimplexFractal", "Cellular"};
+		
+		static int choice = 0;
+		if(ImGui::BeginCombo("type",noise_types[choice]))
+		{
+			
+			if(ImGui::Selectable(noise_types[0], choice == 0))
+			{
+				noise.SetNoiseType(FastNoise::PerlinFractal);
+				generate_noise(noise_frequency);
+				choice = 0;
+			}
+			if(ImGui::Selectable(noise_types[1], choice == 1))
+			{
+				noise.SetNoiseType(FastNoise::SimplexFractal);
+				generate_noise(noise_frequency);
+				choice = 1;
+			}			
+			if(ImGui::Selectable(noise_types[2], choice == 2))
+			{
+				noise.SetNoiseType(FastNoise::Cellular);
+				generate_noise(noise_frequency);
+				choice = 2;
+			}				
+			ImGui::EndCombo();
 		}
 		if(ImGui::Button("Generate"))
 		{
