@@ -1241,13 +1241,13 @@ void saveToFile()
 void loadFromFile()
 {
 	JsonFileReader reader;
-	VJ_FILE_DATA data = reader.load(current_explorer_file_path_V2);
+	VJ_FILE_DATA data = reader.load(current_explorer_file_path_V2, timer);
 	renderer.m_modules = data.modules; 
 	
-	for(auto module : renderer.m_modules)
-	{
-		module->setTimer(timer);
-	}
+	//~ for(auto module : renderer.m_modules)
+	//~ {
+		//~ module->setTimer(timer);
+	//~ }
 	//~ std::cout << current_explorer_file_path_V2 << std::endl;
 }
 

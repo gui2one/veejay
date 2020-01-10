@@ -17,7 +17,7 @@ class JsonFileReader
 	public:
 		JsonFileReader();
 		
-		VJ_FILE_DATA load(std::string& path);
+		VJ_FILE_DATA load(std::string& path, std::shared_ptr<Timer> timer_ptr);
 			
 	private:
 	

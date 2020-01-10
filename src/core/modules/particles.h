@@ -14,7 +14,7 @@ struct gl_particle{
 class Particles: public Module
 {
 	public:
-		Particles(std::shared_ptr<Timer> timer);
+		Particles(std::shared_ptr<Timer> timer = nullptr);
 		~Particles();
 		
 		void init();

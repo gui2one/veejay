@@ -33,6 +33,7 @@ JSON JsonFileWriter::encodeModules(std::vector<std::shared_ptr<Module> >& module
 				{
 					json_param["name"] = p_float->getName();
 					json_param["value"] = p_float->getValue();
+					json_param["use_signal"] = p_float->getUseSignalRange();
 				}
 				else if(( p_int = dynamic_cast<Param<int> *>(param.get())))
 				{
