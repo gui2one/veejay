@@ -13,8 +13,7 @@ JSON JsonFileWriter::encodeModules(std::vector<std::shared_ptr<Module> >& module
 	JSON json_modules = json::Array();
 	for(auto module : modules)
 	{	
-		if(module->getType() == MODULE_TYPE_ORBITER)
-		{		
+		
 			//~ printf("module name : %s -- is an Orbiter \n", module->getName());		
 
 			JSON mod = json::Object();
@@ -65,7 +64,7 @@ JSON JsonFileWriter::encodeModules(std::vector<std::shared_ptr<Module> >& module
 			mod["params"] = json_params;
 			json_modules.append(mod);
 
-		}
+		
 	}
 	
 	json_data["modules"] = json_modules;

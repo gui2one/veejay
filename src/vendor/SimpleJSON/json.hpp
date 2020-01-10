@@ -201,6 +201,7 @@ class JSON
         }
 
         static JSON Load( const string & );
+        
 
         template <typename T>
         void append( T arg ) {

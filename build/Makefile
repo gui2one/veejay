@@ -567,6 +567,33 @@ home/pi/projects/veejay/src/ipc/server.cpp.s:
 	$(MAKE) -f CMakeFiles/vj_player.dir/build.make CMakeFiles/vj_player.dir/home/pi/projects/veejay/src/ipc/server.cpp.s
 .PHONY : home/pi/projects/veejay/src/ipc/server.cpp.s
 
+home/pi/projects/veejay/src/jsonfilereader.o: home/pi/projects/veejay/src/jsonfilereader.cpp.o
+
+.PHONY : home/pi/projects/veejay/src/jsonfilereader.o
+
+# target to build an object file
+home/pi/projects/veejay/src/jsonfilereader.cpp.o:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/jsonfilereader.cpp.o
+.PHONY : home/pi/projects/veejay/src/jsonfilereader.cpp.o
+
+home/pi/projects/veejay/src/jsonfilereader.i: home/pi/projects/veejay/src/jsonfilereader.cpp.i
+
+.PHONY : home/pi/projects/veejay/src/jsonfilereader.i
+
+# target to preprocess a source file
+home/pi/projects/veejay/src/jsonfilereader.cpp.i:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/jsonfilereader.cpp.i
+.PHONY : home/pi/projects/veejay/src/jsonfilereader.cpp.i
+
+home/pi/projects/veejay/src/jsonfilereader.s: home/pi/projects/veejay/src/jsonfilereader.cpp.s
+
+.PHONY : home/pi/projects/veejay/src/jsonfilereader.s
+
+# target to generate assembly for a file
+home/pi/projects/veejay/src/jsonfilereader.cpp.s:
+	$(MAKE) -f CMakeFiles/vj_editor.dir/build.make CMakeFiles/vj_editor.dir/home/pi/projects/veejay/src/jsonfilereader.cpp.s
+.PHONY : home/pi/projects/veejay/src/jsonfilereader.cpp.s
+
 home/pi/projects/veejay/src/jsonfilewriter.o: home/pi/projects/veejay/src/jsonfilewriter.cpp.o
 
 .PHONY : home/pi/projects/veejay/src/jsonfilewriter.o
@@ -948,6 +975,9 @@ help:
 	@echo "... home/pi/projects/veejay/src/ipc/server.o"
 	@echo "... home/pi/projects/veejay/src/ipc/server.i"
 	@echo "... home/pi/projects/veejay/src/ipc/server.s"
+	@echo "... home/pi/projects/veejay/src/jsonfilereader.o"
+	@echo "... home/pi/projects/veejay/src/jsonfilereader.i"
+	@echo "... home/pi/projects/veejay/src/jsonfilereader.s"
 	@echo "... home/pi/projects/veejay/src/jsonfilewriter.o"
 	@echo "... home/pi/projects/veejay/src/jsonfilewriter.i"
 	@echo "... home/pi/projects/veejay/src/jsonfilewriter.s"

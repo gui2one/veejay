@@ -8,6 +8,7 @@
 #include "ipc/client.h"
 
 #include "jsonfilewriter.h"
+#include "jsonfilereader.h"
 
 // for explorerDialog
 #include <dirent.h>
@@ -435,7 +436,7 @@ int explorerDialog_V2(const char * path = "", const char * file_name = "")
 
 				explorer_V2_file_name = file_names[i];
 				//~ printf("Selected File is : %s / %s\n", explorer_V2_dir_path.c_str(), explorer_V2_file_name.c_str());
-
+				strcpy(&file_n[0], explorer_V2_file_name.c_str());
 			}	
 		}	
 		
@@ -1237,6 +1238,19 @@ void saveToFile()
 	}
 }
 
+void loadFromFile()
+{
+	JsonFileReader reader;
+	VJ_FILE_DATA data = reader.load(current_explorer_file_path_V2);
+	renderer.m_modules = data.modules; 
+	
+	for(auto module : renderer.m_modules)
+	{
+		module->setTimer(timer);
+	}
+	//~ std::cout << current_explorer_file_path_V2 << std::endl;
+}
+
 void move_module( int from , int to)
 {
 
@@ -1832,14 +1846,6 @@ int main(int argc, char** argv)
 	//~ VJ_LOG_WARN("Warning");
 	//~ VJ_LOG_ERROR("Error in main ");
 
-
-	
-		
-	for (int i = 0; i < 10; i++)
-	{
-		std::cout << noise.GetValue((double)i * 10.0, 0.0) << std::endl;
-	}	
-	
 	
 	memset(fft_maximums, 0.0, sizeof(float) * NUM_BANDS);
 	FFT fft;
@@ -2037,6 +2043,14 @@ int main(int argc, char** argv)
 				
 				if(ImGui::BeginMenu("File"))
 				{
+					if(ImGui::MenuItem("load"))
+					{
+						printf("load ????\n");
+						b_explorer_opened = true;
+						current_explorer_callback = [](){
+							loadFromFile();
+						};
+					}
 					if(ImGui::MenuItem("save"))
 					{
 						printf("save ????\n");
@@ -2044,7 +2058,7 @@ int main(int argc, char** argv)
 						current_explorer_callback = [](){
 							saveToFile();
 						};
-					}
+					}					
 					
 					if(ImGui::MenuItem("exit"))
 					{

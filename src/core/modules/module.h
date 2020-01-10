@@ -43,6 +43,10 @@ class Module
 		inline void 	   setBlendingMode(MODULE_BLENDING _mode){ blending_mode = _mode; }		
 		inline MODULE_BLENDING getBlendingMode(){ return blending_mode; }	
 		
+		inline void setTimer(std::shared_ptr<Timer> timer_ptr)
+		{
+			m_timer = timer_ptr;
+		}
 		inline std::shared_ptr<Timer>& getTimer(){
 			return m_timer;
 		}

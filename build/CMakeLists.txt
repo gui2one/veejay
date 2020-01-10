@@ -57,6 +57,7 @@ add_executable(vj_editor
 	
 	../src/vendor/SimpleJSON/json.cpp
 	../src/jsonfilewriter.cpp		
+	../src/jsonfilereader.cpp		
 	
 	../src/wave_file_reader.cpp
 	../src/fft.cpp

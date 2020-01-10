@@ -59,6 +59,7 @@ void Orbiter::update(float * fft_maximums){
 	m_radius = p_radius->getFilteredValue(fft_maximums);
 	m_opacity = p_opacity->getFilteredValue(fft_maximums);
 	m_speed = p_speed->getFilteredValue(fft_maximums);
+	
 	m_angle += m_speed * getTimer()->getDeltaMillis();
 	
 }

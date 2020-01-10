@@ -6,7 +6,7 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 {
 
 	
-	
+	setType(MODULE_TYPE_PARTICLES);
 	m_timer = timer;
 	
 	// init is called in main.cpp
