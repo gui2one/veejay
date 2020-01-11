@@ -1258,6 +1258,10 @@ void move_module( int from , int to)
 	std::shared_ptr<Module > save = renderer.m_modules[from];
 	renderer.m_modules.erase( renderer.m_modules.begin() + from);	
 	renderer.m_modules.insert( renderer.m_modules.begin() + to, save);
+	
+	// follow layer selection if it was already selected
+	//~ if(current_module_id == from)
+		current_module_id = to;
 }
 
 std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
