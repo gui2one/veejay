@@ -14,12 +14,22 @@ static void set_param_layout_values(std::shared_ptr<Module> module_ptr, JSON jso
 		Param<float> * p_float = nullptr;
 		Param<int> * p_int = nullptr;
 		ParamMenu * p_menu = nullptr;
-		ParamColor3 * p_color3 = nullptr;		
+		ParamColor3 * p_color3 = nullptr;	
+		ParamFilePath * p_file_path = nullptr;	
 		
 		if((p_float = dynamic_cast<Param<float> *>(param.get())))
 		{
 			p_float->setValue(json_params[inc]["value"].ToFloat());
 			p_float->setUseSignalRange(json_params[inc]["use_signal"].ToBool());
+			
+			SignalRange range;
+			range.min = json_params[inc]["signal_range"]["min"].ToInt();
+			range.max = json_params[inc]["signal_range"]["max"].ToInt();
+			range.mode = (SignalRangeMode)json_params[inc]["signal_range"]["mode"].ToInt();
+			range.multiplier = (SignalRangeMode)json_params[inc]["signal_range"]["multiplier"].ToFloat();
+			
+			p_float->setSignalRange(range);
+			
 		}else if((p_int = dynamic_cast<Param<int> *>(param.get())))
 		{
 			p_int->setValue(json_params[inc]["value"].ToInt());			
@@ -31,6 +41,10 @@ static void set_param_layout_values(std::shared_ptr<Module> module_ptr, JSON jso
 		{
 			JSON json_color = json_params[inc]["value"];
 			p_color3->setValue(glm::vec3(json_color[0].ToFloat(), json_color[1].ToFloat(), json_color[2].ToFloat()));
+		}else if((p_file_path = dynamic_cast<ParamFilePath *>(param.get())))
+		{
+			JSON json_path = json_params[inc]["value"];
+			p_file_path->setValue(json_path.ToString());
 		}
 		
 		inc++;
@@ -103,8 +117,9 @@ VJ_FILE_DATA JsonFileReader::load(std::string& path, std::shared_ptr<Timer> time
 			{
 				std::shared_ptr<Image> mod = std::make_shared<Image>(timer_ptr);
 				mod->setName(modules[i]["name"].ToString());
-				mod->init();	
 				set_param_layout_values(mod, modules[i]["params"]);
+				mod->init();	
+				
 				data.modules.push_back(mod);
 				break;											
 			}

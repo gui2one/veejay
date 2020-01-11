@@ -13,7 +13,7 @@ Image::Image(std::shared_ptr<Timer> timer)
 	});
 	param_layout.addParam(p_path);
 
-	loadFile(p_path->getValue().c_str());
+	
 }
 
 
@@ -25,6 +25,7 @@ void Image::loadFile(const char * path)
 
 void Image::init()
 {
+	loadFile(p_path->getValue().c_str());
 	
 	screen_shader.loadVertexShaderSource("../src/shaders/screen_shader.vert");
 	screen_shader.loadFragmentShaderSource("../src/shaders/screen_shader.frag");
