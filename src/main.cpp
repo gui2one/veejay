@@ -1304,6 +1304,8 @@ std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num)
 		return mod;
 	}	
 	
+	current_module_id = layer_num;
+	
 	return nullptr;
 }
 
@@ -1363,10 +1365,18 @@ void module_list_dialog()
 		SameLine();
 		if(Button("Add Module"))
 		{
-			std::shared_ptr<Module> module_ptr = add_module((MODULE_TYPE)choice);
+			if(current_module_id > 0)
+			{
+				current_module_id -= 1;
+			}else{
+				current_module_id = 0;
+			}
+				
+			std::shared_ptr<Module> module_ptr = add_module((MODULE_TYPE)choice, current_module_id);
 			
 			std::shared_ptr<ActionAddModule> 
-			action = std::make_shared<ActionAddModule>(
+			action = std::make_shared<ActionAddModule>(					
+					current_module_id,
 					(MODULE_TYPE)choice, 
 					module_ptr,
 					add_module_ptr, 

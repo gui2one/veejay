@@ -242,6 +242,7 @@ class ActionAddModule : public Action
 {
 public : 
 	ActionAddModule( 
+		int layer_num,
 		MODULE_TYPE type,
 		std::shared_ptr<Module> module_ptr,
 		std::function< void(std::shared_ptr<Module>,unsigned int)>  add_func, 
@@ -250,6 +251,7 @@ public :
 	) : Action()
 	{
 		setName("Add Module");
+		m_layer_num = layer_num;
 		m_type = type;
 		m_module_ptr = module_ptr;
 		m_add_module_function = add_func;
@@ -258,7 +260,7 @@ public :
 	
 	void redo()override{
 		//~ printf("---- REDO Add Module\n");
-		m_add_module_function(m_module_ptr, 0);
+		m_add_module_function(m_module_ptr, m_layer_num);
 	}
 	
 	void undo()override{
@@ -268,6 +270,7 @@ public :
 		//~ VJ_LOG_TRACE("UNDID Add Module");
 	}
 	
+	int m_layer_num;
 	MODULE_TYPE m_type;
 	std::shared_ptr<Module> m_module_ptr;
 	std::function< void(std::shared_ptr<Module>, unsigned int)> m_add_module_function;
