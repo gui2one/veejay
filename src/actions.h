@@ -324,6 +324,46 @@ private:
 
 };
 
+
+class ActionDuplicateModule : public Action
+{
+public:
+	ActionDuplicateModule(
+		std::shared_ptr<Module> module_ptr, 
+		int layer_num, 
+		std::function<void(std::shared_ptr<Module>, unsigned int )> add_func, 
+		std::function<void(std::shared_ptr<Module>)> remove_func, 
+		std::function<void()> callback = [](){}	
+	) : Action()
+	{
+		setName("Duplicate Module");
+		m_add_module_function = add_func;
+		m_remove_module_function = remove_func;
+		
+		
+		m_layer_num = layer_num;
+		m_module_ptr = module_ptr;
+		
+
+	}
+	
+	void redo()override{
+		m_add_module_function(m_module_ptr, m_layer_num);
+	}
+	
+	void undo()override{
+		m_remove_module_function(m_module_ptr);
+		
+	}
+	
+	std::function<void(std::shared_ptr<Module>, unsigned int)> m_add_module_function;
+	std::function<void(std::shared_ptr<Module>)> m_remove_module_function;
+	
+	
+	int m_layer_num;
+	std::shared_ptr<Module> m_module_ptr;
+private:
+};
 class ActionMoveModule : public Action
 {
 public: 

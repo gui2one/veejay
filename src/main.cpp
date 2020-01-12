@@ -1452,6 +1452,23 @@ void module_list_dialog()
 				if( current_module_id != -1)
 				{
 					duplicate_module(renderer.m_modules[current_module_id]);
+					std::shared_ptr<ActionDuplicateModule> action = std::make_shared<ActionDuplicateModule>(
+																							renderer.m_modules[current_module_id], 
+																							current_module_id, 
+																							add_module_ptr, 
+																							remove_module_ptr
+																							);
+					
+					
+					register_action(action);						
+
+					
+					if(renderer.m_modules.size() == 0)
+					{
+						current_module_id = -1;
+					}else if(current_module_id > (int)(renderer.m_modules.size() -1)){
+						current_module_id = renderer.m_modules.size() - 1;
+					}					
 				}
 				
 			}			
