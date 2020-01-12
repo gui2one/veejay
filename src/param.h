@@ -51,7 +51,9 @@ class BaseParam
 		BaseParam(){};		
 		BaseParam(const BaseParam& other)
 		{
-			setName(other.getName());			
+			setName(other.getName());	
+			setUseSignalRange(other.getUseSignalRange());		
+			setSignalRange(other.getSignalRange());
 		}
 		virtual ~BaseParam(){};
 		
@@ -59,14 +61,14 @@ class BaseParam
 		inline const char * getName() const { return name; }
 
 		inline void setSignalRange(SignalRange _signal ){ signal_range = _signal;}		
-		inline SignalRange getSignalRange(){ return signal_range; }
+		inline SignalRange getSignalRange() const { return signal_range; }
 		
 		inline void setUseSignalRange(bool _value)
 		{
 			use_signal_range = _value;
 		}
 		
-		inline bool getUseSignalRange()
+		inline bool getUseSignalRange() const
 		{
 			return use_signal_range;
 		}
