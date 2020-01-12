@@ -86,6 +86,11 @@ VJ_FILE_DATA JsonFileReader::load(std::string& path, std::shared_ptr<Timer> time
 		
 		switch((MODULE_TYPE)(j_int.ToInt()))
 		{
+			case MODULE_TYPE_NULL :
+			{
+				
+				break;
+			}
 			case MODULE_TYPE_PARTICLES : 
 			{
 				std::shared_ptr<Particles> mod = std::make_shared<Particles>(timer_ptr);

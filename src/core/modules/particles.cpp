@@ -9,29 +9,11 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	setType(MODULE_TYPE_PARTICLES);
 	m_timer = timer;
 	
-	// init is called in main.cpp
-	//~ init();
-
-}
-
-Particles::~Particles()
-{
-	GLCall(glDeleteBuffers(1, &m_vbo));
-}
-
-void Particles::init()
-{
 	m_psystem = std::make_shared<ParticleSystem>(m_timer);	
 	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);
 	m_psystem->getEmitters()[0]->amount = 1;
 	m_psystem->getEmitters()[0]->position = glm::vec3(0.5f, 0.0f, 0.0f);
 	
-	//~ p_spawn_button = std::make_shared<ParamButton>();
-	//~ p_spawn_button->setCallback([this](){
-		//~ this->m_psystem->spawnParticles(50);
-	
-	//~ });
-	//~ param_layout.addParam(p_spawn_button);
 	
 	p_gravity = std::make_shared<Param<float> >();
 	p_gravity->setName("Gravity");
@@ -50,6 +32,45 @@ void Particles::init()
 	gravity_force = std::make_shared<DirectionalForce>();
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getValue());
 	m_psystem->addForce(gravity_force);		
+
+}
+
+Particles::Particles(const Particles& other) : Module(other)
+{
+	setType(MODULE_TYPE_PARTICLES);
+	
+	m_gl_particles.clear();
+	
+	m_psystem = std::make_shared<ParticleSystem>(*(other.m_psystem));
+	
+	m_psystem->addEmitter(PARTICLE_EMITTER_RECT);
+	m_psystem->getEmitters()[0]->amount = 1;
+	m_psystem->getEmitters()[0]->position = glm::vec3(0.5f, 0.0f, 0.0f);
+		
+	p_gravity = std::make_shared<Param<float> >(*(other.p_gravity));
+	param_layout.addParam(p_gravity);
+	
+	p_emit_amount = std::make_shared<Param<float> >(*(other.p_emit_amount));
+	param_layout.addParam(p_emit_amount);
+	
+	p_info = std::make_shared<ParamInfo>(*(other.p_info));
+	param_layout.addParam(p_info);
+	
+	gravity_force = std::make_shared<DirectionalForce>(*(other.gravity_force));	
+	m_psystem->addForce(gravity_force);
+	
+	
+	
+}
+
+Particles::~Particles()
+{
+	GLCall(glDeleteBuffers(1, &m_vbo));
+}
+
+void Particles::init()
+{
+
 	
 	
 	GLCall(glGenBuffers(1, &m_vbo));
@@ -80,9 +101,9 @@ void Particles::update(float * fft_maximums)
 	for( auto particle : m_psystem->getParticles())
 	{
 		gl_particle p;
-		p.x = particle->position.x;
-		p.y = particle->position.y;
-		p.z = particle->position.z;
+		p.x = particle.position.x;
+		p.y = particle.position.y;
+		p.z = particle.position.z;
 		
 		
 		//~ m_vertices.emplace_back( particle->position.x);
@@ -90,7 +111,7 @@ void Particles::update(float * fft_maximums)
 		//~ m_vertices.emplace_back( particle->position.z);
 		
 		// opacity
-		p.opacity =  1.0 - ( particle->age / particle->life);
+		p.opacity =  1.0 - ( particle.age / particle.life);
 		
 		
 		m_gl_particles.emplace_back(p);

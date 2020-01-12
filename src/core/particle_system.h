@@ -13,6 +13,8 @@ class Force
 {
 public:
 	Force(){};
+	Force(const Force& other){};
+	
 	virtual void funcA() = 0;
 	
 private:
@@ -26,6 +28,12 @@ public:
 	
 		
 	}
+	
+	DirectionalForce(const DirectionalForce& other) : Force(other)
+	{
+		magnitude = other.magnitude;
+	}
+	
 	void funcA(){}
 	
 	glm::vec2 magnitude;
@@ -37,6 +45,13 @@ class Emitter{
 public :
 	Emitter(){
 		
+	}
+	Emitter(const Emitter& other)
+	{
+		position = other.position;
+		amount = other.amount;
+		internal_counter = other.internal_counter;
+		partial_counter = other.partial_counter;
 	}
 	virtual ~Emitter(){};
 	virtual void funcA() = 0;
@@ -52,6 +67,10 @@ class PointEmitter : public Emitter
 {
 public :
 	PointEmitter() : Emitter()
+	{
+		
+	}
+	PointEmitter(const PointEmitter& other) : Emitter(other)
 	{
 		
 	}
@@ -72,6 +91,11 @@ public :
 	{
 		
 	}
+	
+	RectEmitter(const RectEmitter& other) : Emitter(other)
+	{
+		size = other.size;
+	}	
 	~RectEmitter(){};
 	
 	void funcA(){};
@@ -92,6 +116,16 @@ public :
 		
 	}
 	
+	Particle(const Particle& other)
+	{
+		id = other.id;
+		position = other.position;
+		velocity = other.velocity;
+		acceleration = other.acceleration;
+		age = other.age;
+		life = other.life;
+	}
+	
 	unsigned int id;
 	glm::vec3 position;
 	glm::vec3 velocity;
@@ -104,17 +138,18 @@ class ParticleSystem
 {
 	public:
 		ParticleSystem(std::shared_ptr<Timer> timer);
+		ParticleSystem(const ParticleSystem& other);
 		virtual ~ParticleSystem();
 		
 		void spawnParticles(unsigned int n);
 		void emitParticles(float amout_mult);
 		void update();
 		
-		inline std::vector<std::shared_ptr<Particle> >& getParticles(){
+		inline std::vector<Particle> getParticles() const {
 			return m_particles;
 		}
 		
-		inline std::vector< std::shared_ptr<Force> >& getForces(){
+		inline std::vector< std::shared_ptr<Force> > getForces() const{
 			return m_forces;
 		}
 		
@@ -124,16 +159,24 @@ class ParticleSystem
 		}
 		
 		void addEmitter(PARTICLE_EMITTER_TYPE type);
-		std::vector<std::shared_ptr<Emitter> >& getEmitters()
+		void addEmitter(std::shared_ptr<Emitter> ptr);
+		
+		std::vector<std::shared_ptr<Emitter> > getEmitters() const 
 		{
 			return m_emitters;
 		}
 			
-		
+		inline void setTimer(std::shared_ptr<Timer> timer_ptr)
+		{
+			m_timer = timer_ptr;
+		}
+		inline std::shared_ptr<Timer> getTimer() const {
+			return m_timer;
+		}		
 		
 	private:
 		/* add your private declarations */
-		std::vector<std::shared_ptr<Particle> > m_particles;
+		std::vector<Particle> m_particles;
 		std::vector<std::shared_ptr<Emitter> > m_emitters;
 		std::shared_ptr<Timer> m_timer;
 		

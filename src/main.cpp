@@ -196,7 +196,7 @@ static void update_noise_texture()
 	
 	GLCall(glBindTexture(GL_TEXTURE_2D, noise_texture)); // Bind the texture fbo_texture
 
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, noise_texture_size, noise_texture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0])); // Create a standard texture with the width and height of our window
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, noise_texture_size, noise_texture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, &noise_data[0]); // Create a standard texture with the width and height of our window
 
 	// Setup the basic texture parameters
 	GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -1324,6 +1324,9 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	
 	
 	Orbiter * p_orbiter = nullptr;
+	Circles * p_circles = nullptr;
+	Image   * p_image = nullptr;
+	Particles   * p_particles = nullptr;
 	
 	if((p_orbiter = dynamic_cast<Orbiter *>(ptr.get())))
 	{
@@ -1333,14 +1336,34 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 		copy->init();
 		
 		renderer.m_modules.insert(renderer.m_modules.begin() + 0, copy);
-		
-		
 	}
-	
-	
-	
-	
-	printf("what ?!\n");
+	else if((p_circles = dynamic_cast<Circles *>(ptr.get())))
+	{
+		std::shared_ptr<Circles> copy = std::make_shared<Circles>(*(p_circles));
+		copy->setTimer(timer);
+		copy->setName(uniqueName(p_circles->getName()));
+		copy->init();
+		
+		renderer.m_modules.insert(renderer.m_modules.begin() + 0, copy);
+	}
+	else if((p_image = dynamic_cast<Image *>(ptr.get())))
+	{
+		std::shared_ptr<Image> copy = std::make_shared<Image>(*(p_image));
+		copy->setTimer(timer);
+		copy->setName(uniqueName(p_image->getName()));
+		copy->init();
+		
+		renderer.m_modules.insert(renderer.m_modules.begin() + 0, copy);
+	}	
+	else if((p_particles = dynamic_cast<Particles *>(ptr.get())))
+	{
+		std::shared_ptr<Particles> copy = std::make_shared<Particles>(*(p_particles));
+		copy->setTimer(timer);
+		copy->setName(uniqueName(p_particles->getName()));
+		copy->init();
+		
+		renderer.m_modules.insert(renderer.m_modules.begin() + 0, copy);
+	}	
 }
 void remove_module(unsigned int id)
 {

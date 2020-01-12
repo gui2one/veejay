@@ -170,7 +170,7 @@ public :
 	
 	ParamInfo(const ParamInfo& other) : BaseParam(other)
 	{
-		
+		setValue(other.value);
 	}
 	~ParamInfo(){};
 	
@@ -301,12 +301,18 @@ public:
 		
 	}
 	
+	ParamFilePath(const ParamFilePath& other) : BaseParam(other)
+	{
+		m_value = other.getValue();
+		m_callback = other.getCallback();
+	}
+	
 	inline void setCallback(std::function<void()> callback)
 	{
 		m_callback = callback;
 	}
 	
-	inline std::function<void()> getCallback()
+	inline std::function<void()> getCallback() const
 	{
 		return m_callback;
 	}

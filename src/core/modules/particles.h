@@ -15,6 +15,7 @@ class Particles: public Module
 {
 	public:
 		Particles(std::shared_ptr<Timer> timer = nullptr);
+		Particles(const Particles& other);
 		~Particles();
 		
 		void init();
@@ -28,8 +29,6 @@ class Particles: public Module
 		}
 	private:
 	
-	
-		std::shared_ptr<ParamButton> p_spawn_button;
 		
 		std::shared_ptr<Param<float> > p_emit_amount;
 		std::shared_ptr<Param<float> > p_gravity;

@@ -5,16 +5,23 @@ Circles::Circles(std::shared_ptr<Timer> timer)
 	: Module(timer)
 {
 	setType(MODULE_TYPE_CIRCLES);
-	m_shader.loadVertexShaderSource("../src/shaders/basic_shader.vert");
-	m_shader.loadFragmentShaderSource("../src/shaders/basic_shader.frag");
-	m_shader.createShader();
+
 	
 	p_color->color = glm::vec3(1.0,0.0,0.0);
 }
 
+Circles::Circles(const Circles& other) : Module(other)
+{
+	setType(other.getType());
+
+	p_color->color = other.p_color->color;
+}
+
 void Circles::init()
 {
-	
+	m_shader.loadVertexShaderSource("../src/shaders/basic_shader.vert");
+	m_shader.loadFragmentShaderSource("../src/shaders/basic_shader.frag");
+	m_shader.createShader();		
 }
 
 void Circles::update(float * fft_maximums)
