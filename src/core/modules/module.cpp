@@ -35,6 +35,33 @@ Module::Module(std::shared_ptr<Timer> timer){
 
 	
 }
+
+Module::Module(const Module & other)
+{
+	param_layout = ParamLayout(other.param_layout);
+	printf("other!!!!\n");
+	m_timer = other.m_timer;
+	
+	p_name = std::make_shared<Param<std::string> >(*(other.p_name));
+	param_layout.addParam(p_name);
+	
+	
+	p_opacity = std::make_shared<Param<float> >(*(other.p_opacity));
+	param_layout.addParam( p_opacity);		
+	
+	p_color = std::make_shared<ParamColor3 >(*(other.p_color));
+	param_layout.addParam( p_color);	
+	
+	p_blending = std::make_shared<ParamMenu>(*(other.p_blending));
+	param_layout.addParam(p_blending);
+	
+	param_layout.addParam( std::make_shared<ParamSeparator>());		
+	
+	p_signal_range = std::make_shared<Param<SignalRange > >(*(other.p_signal_range));
+	//~ p_signal_range->setName("Signal Range");	
+	
+}
+
 Module::~Module()
 {
 	printf("Deleting Module\n");

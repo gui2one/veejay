@@ -24,6 +24,27 @@ Orbiter::Orbiter(std::shared_ptr<Timer> timer)
 	//~ setBlendingMode(MODULE_BLENDING_ADD);
 }
 
+Orbiter::Orbiter(const Orbiter & other):Module(other)
+{
+	printf("other Orbiter\n");
+	
+	//~ param_layout = ParamLayout(other.param_layout);
+	p_radius = std::make_shared<Param<float> >(*(other.p_radius));
+	//~ p_radius->setName("Radius");
+	//~ p_radius->setValue(1.0);
+	param_layout.addParam( p_radius);
+	
+	p_speed = std::make_shared<Param<float> >(*(other.p_speed));
+	//~ p_speed->setName("Speed");
+	//~ p_speed->setValue(1.0);
+	param_layout.addParam(p_speed);
+	
+	setType((MODULE_TYPE) other.getType());
+
+	
+	m_angle = other.m_angle;	
+}
+
 Orbiter::~Orbiter(){
 	GLCall(glDeleteBuffers(1, &m_vbo));
 }

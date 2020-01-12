@@ -1318,6 +1318,30 @@ void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
 	renderer.m_modules.insert(renderer.m_modules.begin() + layer_num, ptr);
 }
 
+
+void duplicate_module(std::shared_ptr<Module> ptr)
+{
+	
+	
+	Orbiter * p_orbiter = nullptr;
+	
+	if((p_orbiter = dynamic_cast<Orbiter *>(ptr.get())))
+	{
+		std::shared_ptr<Orbiter> copy = std::make_shared<Orbiter>(*(p_orbiter));
+		copy->setTimer(timer);
+		copy->setName(uniqueName(p_orbiter->getName()));
+		copy->init();
+		
+		renderer.m_modules.insert(renderer.m_modules.begin() + 0, copy);
+		
+		
+	}
+	
+	
+	
+	
+	printf("what ?!\n");
+}
 void remove_module(unsigned int id)
 {
 	renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
@@ -1419,15 +1443,25 @@ void module_list_dialog()
 					
 				}
 					
-			}		
+			}
+			
+			ImGui::SameLine();
+			
+			if(Button("Duplicate"))
+			{
+				if( current_module_id != -1)
+				{
+					duplicate_module(renderer.m_modules[current_module_id]);
+				}
+				
+			}			
+					
 		}		
 		
 		int inc = 0;
 		
 		for(auto module : renderer.m_modules)
-		{
-		
-			
+		{		
 			
 			ImGui::PushID(module.get());
 
@@ -2130,7 +2164,9 @@ int main(int argc, char** argv)
 			{
 				
 				if( current_module_id != -1)
+				{
 					draw_param_layout(renderer.m_modules[current_module_id]->param_layout);
+				}
 					
 				ImGui::End(); 
 

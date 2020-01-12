@@ -5,6 +5,7 @@
 #include <string>
 
 class BaseParam;
+
 struct SignalRange;
 
 enum SignalRangeMode
@@ -24,6 +25,14 @@ struct SignalRange
 		multiplier = _multiplier;		
 	}
 	
+	SignalRange(const SignalRange& other)
+	{
+		min = other.min;
+		max = other.max;
+		mode = other.mode;
+		multiplier = other.multiplier;
+	}
+	
 	int min = 0;
 	int max = 31;
 	SignalRangeMode mode;
@@ -33,36 +42,21 @@ struct SignalRange
 
 
 
-class ParamLayout{
-public:
-	ParamLayout(){ name = "default layout";}
-	ParamLayout(const char * _name): name(_name){
-		
-	}
-	
-	inline void addParam(std::shared_ptr<BaseParam> ptr){
-		params.push_back(ptr);
-	}
-	
-	
-	inline void setName(const char * _name ){ name = _name;}		
-	inline const char * getName(){ return name; }	
-	std::vector<std::shared_ptr<BaseParam> > params; 
-	
-	
-private:
-	const char * name;
-};
+
 
 class BaseParam
 {
 	public : 
 	
 		BaseParam(){};		
+		BaseParam(const BaseParam& other)
+		{
+			setName(other.getName());			
+		}
 		virtual ~BaseParam(){};
 		
 		inline void setName(const char * _name ){ name = _name;}		
-		inline const char * getName(){ return name; }
+		inline const char * getName() const { return name; }
 
 		inline void setSignalRange(SignalRange _signal ){ signal_range = _signal;}		
 		inline SignalRange getSignalRange(){ return signal_range; }
@@ -90,10 +84,12 @@ class Param : public BaseParam
 	public:
 		Param(): BaseParam(){}
 		
-		Param(const Param& other){}
+		Param(const Param& other) : BaseParam(other){
+			setValue(other.getValue());
+		}
 		~Param(){};
 		
-		inline T getValue() { return value; }
+		inline T getValue() const { return value; }
 		inline void setValue( T input ) { value = input; }
 	private:
 	
@@ -107,10 +103,12 @@ class Param<float> : public BaseParam
 	public:
 		Param(): BaseParam(){}
 		
-		Param(const Param& other){}
+		Param(const Param& other) : BaseParam(other){
+			setValue(other.getValue());
+		}
 		~Param(){};
 		
-		inline float getValue() 			 { return value;  }
+		inline float getValue() 	const    { return value;  }
 		inline void  setValue( float input ) { value = input; }
 		
 		inline float getFilteredValue(float * fft_maximums)
@@ -168,10 +166,13 @@ public :
 		
 	}
 	
-	ParamInfo(const ParamInfo& other){}
+	ParamInfo(const ParamInfo& other) : BaseParam(other)
+	{
+		
+	}
 	~ParamInfo(){};
 	
-	inline std::string_view getValue()
+	inline std::string_view getValue() const
 	{
 		return value;
 	}
@@ -189,14 +190,15 @@ class ParamSeparator : public BaseParam
 {
 	public:
 		ParamSeparator(){}
+		ParamSeparator(const ParamSeparator& other){}
 	private:
 };
 
 class ParamMenu : public BaseParam
 {
 	public: 
-		ParamMenu(){}
-		ParamMenu(std::vector<const char *> _entries){
+		ParamMenu() : BaseParam() {}
+		ParamMenu(std::vector<const char *> _entries) : BaseParam(){
 			int inc = 0;
 			for(const char * str : _entries)
 			{
@@ -210,9 +212,22 @@ class ParamMenu : public BaseParam
 			
 			value = 0;
 		}
-		ParamMenu(const ParamMenu& other){}
+		ParamMenu(const ParamMenu& other) : BaseParam(other){
+			
+			for(auto other_entry : other.entries)
+			{
+				std::pair< const char *, int> entry;
+				entry.first = other_entry.first;
+				entry.second = other_entry.second;
+				
+				entries.push_back(entry);
+				
+			}
+			
+			setValue(other.getValue());			
+		}
 		
-		inline int getValue(){ return value; }
+		inline int getValue() const { return value; }
 		inline void setValue(int _val){ value = _val; }
 		
 		std::vector<std::pair< const char *, int>> entries;
@@ -227,6 +242,11 @@ class ParamButton : public BaseParam
 	public:
 		ParamButton() : BaseParam(){
 			m_callback = [](){};
+		}
+		
+		ParamButton(const ParamButton& other) : BaseParam(other)
+		{
+			
 		}
 		
 		inline void setCallback(std::function<void()> callback)
@@ -251,7 +271,11 @@ class ParamColor3 : public BaseParam
 			color = glm::vec3(1.0f, 1.0f, 1.0f);
 		}
 		
-		inline glm::vec3 getValue(){
+		ParamColor3( const ParamColor3& other) : BaseParam(other)
+		{
+			setValue(other.getValue());
+		}
+		inline glm::vec3 getValue() const {
 			
 			return color;
 		}
@@ -285,7 +309,7 @@ public:
 		return m_callback;
 	}
 			
-	inline std::string getValue()
+	inline std::string getValue() const
 	{
 		return m_value;
 	}
@@ -299,14 +323,79 @@ private:
 	std::function<void()>  m_callback;
 };
 
-//~ template<>
-//~ class Param <glm::vec3>{
-		//~ 
-		//~ public :
-		//~ 
-		//~ 
-		//~ private :
-			//~ glm::vec3 value
-//~ }
+class ParamLayout{
+public:
+	ParamLayout(){ name = "default layout";}
+	ParamLayout(const char * _name): name(_name){
+		
+	}
+	
+	ParamLayout(const ParamLayout& other)
+	{
+		setName(other.getName());
+		for(auto param_ptr : other.params)
+		{
+			//~ Param<float> * p_float = nullptr;
+			//~ Param<int> * p_int = nullptr;
+			//~ Param<std::string> * p_string = nullptr;
+			//~ Param<const char *> * p_text = nullptr;
+			//~ Param<SignalRange> * p_signal_range = nullptr;
+			//~ ParamMenu * p_menu = nullptr;
+			//~ ParamSeparator * p_separator = nullptr;
+			
+			//~ if((p_float = dynamic_cast<Param<float> *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<Param<float> > p = std::make_shared<Param<float> >(*p_float);
+				//~ addParam(p);
+			//~ }
+			//~ else if((p_int = dynamic_cast<Param<int> *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<Param<int> > p = std::make_shared<Param<int> >(*p_int);
+				//~ addParam(p);				
+			//~ }
+			//~ else if((p_string = dynamic_cast<Param<std::string> *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<Param<std::string> > p = std::make_shared<Param<std::string> >(*p_string);
+				//~ addParam(p);				
+			//~ }			
+			//~ else if((p_text = dynamic_cast<Param<const char *> *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<Param<const char *> > p = std::make_shared<Param<const char *> >(*p_text);
+				//~ addParam(p);				
+			//~ }
+			//~ else if((p_signal_range = dynamic_cast<Param<SignalRange> *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<Param<SignalRange> > p = std::make_shared<Param<SignalRange> >(*p_signal_range);
+				//~ addParam(p);				
+			//~ }			
+			//~ else if((p_menu = dynamic_cast<ParamMenu *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<ParamMenu > p = std::make_shared<ParamMenu >(*p_menu);
+				//~ addParam(p);				
+			//~ }	
+			//~ else if((p_separator = dynamic_cast<ParamSeparator *>(param_ptr.get())))
+			//~ {
+				//~ std::shared_ptr<ParamSeparator> p = std::make_shared<ParamSeparator>(*p_separator);
+				//~ addParam(p);				
+			//~ }	
+		}
+		
+	}
+	
+	inline void addParam(std::shared_ptr<BaseParam> ptr){
+		params.push_back(ptr);
+	}
+	
+	
+	inline const char * getName() const { return name; }	
+	inline void setName(const char * _name ){ name = _name;}		
+	
+	std::vector<std::shared_ptr<BaseParam> > params; 
+	
+	
+private:
+	const char * name;
+};
+
 
 #endif /* PARAM_H */ 

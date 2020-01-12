@@ -26,6 +26,7 @@ class Module
 {
 	public:
 		Module(std::shared_ptr<Timer> timer);
+		Module(const Module & other);
 		virtual ~Module();
 		virtual void init(){};
 		virtual void update(float * fft_maximums){};
@@ -38,7 +39,7 @@ class Module
 		inline const std::string getName(){ return p_name->getValue();	}		
 		
 		inline void 	   setType(MODULE_TYPE _type){ type = _type; }		
-		inline MODULE_TYPE getType(){ return type; }		
+		inline MODULE_TYPE getType() const { return type; }		
 		
 		inline void 	   setBlendingMode(MODULE_BLENDING _mode){ blending_mode = _mode; }		
 		inline MODULE_BLENDING getBlendingMode(){ return blending_mode; }	
