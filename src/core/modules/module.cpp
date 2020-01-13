@@ -64,7 +64,7 @@ Module::Module(const Module & other)
 
 Module::~Module()
 {
-	printf("Deleting Module\n");
+	//~ printf("Deleting Module\n");
 }
 
 

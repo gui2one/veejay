@@ -3,7 +3,7 @@
 using json::JSON;
 JsonFileReader::JsonFileReader()
 {
-	std::cout << "JSON READER" << std::endl;
+	//~ std::cout << "JSON READER" << std::endl;
 }
 
 static void set_param_layout_values(std::shared_ptr<Module> module_ptr, JSON json_params)

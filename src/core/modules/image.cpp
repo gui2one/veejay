@@ -19,7 +19,11 @@ Image::Image(std::shared_ptr<Timer> timer)
 Image::Image(const Image& other) : Module(other)
 {
 	p_path = std::make_shared<ParamFilePath>(*(other.p_path));
+	p_path->setCallback( [this](){
+		this->loadFile(this->p_path->getValue().c_str());
+	});	
 	param_layout.addParam(p_path);
+	//~ m_texture = Texture(other.m_texture);
 }
 
 void Image::loadFile(const char * path)

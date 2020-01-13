@@ -5,7 +5,7 @@ Shader::Shader(){
 }
 
 Shader::~Shader(){
-	std::cout << "deleting shader \n";
+	//~ std::cout << "deleting shader \n";
 }
 
 std::string loadShaderFile(std::string path){

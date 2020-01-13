@@ -93,7 +93,7 @@ void Texture::unbind(){
 
 Texture::~Texture()
 {
-	std::cout << "deleting texture -- ID : " << id << "\n";
+	//~ std::cout << "deleting texture -- ID : " << id << "\n";
 	glDeleteTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
