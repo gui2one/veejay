@@ -1331,7 +1331,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	if((p_orbiter = dynamic_cast<Orbiter *>(ptr.get())))
 	{
 		std::shared_ptr<Orbiter> copy = std::make_shared<Orbiter>(*(p_orbiter));
-		copy->setTimer(timer);
+		//~ copy->setTimer(timer);
 		copy->setName(uniqueName(p_orbiter->getName()));
 		copy->init();
 		
@@ -1340,7 +1340,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	else if((p_circles = dynamic_cast<Circles *>(ptr.get())))
 	{
 		std::shared_ptr<Circles> copy = std::make_shared<Circles>(*(p_circles));
-		copy->setTimer(timer);
+		//~ copy->setTimer(timer);
 		copy->setName(uniqueName(p_circles->getName()));
 		copy->init();
 		
@@ -1349,7 +1349,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	else if((p_image = dynamic_cast<Image *>(ptr.get())))
 	{
 		std::shared_ptr<Image> copy = std::make_shared<Image>(*(p_image));
-		copy->setTimer(timer);
+		//~ copy->setTimer(timer);
 		copy->setName(uniqueName(p_image->getName()));
 		copy->init();
 		
@@ -1358,7 +1358,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	else if((p_particles = dynamic_cast<Particles *>(ptr.get())))
 	{
 		std::shared_ptr<Particles> copy = std::make_shared<Particles>(*(p_particles));
-		copy->setTimer(timer);
+		//~ copy->setTimer(timer);
 		copy->setName(uniqueName(p_particles->getName()));
 		copy->init();
 		

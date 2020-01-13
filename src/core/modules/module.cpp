@@ -39,7 +39,7 @@ Module::Module(std::shared_ptr<Timer> timer){
 Module::Module(const Module & other)
 {
 	param_layout = ParamLayout(other.param_layout);
-	printf("other!!!!\n");
+	//~ printf("other!!!!\n");
 	m_timer = other.m_timer;
 	
 	p_name = std::make_shared<Param<std::string> >(*(other.p_name));
