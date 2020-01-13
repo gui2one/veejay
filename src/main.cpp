@@ -498,7 +498,6 @@ std::string uniqueName(std::string _str)
 	return _str;
 }
 
-
 void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> parent_param = nullptr, std::function<void()> callback = [](){})
 {
 	
@@ -537,14 +536,17 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 			//~ printf("%s hovered\n", p_float->getName());
 			ImVec2 p = ImGui::GetCursorScreenPos();
 			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(10 + p.x, p.y + ImGui::GetFontSize()), IM_COL32(230,230,230,255));				
+		}	
+		
+			
+		ImGui::SetNextWindowSize(ImVec2(300.0,0));
+		if (ImGui::BeginPopupContextItem("item context menu"))
+		{
+			std::shared_ptr<Param<SignalRange> > signal_temp = std::make_shared<Param<SignalRange> >();
+			UI_widget(signal_temp , param_ptr);
+			
+			ImGui::EndPopup();
 		}		
-					if (ImGui::BeginPopupContextItem("item context menu"))
-					{
-						//~ ImGui::Text(p_float->getName());
-						//~ UI_widget(p_float->
-						
-						ImGui::EndPopup();
-					}		
 					
 
 		
@@ -1161,6 +1163,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 
 	
 }
+
 
 void register_action(std::shared_ptr<Action> action)
 {
@@ -1905,12 +1908,13 @@ void sound_dialog()
 }
 
 
+
 void parameter_signal_dialog()
 {
 	
-	ImGuiWindowFlags flags = ImGuiWindowFlags_NoDocking;
+	//~ ImGuiWindowFlags flags = ImGuiWindowFlags_NoDocking;
 	
-	if(ImGui::Begin("Signal", &signal_range_dialog_opened, flags)) //, &signal_range_dialog_opened, flags))
+	if(ImGui::Begin("Signal"), true) //, &signal_range_dialog_opened, flags))
 	{
 		for( auto module : renderer.m_modules)
 		{			
@@ -1939,9 +1943,11 @@ void parameter_signal_dialog()
 				}
 			}
 		}
+		
+		ImGui::End();
 	}
 	
-	ImGui::End();
+	
 }
 
 
@@ -2147,7 +2153,7 @@ int main(int argc, char** argv)
 			sound_dialog();
 			noise_dialog();
 			
-			if (ImGui::Begin("Main Menu",  &active))
+			if (ImGui::Begin("Main Menu"),  &active)
 			{
 				
 				if(ImGui::BeginMenu("File"))
@@ -2191,6 +2197,7 @@ int main(int argc, char** argv)
 					
 					ImGui::EndMenu();
 				}	
+				
 				ImGui::End(); 
 			}
 			
@@ -2201,22 +2208,16 @@ int main(int argc, char** argv)
 				
 				float _ratio = (float)live_w_width / (float)live_w_height;
 				ImGui::Image((void*)(uintptr_t)renderer.m_texture, ImVec2(avail_width,(int)((float)avail_width / _ratio)),ImVec2(0,1), ImVec2(1,0));
+				
 				ImGui::End(); 
 			}
-			
-			if (ImGui::Begin("Noise Viewer"), &active)
-			{
-				//~ int avail_width = ImGui::GetContentRegionAvail().x;				
 				
-				
-				//~ ImGui::Image((void*)(uintptr_t)noise_texture, ImVec2(avail_width,(int)((float)avail_width)),ImVec2(0,1), ImVec2(1,0));
-				ImGui::End(); 
-			}			
 			
 			
 			if (ImGui::Begin("Player"), &active)
 			{
 				draw_param_layout(player_layout);
+				
 				ImGui::End(); 
 			}
 			
