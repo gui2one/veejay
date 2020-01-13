@@ -524,12 +524,30 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		float new_val = p_float->getValue();
 		float old_val = new_val;
 
+
 		
 		sprintf((char *)_name, "##%s", p_float->getName());
 
 		ImGui::Columns(3);
 		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text(p_float->getName() );
+		
+		if(ImGui::IsItemHovered())
+		{
+			//~ printf("%s hovered\n", p_float->getName());
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(10 + p.x, p.y + ImGui::GetFontSize()), IM_COL32(230,230,230,255));				
+		}		
+					if (ImGui::BeginPopupContextItem("item context menu"))
+					{
+						//~ ImGui::Text(p_float->getName());
+						//~ UI_widget(p_float->
+						
+						ImGui::EndPopup();
+					}		
+					
+
+		
 		ImGui::NextColumn();
 		ImGui::PushItemWidth(-1);
 		if( ImGui::DragFloat((const char *) _name, &new_val, 0.05f))
@@ -592,7 +610,7 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		
 		
 
-				
+			
 		
 	}else if((p_int    = dynamic_cast<Param<int> *>  (param_ptr.get())) ){
 		int _val = p_int->getValue();
@@ -1139,6 +1157,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 	
 	ImGui::Columns(1);
 	ImGui::Spacing();
+	
+
 	
 }
 
@@ -1883,6 +1903,7 @@ void sound_dialog()
 		ImGui::End();
 	}
 }
+
 
 void parameter_signal_dialog()
 {
