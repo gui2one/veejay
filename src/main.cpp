@@ -1344,8 +1344,6 @@ void add_module_ptr(std::shared_ptr<Module> ptr, unsigned int layer_num = 0)
 
 void duplicate_module(std::shared_ptr<Module> ptr)
 {
-	
-	
 	Orbiter * p_orbiter = nullptr;
 	Circles * p_circles = nullptr;
 	Image   * p_image = nullptr;
@@ -1354,7 +1352,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	if((p_orbiter = dynamic_cast<Orbiter *>(ptr.get())))
 	{
 		std::shared_ptr<Orbiter> copy = std::make_shared<Orbiter>(*(p_orbiter));
-		//~ copy->setTimer(timer);
+		
 		copy->setName(uniqueName(p_orbiter->getName()));
 		copy->init();
 		
@@ -1363,7 +1361,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	else if((p_circles = dynamic_cast<Circles *>(ptr.get())))
 	{
 		std::shared_ptr<Circles> copy = std::make_shared<Circles>(*(p_circles));
-		//~ copy->setTimer(timer);
+
 		copy->setName(uniqueName(p_circles->getName()));
 		copy->init();
 		
@@ -1372,7 +1370,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	else if((p_image = dynamic_cast<Image *>(ptr.get())))
 	{
 		std::shared_ptr<Image> copy = std::make_shared<Image>(*(p_image));
-		//~ copy->setTimer(timer);
+		
 		copy->setName(uniqueName(p_image->getName()));
 		copy->init();
 		
@@ -1381,7 +1379,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 	else if((p_particles = dynamic_cast<Particles *>(ptr.get())))
 	{
 		std::shared_ptr<Particles> copy = std::make_shared<Particles>(*(p_particles));
-		//~ copy->setTimer(timer);
+
 		copy->setName(uniqueName(p_particles->getName()));
 		copy->init();
 		
@@ -1391,6 +1389,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 void remove_module(unsigned int id)
 {
 	renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
+	
 	if(renderer.m_modules.size() == 0)
 		current_module_id = -1;
 }
@@ -1400,8 +1399,7 @@ void remove_module_ptr(std::shared_ptr<Module> module_ptr)
 	auto it = std::find(renderer.m_modules.begin(), renderer.m_modules.end(), module_ptr);
 	
 	if( it != renderer.m_modules.end())
-	{
-		
+	{	
 		int index = std::distance(renderer.m_modules.begin(), it);
 		remove_module(index);
 	}
@@ -1415,11 +1413,8 @@ void module_list_dialog()
 		const char * choices[] = {"Orbiter", "Circles", "Image", "Particles"};
 		static int choice = 1;
 		SetNextItemWidth(100);
-		if(BeginCombo("##label", choices[choice - 1])){
-			
-			//~ if(Selectable("choose")){
-				
-			//~ }
+		if(BeginCombo("##label", choices[choice - 1]))
+		{
 			if(Selectable("Orbiter", false)){
 				choice = (int)MODULE_TYPE_ORBITER;
 			}
@@ -1437,6 +1432,7 @@ void module_list_dialog()
 		}
 		
 		SameLine();
+		
 		if(Button("Add Module"))
 		{
 			if(current_module_id > 0)
@@ -1457,11 +1453,12 @@ void module_list_dialog()
 					remove_module_ptr
 			);
 			
-			
 			register_action(action);	
 			
 		}
+		
 		SameLine();
+		
 		if( renderer.m_modules.size() > 0)
 		{
 			if(Button("Remove"))
@@ -1474,9 +1471,7 @@ void module_list_dialog()
 																							current_module_id, 
 																							add_module_ptr, 
 																							remove_module_ptr
-																							);
-					
-					
+																							);				
 					register_action(action);						
 
 					
@@ -1486,9 +1481,7 @@ void module_list_dialog()
 					}else if(current_module_id > (int)(renderer.m_modules.size() -1)){
 						current_module_id = renderer.m_modules.size() - 1;
 					}
-					
-				}
-					
+				}	
 			}
 			
 			ImGui::SameLine();
@@ -1504,10 +1497,7 @@ void module_list_dialog()
 																							add_module_ptr, 
 																							remove_module_ptr
 																							);
-					
-					
-					register_action(action);						
-
+					register_action(action);		
 					
 					if(renderer.m_modules.size() == 0)
 					{
@@ -1516,29 +1506,22 @@ void module_list_dialog()
 						current_module_id = renderer.m_modules.size() - 1;
 					}					
 				}
-				
-			}			
-					
+			}
 		}		
 		
 		int inc = 0;
 		
 		for(auto module : renderer.m_modules)
-		{		
-			
+		{
 			ImGui::PushID(module.get());
 
 			ImVec2 p = ImGui::GetCursorScreenPos();
-			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(20,20,40,255))	;				
+			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(20,20,40,255))	;		
+					
 			if( Selectable("##title", inc == current_module_id, 0, ImVec2( ImGui::GetContentRegionAvailWidth(), GetFontSize() * 1.0 )))
 			{
-
 				current_module_id = inc;
 			}
-			
-			
-			
-	
 			
 			ImGuiDragDropFlags src_flags = 0;
 			
@@ -1582,9 +1565,9 @@ void module_list_dialog()
             
             ImGui::SetCursorPosY(GetCursorPosY() + 5.0);
             
-            
-			UI_widget(module->p_opacity);
-			
+            ////
+				UI_widget(module->p_opacity);
+			////
 			
 			ImGui::PopID();			
 
@@ -1743,10 +1726,8 @@ void compute_fft_maximums(float threshold, float exponent)
 void display_fft_values()
 {
 	ImGui::Text("FFT :");
-	ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);
-	
-	//~ static float threshold  = 0.1;
-	//~ static float exponent  = 1.5;
+	ImGui::BeginChild("fft_child", ImVec2(ImGui::GetContentRegionAvail().x,200.0f) , true);	
+
 	if( ImGui::SliderFloat("##Threshold", &fft_threshold, 0.0, 1.0, "Threshold = %.3f"))
 	{
 		
@@ -1757,7 +1738,6 @@ void display_fft_values()
 		
 	}		
 	
-	//~ double max = abs(fft_out[0][0]);
 	int num_bands = NUM_BANDS;
 	int fft_num_samples = 256;
 	int num_per_band = fft_num_samples / num_bands;
@@ -1765,7 +1745,6 @@ void display_fft_values()
 	{		
 		double height;
 		height = fft_values[i] * 200.0f;
-		
 		
 		ImGui::GetWindowDrawList()->AddRectFilled(
 			ImVec2(ImGui::GetCursorScreenPos().x + i*2*num_per_band, ImGui::GetCursorScreenPos().y),
@@ -1793,7 +1772,6 @@ void display_fft_values()
 		);			
 	}
 	
-	
 	ImGui::EndChild();	
 }
 
@@ -1816,13 +1794,13 @@ void sound_dialog()
 				{
 					choice = i;
 				}
-				
 			}
 
 			ImGui::EndCombo();
 		}
 		
-		if(ImGui::Button("Change")){
+		if(ImGui::Button("Change"))
+		{
 			sound_player_mode = (SOUND_PLAYER_MODE)choice;
 		}
 		
@@ -1946,8 +1924,6 @@ void parameter_signal_dialog()
 		
 		ImGui::End();
 	}
-	
-	
 }
 
 
@@ -1970,7 +1946,6 @@ int main(int argc, char** argv)
 		sound_buffer[i] = 0.5;
 	}
 	
-
 	//sound thread
 	std::string str_wav_path = "/home/pi/Downloads/guitar_riff.wav";
 	WAV_PATH = (char *)(str_wav_path.c_str());
@@ -2017,7 +1992,6 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	
-	
 	ui_window = glfwCreateWindow(w_width, w_height,"UI Window", NULL, NULL);
 	live_window = glfwCreateWindow(live_w_width, live_w_height,"other window", NULL, ui_window);
 	
@@ -2037,14 +2011,15 @@ int main(int argc, char** argv)
 	glfwSetKeyCallback(ui_window, UI_key_callback);
 	glfwMakeContextCurrent(ui_window);
 	
+	////
+		glewInit();
 	
-	glewInit();
-	
+		printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
+		printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));		
+	////
 	
 
-	
-	printf("GL_VERSION : %s\n", glGetString(GL_VERSION));
-	printf("GL_SHADING_LANGUAGE_VERSION : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 	
 	
 
@@ -2069,8 +2044,6 @@ int main(int argc, char** argv)
     // add second font
     small_font = io.Fonts->AddFontFromFileTTF("../src/fonts/ProggyTiny.ttf", 10.0f);
     
-    
-    
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(ui_window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);    
@@ -2088,8 +2061,8 @@ int main(int argc, char** argv)
 
 
 	timer->start();
-	int cur_time = 0;
-	int old_time = 0;
+	//~ int cur_time = 0;
+	//~ int old_time = 0;
 	while (!glfwWindowShouldClose(live_window)){
 		
 		if( noise_trigger_update)
@@ -2109,9 +2082,9 @@ int main(int argc, char** argv)
 		
 		timer->update();
 		
-		cur_time = timer->getMillis();
+		//~ cur_time = timer->getMillis();
 		
-		old_time = cur_time;
+		//~ old_time = cur_time;
 		
 		glfwMakeContextCurrent(ui_window);
 		
