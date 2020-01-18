@@ -35,6 +35,7 @@
 // forward declarations ...
 void display_fft_values();
 void register_action(std::shared_ptr<Action> action);
+void create_signal_popup(std::shared_ptr<BaseParam> param_ptr);
 
 std::shared_ptr<Module> add_module(MODULE_TYPE type, unsigned int layer_num = 0);
 void remove_module(unsigned int id);
@@ -501,7 +502,7 @@ std::string uniqueName(std::string _str)
 void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> parent_param = nullptr, std::function<void()> callback = [](){})
 {
 	
-	float LABEL_WIDTH = ImGui::GetContentRegionAvailWidth() * 0.25f;
+	float LABEL_WIDTH = ImGui::GetContentRegionAvail().x * 0.25f;
 	
 	Param<float> * p_float  = nullptr;
 	Param<int> *   p_int    = nullptr;
@@ -539,14 +540,16 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		}	
 		
 			
-		ImGui::SetNextWindowSize(ImVec2(300.0,0));
-		if (ImGui::BeginPopupContextItem("item context menu"))
-		{
-			std::shared_ptr<Param<SignalRange> > signal_temp = std::make_shared<Param<SignalRange> >();
-			UI_widget(signal_temp , param_ptr);
+		//~ ImGui::SetNextWindowSize(ImVec2(300.0,0));
+		//~ if (ImGui::BeginPopupContextWindow("item context menu"))
+		//~ {
+			//~ std::shared_ptr<Param<SignalRange> > signal_temp = std::make_shared<Param<SignalRange> >();
+			//~ UI_widget(signal_temp , param_ptr);
 			
-			ImGui::EndPopup();
-		}		
+			//~ ImGui::EndPopup();
+		//~ }		
+		
+		create_signal_popup(param_ptr);
 					
 
 		
@@ -727,6 +730,9 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		
 		ImGui::Text(parent_param->getName() );
 		ImGui::Separator();
+		
+		ImGui::Indent();
+		
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(-1, LABEL_WIDTH);
 		ImGui::Text("Min Band :" );
@@ -988,6 +994,8 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		
 		ImGui::PopItemWidth();
 		ImGui::Columns(1);
+		
+		ImGui::Unindent();
 		ImGui::PopID();
 		
 	}else if((p_menu   = dynamic_cast<ParamMenu *>   (param_ptr.get()) )){
@@ -1386,6 +1394,7 @@ void duplicate_module(std::shared_ptr<Module> ptr)
 		renderer.m_modules.insert(renderer.m_modules.begin() + 0, copy);
 	}	
 }
+
 void remove_module(unsigned int id)
 {
 	renderer.m_modules.erase(renderer.m_modules.begin() + id, renderer.m_modules.begin() + id + 1);
@@ -1516,9 +1525,9 @@ void module_list_dialog()
 			ImGui::PushID(module.get());
 
 			ImVec2 p = ImGui::GetCursorScreenPos();
-			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvailWidth() + p.x, p.y + ImGui::GetFontSize()), IM_COL32(20,20,40,255))	;		
+			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(ImGui::GetContentRegionAvail().x + p.x, p.y + ImGui::GetFontSize()), IM_COL32(20,20,40,255))	;		
 					
-			if( Selectable("##title", inc == current_module_id, 0, ImVec2( ImGui::GetContentRegionAvailWidth(), GetFontSize() * 1.0 )))
+			if( Selectable("##title", inc == current_module_id, 0, ImVec2( ImGui::GetContentRegionAvail().x, GetFontSize() * 1.0 )))
 			{
 				current_module_id = inc;
 			}
@@ -1584,10 +1593,12 @@ void draw_param_layout(ParamLayout& layout)
 {
 	ImGui::Text(layout.getName());
 	ImGui::Separator();
+	ImGui::Indent();
 	for(auto param : layout.params){
 		UI_widget(param);
 		
 	}
+	ImGui::Unindent();
 }
 
 //// GLFW callbacks
@@ -1910,6 +1921,7 @@ void parameter_signal_dialog()
 			{
 				if(ImGui::CollapsingHeader(module->getName().c_str()))
 				{
+					
 					for(auto param : module->param_layout.params)
 					{
 						if( param->getUseSignalRange())
@@ -1917,7 +1929,10 @@ void parameter_signal_dialog()
 							//~ ImGui::Text(param->getName());
 							UI_widget(module->p_signal_range, param);
 						}
-					}	
+					}
+					
+					
+						
 				}
 			}
 		}
@@ -1927,6 +1942,88 @@ void parameter_signal_dialog()
 }
 
 
+struct signal_popup_data
+{
+	std::shared_ptr<BaseParam> param_ptr;
+	ImVec2 win_pos;
+	bool is_opened = true;
+};
+
+std::vector<signal_popup_data > signal_popups;
+
+void create_signal_popup(std::shared_ptr<BaseParam> param_ptr)
+{
+	if( ImGui::IsMouseReleased(1) && ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))
+	{
+		signal_popup_data data;
+		data.is_opened = true;
+		data.param_ptr = param_ptr;
+		data.win_pos = ImGui::GetMousePos();
+		
+		signal_popups.push_back(data);
+		std::cout << "Popups num : " << signal_popups.size() << std::endl;
+	}
+}
+
+void draw_signal_popups()
+{
+	
+	//// clean popups array by removing closed ones
+	for(int i=(int)(signal_popups.size()-1); i >= 0; i--)
+	{
+		if(signal_popups[i].is_opened == false)
+		{
+			std::cout << "deleting popup id " << i << std::endl;
+			signal_popups.erase(signal_popups.begin() + i  , signal_popups.begin() + i + 1);
+		}
+	} 
+	
+	
+	int inc = 0;
+	for(size_t i = 0; i < signal_popups.size(); i++)
+	{
+		if( signal_popups[i].is_opened )
+		{
+			//~ static bool is_opened = true;
+			//~ ImGui::SetNextWindowPos(popup_data.win_pos);
+			//~ ImGui::SetNextWindowSize(ImVec2(200.0f,100.0f));
+			//~ ImGui::SetNextWindowPos(popup_data.win_pos);
+			//~ ImGui::SetNextWindowSize(ImVec2(200.0f,100.0f));
+			
+			char id_buffer[512];
+			char name_buffer[514];
+			sprintf(id_buffer, "signal_popup_%d", inc);
+			sprintf(name_buffer, "##%s", id_buffer);
+			
+			ImGui::PushID(id_buffer);
+			
+			ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar ;
+			flags |= ImGuiWindowFlags_Popup;
+			flags |= ImGuiWindowFlags_NoSavedSettings ;
+			if(ImGui::Begin(name_buffer, NULL, ImGuiWindowFlags_NoTitleBar))
+			{
+			
+				ImGui::Text(signal_popups[i].param_ptr->getName());
+				
+				//~ if( ImGui::IsMouseReleased(0) && ImGui::IsItemHovered() == false)
+				if(ImGui::Button("X"))
+				{
+					signal_popups[i].is_opened = false;
+				}
+				
+				
+				std::shared_ptr<Param<SignalRange> > signal_temp = std::make_shared<Param<SignalRange> >();
+				UI_widget(signal_temp , signal_popups[i].param_ptr);	
+				
+				ImGui::End();			
+			}	
+				
+			
+			ImGui::PopID();
+			inc++;
+		}
+	}
+}
 int main(int argc, char** argv)
 {
 	
@@ -2125,6 +2222,8 @@ int main(int argc, char** argv)
 			actions_dialog();
 			sound_dialog();
 			noise_dialog();
+			
+			draw_signal_popups();
 			
 			if (ImGui::Begin("Main Menu"),  &active)
 			{
