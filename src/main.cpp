@@ -1284,6 +1284,10 @@ void loadFromFile()
 	VJ_FILE_DATA data = reader.load(current_explorer_file_path_V2, timer);
 	renderer.m_modules = data.modules; 
 	
+	if( current_explorer_file_path_V2 != "" )
+	{
+		glfwSetWindowTitle(ui_window, current_explorer_file_path_V2.c_str()); 
+	}	
 	//~ for(auto module : renderer.m_modules)
 	//~ {
 		//~ module->setTimer(timer);
@@ -1906,6 +1910,46 @@ void sound_dialog()
 }
 
 
+void save_session_file()
+{
+	if( current_explorer_file_path_V2 != "")
+	{
+		std::cout << "scenefile path is : " << current_explorer_file_path_V2 << std::endl;
+		
+		std::ofstream output_file;
+		output_file.open("VEEJAY_SESSION.txt");
+	
+		output_file << current_explorer_file_path_V2 ;
+		output_file.close();		
+	}
+}
+
+void load_session_file()
+{
+	//~ printf("Load Session Function\n");
+	std::ifstream input_file("VEEJAY_SESSION.txt");
+	
+	std::string line;
+	std::vector<std::string> session_lines;
+	
+	if( input_file.is_open() )
+	{
+		//~ printf("session file opened \n");
+		while( std::getline(input_file, line))
+		{
+			session_lines.push_back(line);
+		}
+		
+		input_file.close();
+	}
+	
+	if( session_lines.size() > 0)
+	{
+		current_explorer_file_path_V2 = session_lines[0];
+		loadFromFile();
+	}
+}
+
 
 void parameter_signal_dialog()
 {
@@ -2033,6 +2077,7 @@ void draw_signal_popups()
 		}
 	}
 }
+
 int main(int argc, char** argv)
 {
 	
@@ -2247,6 +2292,14 @@ int main(int argc, char** argv)
 							loadFromFile();
 						};
 					}
+					
+					if(ImGui::MenuItem("load last"))
+					{
+						
+						load_session_file();
+						
+					}
+										
 					if(ImGui::MenuItem("save"))
 					{
 						//~ printf("save ????\n");
@@ -2363,6 +2416,9 @@ int main(int argc, char** argv)
 	}
 	
 		
+		
+	save_session_file();
+	
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
