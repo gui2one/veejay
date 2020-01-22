@@ -1,6 +1,8 @@
 #include "particle_system.h"
 
 
+
+
 ParticleSystem::ParticleSystem(std::shared_ptr<Timer> timer)
 {
 	m_timer = timer;
@@ -15,43 +17,7 @@ ParticleSystem::ParticleSystem(const ParticleSystem& other)
 	m_particles = std::vector<Particle>();
 	m_particles.clear();
 	
-	//~ for(auto particle : other.m_particles)
-	//~ {
-		//~ Particle p;
-		//~ m_particles.push_back(p);
-	//~ }
-	
-	//~ for(auto force : other.getForces())
-	//~ {
-		//~ DirectionalForce * p_direct = nullptr;
-		
-		//~ if((p_direct = dynamic_cast<DirectionalForce *>(force.get())))
-		//~ {
-			//~ std::shared_ptr<DirectionalForce> f = std::make_shared<DirectionalForce>(*p_direct);
-			//~ addForce(f);
-			//~ printf("just duplicated a DirectionForce\n");
-		//~ }
-		
-	//~ }
-	
-	//~ for(auto emitter : other.getEmitters())
-	//~ {
-		//~ PointEmitter * p_point = nullptr;
-		//~ RectEmitter * p_rect = nullptr;
-		
-		//~ if((p_point = dynamic_cast<PointEmitter *>(emitter.get())))
-		//~ {
-			//~ std::shared_ptr<PointEmitter> copy = std::make_shared<PointEmitter>(*p_point);
-			//~ addEmitter(copy);
-			//~ printf("just duplicated a PointEmitter\n");
-		//~ }		
-		//~ else if((p_rect = dynamic_cast<RectEmitter *>(emitter.get())))
-		//~ {
-			//~ std::shared_ptr<RectEmitter> copy = std::make_shared<RectEmitter>(*p_rect);
-			//~ addEmitter(copy);
-			//~ printf("just duplicated a RectEmitter\n");
-		//~ }				
-	//~ }
+
 }
 
 ParticleSystem::~ParticleSystem()
@@ -212,4 +178,17 @@ void ParticleSystem::addEmitter(PARTICLE_EMITTER_TYPE type)
 void ParticleSystem::addEmitter(std::shared_ptr<Emitter> ptr)
 {
 	m_emitters.push_back(ptr);
+}
+
+//// implement Forces
+
+PointForce::PointForce() : Force(), magnitude(1.0), position(glm::vec2(0.0f,0.0f))
+{
+	
+}
+
+PointForce::PointForce(const PointForce &other)
+{
+	magnitude = other.magnitude;
+	position = other.position;
 }

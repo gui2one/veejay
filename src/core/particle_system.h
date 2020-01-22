@@ -41,6 +41,18 @@ private:
 
 };
 
+class PointForce : public Force
+{
+public :
+	PointForce();
+	PointForce(const PointForce &other);
+	
+	float magnitude;
+	glm::vec2 position;
+private:
+	
+};
+
 class Emitter{
 public :
 	Emitter(){

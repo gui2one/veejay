@@ -1162,6 +1162,15 @@ void UI_widget(std::shared_ptr<BaseParam> param_ptr, std::shared_ptr<BaseParam> 
 		
 	}
 
+
+	//~ ImGui::SetCursorPosX( ImGui::GetCursorPosX() - 5);
+	//~ ImGui::SetCursorPosY( ImGui::GetCursorPosY() - 21);
+	//~ ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	//~ flags |= ImGuiWindowFlags_NoInputs;
+	
+	//~ ImGui::BeginChild("##child", ImVec2(ImGui::GetContentRegionAvail().x, 20.0),true, flags);
+	
+	//~ ImGui::EndChild();
 	ImGui::PopID();
 	ImGui::PopFont();
 	
