@@ -32,9 +32,11 @@ class Particles: public Module
 		
 		std::shared_ptr<Param<float> > p_emit_amount;
 		std::shared_ptr<Param<float> > p_gravity;
+		std::shared_ptr<Param<float> > p_point_force_amount;
 		std::shared_ptr<ParamInfo> p_info;
 		
 		std::shared_ptr<DirectionalForce> gravity_force;
+		std::shared_ptr<PointForce> point_force;
 		unsigned int m_vbo = 0;
 		std::vector<float> m_vertices;
 		std::vector<gl_particle> m_gl_particles;

@@ -45,10 +45,12 @@ class PointForce : public Force
 {
 public :
 	PointForce();
-	PointForce(const PointForce &other);
+	PointForce(const PointForce & other);
+	
+	void funcA(){}
 	
 	float magnitude;
-	glm::vec2 position;
+	glm::vec3 position;
 private:
 	
 };

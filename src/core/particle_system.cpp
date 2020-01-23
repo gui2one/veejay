@@ -42,11 +42,20 @@ void ParticleSystem::update()
 		for( auto force : m_forces)
 		{
 			DirectionalForce * p_direct = nullptr;
+			PointForce * p_point = nullptr;
 			
 			if( (p_direct = dynamic_cast<DirectionalForce *>(force.get())))
 			{
 				m_particles[i].velocity.x += p_direct->magnitude.x ;
 				m_particles[i].velocity.y += p_direct->magnitude.y;
+			}else if((p_point = dynamic_cast<PointForce *>(force.get())))
+			{
+
+				glm::vec3 dir = glm::vec3(0.0f, 0.0f, 0.0f);
+				dir = glm::normalize(m_particles[i].position - p_point->position);
+				float distance = glm::distance(m_particles[i].position, p_point->position);
+				m_particles[i].velocity.x += dir.x * p_point->magnitude * (1.0/ ( distance * distance));
+				m_particles[i].velocity.y += dir.y * p_point->magnitude * (1.0/ ( distance * distance));
 			}
 		}
 		
@@ -182,12 +191,12 @@ void ParticleSystem::addEmitter(std::shared_ptr<Emitter> ptr)
 
 //// implement Forces
 
-PointForce::PointForce() : Force(), magnitude(1.0), position(glm::vec2(0.0f,0.0f))
+PointForce::PointForce() : Force(), magnitude(1.0), position(glm::vec3(0.0f, 0.0f, 0.0f))
 {
 	
 }
 
-PointForce::PointForce(const PointForce &other)
+PointForce::PointForce(const PointForce & other) : Force(other)
 {
 	magnitude = other.magnitude;
 	position = other.position;

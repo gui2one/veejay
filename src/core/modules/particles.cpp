@@ -19,6 +19,11 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	p_gravity->setName("Gravity");
 	p_gravity->setValue(-0.05f);
 	param_layout.addParam(p_gravity);
+
+	p_point_force_amount = std::make_shared<Param<float> >();
+	p_point_force_amount->setName("Point Force");
+	p_point_force_amount->setValue(0.05f);
+	param_layout.addParam(p_point_force_amount);
 	
 	p_emit_amount = std::make_shared<Param<float> >();
 	p_emit_amount->setName("Emit Amount");
@@ -33,6 +38,9 @@ Particles::Particles(std::shared_ptr<Timer> timer)
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getValue());
 	m_psystem->addForce(gravity_force);		
 
+	point_force = std::make_shared<PointForce>();
+	point_force->magnitude = 1.0f;
+	m_psystem->addForce(point_force);		
 }
 
 Particles::Particles(const Particles& other) : Module(other)
@@ -50,6 +58,9 @@ Particles::Particles(const Particles& other) : Module(other)
 	p_gravity = std::make_shared<Param<float> >(*(other.p_gravity));
 	param_layout.addParam(p_gravity);
 	
+	p_point_force_amount = std::make_shared<Param<float> >(*(other.p_point_force_amount));
+	param_layout.addParam(p_point_force_amount);
+	
 	p_emit_amount = std::make_shared<Param<float> >(*(other.p_emit_amount));
 	param_layout.addParam(p_emit_amount);
 	
@@ -58,6 +69,9 @@ Particles::Particles(const Particles& other) : Module(other)
 	
 	gravity_force = std::make_shared<DirectionalForce>(*(other.gravity_force));	
 	m_psystem->addForce(gravity_force);
+	
+	point_force = std::make_shared<PointForce>(*(other.point_force));	
+	m_psystem->addForce(point_force);	
 	
 	
 	
@@ -88,6 +102,7 @@ void Particles::update(float * fft_maximums)
 
 	
 	gravity_force->magnitude = glm::vec2(0.0f, p_gravity->getFilteredValue(fft_maximums));
+	point_force->magnitude = p_point_force_amount->getFilteredValue(fft_maximums);
 	m_psystem->emitParticles(p_emit_amount->getFilteredValue(fft_maximums));
 	
 	m_psystem->update();
