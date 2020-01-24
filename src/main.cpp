@@ -1267,7 +1267,7 @@ void saveToFile()
 	
 	
 	
-	output_file << writer.json_data; ;
+	output_file << writer.json_data;
 	output_file.close();
 	
 	b_explorer_opened = false;
@@ -1281,12 +1281,12 @@ void saveToFile()
 void loadFromFile()
 {
 	JsonFileReader reader;
-	VJ_FILE_DATA data = reader.load(current_explorer_file_path_V2, timer);
+	VJ_FILE_DATA data = reader.load(current_scene_file_path, timer);
 	renderer.m_modules = data.modules; 
-	
-	if( current_explorer_file_path_V2 != "" )
+	//~ current_scene_file_path = current_explorer_file_path_V2;
+	if( current_scene_file_path != "" )
 	{
-		glfwSetWindowTitle(ui_window, current_explorer_file_path_V2.c_str()); 
+		glfwSetWindowTitle(ui_window, current_scene_file_path.c_str()); 
 	}	
 	//~ for(auto module : renderer.m_modules)
 	//~ {
@@ -1912,16 +1912,27 @@ void sound_dialog()
 
 void save_session_file()
 {
-	if( current_explorer_file_path_V2 != "")
+	if( current_scene_file_path != "")
 	{
-		std::cout << "scenefile path is : " << current_explorer_file_path_V2 << std::endl;
+		std::cout << "Saving Session : " << current_scene_file_path << std::endl;
 		
 		std::ofstream output_file;
 		output_file.open("VEEJAY_SESSION.txt");
 	
-		output_file << current_explorer_file_path_V2 ;
+		output_file << current_scene_file_path << std::endl;
+		output_file << sound_player_wave_file_path_param->getValue() << std::endl;
+		
 		output_file.close();		
 	}
+}
+
+static std::string remove_end_of_line(std::string _str){
+	
+	std::string str = _str;
+	
+	str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
+	
+	return str;
 }
 
 void load_session_file()
@@ -1945,7 +1956,10 @@ void load_session_file()
 	
 	if( session_lines.size() > 0)
 	{
-		current_explorer_file_path_V2 = session_lines[0];
+		
+		current_scene_file_path = remove_end_of_line(session_lines[0]);
+		printf("Loading Session : %s\n", current_scene_file_path.c_str());
+		WAV_PATH = (char *)(remove_end_of_line(session_lines[1]).c_str());
 		loadFromFile();
 	}
 }
@@ -2289,6 +2303,7 @@ int main(int argc, char** argv)
 						//~ printf("load ????\n");
 						b_explorer_opened = true;
 						current_explorer_callback = [](){
+							current_scene_file_path = current_explorer_file_path_V2;
 							loadFromFile();
 						};
 					}

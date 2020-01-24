@@ -1,1 +1,2 @@
-/home/pi/Downloads/01 Isabella.ogg
+/home/pi/Documents/particles_02.vjs
+/home/pi/Downloads/guitar_riff.wav
