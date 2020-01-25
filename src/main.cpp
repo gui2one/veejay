@@ -1958,9 +1958,17 @@ void load_session_file()
 	{
 		
 		current_scene_file_path = remove_end_of_line(session_lines[0]);
-		printf("Loading Session : %s\n", current_scene_file_path.c_str());
-		WAV_PATH = (char *)(remove_end_of_line(session_lines[1]).c_str());
+		//~ printf("Loading Session : %s\n", current_scene_file_path.c_str());
+
 		loadFromFile();
+
+		if( session_lines.size() > 1)
+		{
+			sound_player_wave_file_path_param->setValue(remove_end_of_line(session_lines[1]));
+			sound_player_cmd = SOUND_PLAYER_CMD_STOP;		
+			wave_reader.read(sound_player_wave_file_path_param->getValue().c_str());
+			sound_player_cmd = SOUND_PLAYER_CMD_PLAY;	
+		}
 	}
 }
 

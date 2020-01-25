@@ -92,7 +92,7 @@ JSON JsonFileWriter::encodeModules(std::vector<std::shared_ptr<Module> >& module
 	
 	json_data["modules"] = json_modules;
 	
-	std::cout<< json_data << std::endl;
+	//~ std::cout<< json_data << std::endl;
 	
 	return json_modules;
 	
