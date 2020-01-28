@@ -1,9 +1,28 @@
 #include "orbiter.h"
 
+// implement Planet
+
+Planet::Planet() : m_radius(30.0f), m_mass(1.0)
+{
+	
+	printf("adding planet\n");
+}
+
+//~ Planet::Planet(const Planet & other)
+//~ {
+	//~ printf("copying planet\n");
+//~ }
+
+Planet::~Planet()
+{
+	printf("deleting planet\n");
+}
+
 
 Orbiter::Orbiter(std::shared_ptr<Timer> timer)
 	: Module(timer)
 {
+	m_planets.clear();
 	//~ printf("Building Orbiter\n");
 	
 	p_radius = std::make_shared<Param<float> >();
@@ -21,7 +40,9 @@ Orbiter::Orbiter(std::shared_ptr<Timer> timer)
 	p_color->color = glm::vec3(0.0, 1.0, 0.0);
 	
 	m_angle = 0.0f;
-	//~ setBlendingMode(MODULE_BLENDING_ADD);
+	
+	
+
 }
 
 Orbiter::Orbiter(const Orbiter & other):Module(other)
@@ -45,8 +66,11 @@ Orbiter::~Orbiter(){
 
 void Orbiter::init(){
 	
-	//~ if(m_vbo != 0)
-		//~ GLCall(glDeleteBuffers(1, &m_vbo));
+	
+	//// adding planets
+	//~ Planet planet1;
+	m_planets.reserve(1);
+	m_planets.emplace_back();
 		
 	GLCall(glGenBuffers(1, &m_vbo));
 	
@@ -67,7 +91,7 @@ void Orbiter::init(){
 }
 
 void Orbiter::update(float * fft_maximums){
-	//~ printf("orbiter update \n");
+	//~ printf("planets num : %d\n", m_planets.size());
 	m_counter++;
 	
 	
@@ -79,7 +103,8 @@ void Orbiter::update(float * fft_maximums){
 	
 }
 
-void Orbiter::render(){
+void Orbiter::render()
+{
 
 	m_shader.useProgram();
 	
@@ -114,5 +139,6 @@ void Orbiter::render(){
 	
 	GLCall(glUseProgram(0));
 }
+
 
 

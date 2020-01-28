@@ -5,6 +5,21 @@
 #include "module.h"
 #include "../shader.h"
 
+class Planet 
+{
+public:
+	Planet();
+	//~ Planet(const Planet & other);
+	~Planet();
+	
+private:
+
+	float m_radius; 
+	float m_mass;
+	glm::vec3 m_position;
+	glm::vec3 m_velocity;
+};
+
 class Orbiter: public Module
 {
 	public:
@@ -28,7 +43,13 @@ class Orbiter: public Module
 		float m_opacity;
 		float m_speed;
 		
+		std::vector<Planet> m_planets;
+		
 		/* add your private declarations */
 };
+
+
+
+
 
 #endif /* ORBITER_H */ 
