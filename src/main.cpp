@@ -1980,36 +1980,75 @@ void parameter_signal_dialog()
 	
 	if(ImGui::Begin("Signal"), true) //, &signal_range_dialog_opened, flags))
 	{
-		for( auto module : renderer.m_modules)
-		{			
-			bool has_signal = false;
-			for(auto param : module->param_layout.params)
+		static bool b_filter = false;
+		
+		ImGui::Checkbox("Filter Selected Module", &b_filter);
+		if( !b_filter)
+		{
+			
+			for( auto module : renderer.m_modules)
 			{			
-				if(param->getUseSignalRange())
+				bool has_signal = false;
+				for(auto param : module->param_layout.params)
+				{			
+					if(param->getUseSignalRange())
+					{
+						has_signal = true;
+						break;
+					}
+				}
+				
+				if( has_signal)
 				{
-					has_signal = true;
-					break;
+					if(ImGui::CollapsingHeader(module->getName().c_str()))
+					{
+						
+						for(auto param : module->param_layout.params)
+						{
+							if( param->getUseSignalRange())
+							{
+								//~ ImGui::Text(param->getName());
+								UI_widget(module->p_signal_range, param);
+							}
+						}
+						
+						
+							
+					}
 				}
 			}
-			
-			if( has_signal)
-			{
-				if(ImGui::CollapsingHeader(module->getName().c_str()))
+		}else{
+				bool has_signal = false;
+				if(current_module_id != -1)
 				{
-					
-					for(auto param : module->param_layout.params)
-					{
-						if( param->getUseSignalRange())
+					for(auto param : renderer.m_modules[current_module_id]->param_layout.params)
+					{			
+						if(param->getUseSignalRange())
 						{
-							//~ ImGui::Text(param->getName());
-							UI_widget(module->p_signal_range, param);
+							has_signal = true;
+							break;
 						}
 					}
 					
-					
-						
-				}
-			}
+					if( has_signal)
+					{
+						//~ if(ImGui::CollapsingHeader(renderer.m_modules[current_module_id]->getName().c_str()))
+						//~ {
+							
+							for(auto param : renderer.m_modules[current_module_id]->param_layout.params)
+							{
+								if( param->getUseSignalRange())
+								{
+									//~ ImGui::Text(param->getName());
+									UI_widget(renderer.m_modules[current_module_id]->p_signal_range, param);
+								}
+							}
+							
+							
+								
+						//~ }
+					}	
+				}		
 		}
 		
 		ImGui::End();
